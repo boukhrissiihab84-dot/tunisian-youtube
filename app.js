@@ -1,36 +1,53 @@
 // =====================================================================
-// TUNISIAN YOUTUBE - MAIN APP
+// TUNISIAN YOUTUBE - APP.JS
 // =====================================================================
 
 let allVideos = [];
-let currentFilter = { category: null, subCategory: null, difficulty: null, search: "" };
+let currentFilter = { category: null, subCategory: null, search: "" };
 
-// Load data
-fetch("enhanced_database.json")
+// 1. Fetch data men tounes_courses.json
+fetch("tounes_courses.json")
     .then(res => res.json())
-    .then(data => {
-        allVideos = data;
-        document.getElementById("videoCount").textContent = `${data.length} cours`;
+    .then(rawVideos => {
+        // Normalisation mta3 el data
+        allVideos = rawVideos.map(v => {
+            const vidId = v.Video_ID || v.video_id || v.id || extractId(v.Lien || v.url || "");
+            return {
+                id: vidId,
+                title: v.Titre || v.title || "Cours Tounsi",
+                channel: v.Chaine || v.channel || "Chaine Tunisienne",
+                category: v.Categorie || v.category || "Autre",
+                topic: v.Mawdhou3 || v.topic || v.sub_category || "Général",
+                url: v.Lien || v.url || `https://www.youtube.com/watch?v=${vidId}`,
+                thumbnail: `https://img.youtube.com/vi/${vidId}/hqdefault.jpg`
+            };
+        });
+
+        document.getElementById("videoCount").textContent = `${allVideos.length} cours 🇹🇳`;
         buildSidebar();
         buildChips();
         renderVideos(allVideos);
     })
     .catch(err => {
-        console.error("Error loading database:", err);
-        document.getElementById("videoGrid").innerHTML = "<p style='color:red'>Error loading videos. Check enhanced_database.json exists.</p>";
+        console.error("Error loading JSON:", err);
+        document.getElementById("videoGrid").innerHTML = "<p style='color:red; text-align:center;'>Fichier tounes_courses.json ma l9inehch!</p>";
     });
 
-// ======================= SIDEBAR =======================
+function extractId(url) {
+    const match = url.match(/(?:v=|\/)([0-9A-Za-z_-]{11})/);
+    return match ? match[1] : "";
+}
+
+// 2. Sidebar
 function buildSidebar() {
-    // Main categories
     const cats = {};
     const subCats = {};
 
     allVideos.forEach(v => {
-        const mc = v.main_category || "Autre";
-        const sc = v.sub_category || "Général";
-        cats[mc] = (cats[mc] || 0) + 1;
-        subCats[sc] = (subCats[sc] || 0) + 1;
+        cats[v.category] = (cats[v.category] || 0) + 1;
+        if (v.topic && v.topic !== "Général") {
+            subCats[v.topic] = (subCats[v.topic] || 0) + 1;
+        }
     });
 
     const catList = document.getElementById("categoryList");
@@ -38,31 +55,26 @@ function buildSidebar() {
     
     const catIcons = {
         "Design": "🎨", "Programmation": "💻", "Langues": "🗣️",
-        "Marketing": "📈", "Montage Vidéo": "🎬", "Freelance": "💼",
+        "Marketing": "📈", "Montage": "🎬", "Freelance": "💼",
         "Bureautique": "📊", "Autre": "📦"
     };
 
-    Object.entries(cats)
-        .sort((a, b) => b[1] - a[1])
-        .forEach(([cat, count]) => {
-            const icon = catIcons[cat] || "📦";
-            catList.innerHTML += `<button class="sidebar-btn" onclick="filterByCategory('${cat}', this)">${icon} ${cat} <span class="cat-count">${count}</span></button>`;
-        });
+    Object.entries(cats).sort((a,b) => b[1] - a[1]).forEach(([cat, count]) => {
+        const icon = catIcons[cat] || "📦";
+        catList.innerHTML += `<button class="sidebar-btn" onclick="filterByCategory('${cat}', this)">${icon} ${cat} <span class="cat-count">${count}</span></button>`;
+    });
 
-    // Sub categories
     const subList = document.getElementById("subCategoryList");
     subList.innerHTML = "";
-    Object.entries(subCats)
-        .sort((a, b) => b[1] - a[1])
-        .forEach(([sub, count]) => {
-            subList.innerHTML += `<button class="sidebar-btn" onclick="filterBySubCategory('${sub}', this)">📌 ${sub} <span class="cat-count">${count}</span></button>`;
-        });
+    Object.entries(subCats).sort((a,b) => b[1] - a[1]).slice(0, 15).forEach(([sub, count]) => {
+        subList.innerHTML += `<button class="sidebar-btn" onclick="filterByTopic('${sub}', this)">📌 ${sub} <span class="cat-count">${count}</span></button>`;
+    });
 }
 
-// ======================= CHIPS =======================
+// 3. Chips
 function buildChips() {
     const chipsDiv = document.getElementById("filterChips");
-    const cats = [...new Set(allVideos.map(v => v.main_category || "Autre"))];
+    const cats = [...new Set(allVideos.map(v => v.category))];
     
     chipsDiv.innerHTML = `<button class="chip active" onclick="showAll()">El Kol</button>`;
     cats.forEach(cat => {
@@ -70,85 +82,69 @@ function buildChips() {
     });
 }
 
-// ======================= RENDER =======================
+// 4. Render Video Cards
 function renderVideos(videos) {
     const grid = document.getElementById("videoGrid");
     const empty = document.getElementById("emptyState");
 
-    if (videos.length === 0) {
+    if (!videos || videos.length === 0) {
         grid.innerHTML = "";
         empty.style.display = "block";
         return;
     }
-
     empty.style.display = "none";
 
-    grid.innerHTML = videos.map(v => {
-        const diffClass = (v.difficulty || "").toLowerCase().includes("débutant") ? "beginner" :
-                          (v.difficulty || "").toLowerCase().includes("inter") ? "intermediate" : "advanced";
-        const diffLabel = v.difficulty || "Débutant";
-
-        return `
-        <div class="video-card" onclick="openVideo('${v.video_id}', '${escapeQuotes(v.title)}', '${escapeQuotes(v.channel)}', ${JSON.stringify(v.tags || []).replace(/"/g, '&quot;')})">
+    grid.innerHTML = videos.map(v => `
+        <div class="video-card" onclick="openVideo('${v.id}', '${escapeQuotes(v.title)}', '${escapeQuotes(v.channel)}')">
             <div class="video-thumbnail">
-                <img src="${v.thumbnail}" alt="${v.title}" loading="lazy"
-                     onerror="this.src='https://img.youtube.com/vi/${v.video_id}/hqdefault.jpg'">
-                <span class="difficulty-badge ${diffClass}">${diffLabel}</span>
-                <span class="sub-cat-badge">${v.sub_category || ""}</span>
+                <img src="${v.thumbnail}" alt="${v.title}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=500'">
+                <span class="sub-cat-badge">${v.topic}</span>
             </div>
             <div class="video-info">
                 <div class="video-title">${v.title}</div>
-                <div class="video-channel">${v.channel}</div>
-                <div class="video-category">${v.main_category} → ${v.sub_category}</div>
+                <div class="video-channel">📺 ${v.channel}</div>
+                <div class="video-category">📁 ${v.category}</div>
             </div>
-        </div>`;
-    }).join("");
+        </div>
+    `).join("");
 }
 
 function escapeQuotes(str) {
     return (str || "").replace(/'/g, "\\'").replace(/"/g, '\\"');
 }
 
-// ======================= FILTERS =======================
+// 5. Filters
 function showAll() {
-    currentFilter = { category: null, subCategory: null, difficulty: null, search: "" };
+    currentFilter = { category: null, subCategory: null, search: "" };
     document.getElementById("searchInput").value = "";
-    clearActiveButtons();
-    applyFilters();
-    updateActiveFilters();
-    
+    document.querySelectorAll(".sidebar-btn").forEach(b => b.classList.remove("active"));
+    document.querySelector("#categoryList .sidebar-btn")?.classList.add("active");
     document.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
-    document.querySelector(".chip").classList.add("active");
+    document.querySelector(".chip")?.classList.add("active");
+    applyFilters();
 }
 
 function filterByCategory(cat, btn) {
     currentFilter.category = cat;
     currentFilter.subCategory = null;
-    highlightSidebarBtn(btn, "categoryList");
+    document.querySelectorAll("#categoryList .sidebar-btn").forEach(b => b.classList.remove("active"));
+    if (btn) btn.classList.add("active");
     applyFilters();
-    updateActiveFilters();
 }
 
-function filterBySubCategory(sub, btn) {
-    currentFilter.subCategory = sub;
-    highlightSidebarBtn(btn, "subCategoryList");
+function filterByTopic(topic, btn) {
+    currentFilter.subCategory = topic;
+    document.querySelectorAll("#subCategoryList .sidebar-btn").forEach(b => b.classList.remove("active"));
+    if (btn) btn.classList.add("active");
     applyFilters();
-    updateActiveFilters();
-}
-
-function filterByDifficulty(diff) {
-    currentFilter.difficulty = diff === "all" ? null : diff;
-    applyFilters();
-    updateActiveFilters();
 }
 
 function filterByChip(cat, btn) {
     currentFilter.category = cat;
     currentFilter.subCategory = null;
     document.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
-    btn.classList.add("active");
+    if (btn) btn.classList.add("active");
     applyFilters();
-    updateActiveFilters();
 }
 
 function searchVideos() {
@@ -160,68 +156,47 @@ function applyFilters() {
     let filtered = allVideos;
 
     if (currentFilter.category) {
-        filtered = filtered.filter(v => v.main_category === currentFilter.category);
+        filtered = filtered.filter(v => v.category === currentFilter.category);
     }
     if (currentFilter.subCategory) {
-        filtered = filtered.filter(v => v.sub_category === currentFilter.subCategory);
-    }
-    if (currentFilter.difficulty) {
-        filtered = filtered.filter(v => v.difficulty === currentFilter.difficulty);
+        filtered = filtered.filter(v => v.topic === currentFilter.subCategory);
     }
     if (currentFilter.search) {
         const s = currentFilter.search;
         filtered = filtered.filter(v =>
             (v.title || "").toLowerCase().includes(s) ||
             (v.channel || "").toLowerCase().includes(s) ||
-            (v.sub_category || "").toLowerCase().includes(s) ||
-            (v.topic_title || "").toLowerCase().includes(s) ||
-            (v.tags || []).some(t => t.toLowerCase().includes(s))
+            (v.topic || "").toLowerCase().includes(s) ||
+            (v.category || "").toLowerCase().includes(s)
         );
     }
 
     renderVideos(filtered);
+    updateActiveFilters();
 }
 
 function updateActiveFilters() {
     const div = document.getElementById("activeFilters");
     let html = "";
     if (currentFilter.category) {
-        html += `<span class="active-filter-tag">📚 ${currentFilter.category} <span class="remove" onclick="currentFilter.category=null;applyFilters();updateActiveFilters();">✕</span></span>`;
+        html += `<span class="active-filter-tag">📚 ${currentFilter.category} <span class="remove" onclick="filterByCategory(null)">✕</span></span>`;
     }
     if (currentFilter.subCategory) {
-        html += `<span class="active-filter-tag">📌 ${currentFilter.subCategory} <span class="remove" onclick="currentFilter.subCategory=null;applyFilters();updateActiveFilters();">✕</span></span>`;
-    }
-    if (currentFilter.difficulty) {
-        html += `<span class="active-filter-tag">📊 ${currentFilter.difficulty} <span class="remove" onclick="currentFilter.difficulty=null;applyFilters();updateActiveFilters();">✕</span></span>`;
+        html += `<span class="active-filter-tag">📌 ${currentFilter.subCategory} <span class="remove" onclick="filterByTopic(null)">✕</span></span>`;
     }
     div.innerHTML = html;
 }
 
-function highlightSidebarBtn(btn, listId) {
-    if (!btn) return;
-    document.querySelectorAll(`#${listId} .sidebar-btn`).forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
-}
-
-function clearActiveButtons() {
-    document.querySelectorAll(".sidebar-btn").forEach(b => b.classList.remove("active"));
-    document.querySelectorAll(`#categoryList .sidebar-btn`)[0]?.classList.add("active");
-}
-
-// ======================= MODAL (VIDEO PLAYER) =======================
-function openVideo(videoId, title, channel, tags) {
+// 6. Video Player Modal
+function openVideo(videoId, title, channel) {
     const overlay = document.getElementById("modalOverlay");
     const player = document.getElementById("videoPlayer");
     const modalTitle = document.getElementById("modalTitle");
     const modalChannel = document.getElementById("modalChannel");
-    const modalTags = document.getElementById("modalTags");
 
     player.innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1" allowfullscreen allow="autoplay"></iframe>`;
     modalTitle.textContent = title;
     modalChannel.textContent = `📺 ${channel}`;
-    
-    const tagsArray = typeof tags === "string" ? JSON.parse(tags) : (tags || []);
-    modalTags.innerHTML = tagsArray.map(t => `<span class="modal-tag">#${t}</span>`).join("");
 
     overlay.classList.add("active");
     document.body.style.overflow = "hidden";
@@ -235,12 +210,10 @@ function closeModal() {
     document.body.style.overflow = "";
 }
 
-// ESC to close
 document.addEventListener("keydown", e => {
     if (e.key === "Escape") closeModal();
 });
 
-// ======================= SIDEBAR TOGGLE =======================
 function toggleSidebar() {
     const sb = document.getElementById("sidebar");
     const mc = document.getElementById("mainContent");
