@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tunisian YouTube 🇹🇳 - Coursset Tounsiya</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header class="header">
+        <div class="header-left">
+            <i class="fas fa-bars menu-icon" onclick="toggleSidebar()"></i>
+            <div class="logo" onclick="showAll()">
+                <i class="fab fa-youtube logo-icon"></i>
+                <span class="logo-text">Tunisian<span class="logo-yt">YouTube</span></span>
+            </div>
+        </div>
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="🔍 Lawwej 3la cours... (Photoshop, Python, Anglais...)" oninput="searchVideos()">
+        </div>
+        <div class="header-right">
+            <span class="flag">🇹🇳</span>
+            <span class="video-count" id="videoCount"></span>
+        </div>
+    </header>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-section">
+            <h3>📚 Categories</h3>
+            <div id="categoryList"></div>
+        </div>
+        <div class="sidebar-section">
+            <h3>🎯 Sous-Categories</h3>
+            <div id="subCategoryList"></div>
+        </div>
+        <div class="sidebar-section">
+            <h3>📊 Niveau</h3>
+            <button class="sidebar-btn" onclick="filterByDifficulty('all')">🌐 El Kol</button>
+            <button class="sidebar-btn" onclick="filterByDifficulty('Débutant')">🟢 Débutant</button>
+            <button class="sidebar-btn" onclick="filterByDifficulty('Intermédiaire')">🟡 Intermédiaire</button>
+            <button class="sidebar-btn" onclick="filterByDifficulty('Avancé')">🔴 Avancé</button>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content" id="mainContent">
+        <!-- FILTER CHIPS (like YouTube) -->
+        <div class="filter-chips" id="filterChips">
+            <button class="chip active" onclick="showAll()">El Kol</button>
+        </div>
+
+        <!-- ACTIVE FILTERS -->
+        <div class="active-filters" id="activeFilters"></div>
+
+        <!-- VIDEO GRID -->
+        <div class="video-grid" id="videoGrid"></div>
+
+        <!-- EMPTY STATE -->
+        <div class="empty-state" id="emptyState" style="display:none;">
+            <i class="fas fa-search" style="font-size:60px;color:#666;"></i>
+            <h2>Ma l9ina 7atta vidéo 😢</h2>
+            <p>Jarreb kelma okhra wala category okhra</p>
+        </div>
+    </main>
+
+    <!-- VIDEO PLAYER MODAL -->
+    <div class="modal-overlay" id="modalOverlay" onclick="closeModal()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeModal()">✕</button>
+            <div class="video-player" id="videoPlayer"></div>
+            <div class="modal-info">
+                <h2 id="modalTitle"></h2>
+                <p id="modalChannel"></p>
+                <div id="modalTags"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="enhanced_database.json" type="text/javascript"></script>
+    <script src="app.js"></script>
+</body>
+</html>
