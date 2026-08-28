@@ -1,42 +1,61 @@
 // =====================================================================
-// TUNISIAN YOUTUBE - APP.JS (AUTO-UPDATE & ANTI-CACHE)
+// TUNISIAN YOUTUBE - APP.JS (MOTEUR DOUBLE HYBRIDE)
 // =====================================================================
 
 let allVideos = [];
 let currentFilter = { category: null, subCategory: null, search: "" };
 
-// 1. Fetch direct sans cache
-fetch("tounes_courses.json?nocache=" + new Date().getTime(), { cache: "no-store" })
-    .then(res => res.json())
-    .then(rawVideos => {
-        allVideos = rawVideos.map(v => {
-            const vidId = v.Video_ID || v.video_id || v.id || extractId(v.Lien || v.url || "");
-            return {
-                id: vidId,
-                title: v.Titre || v.title || "Cours Tounsi",
-                channel: v.Chaine || v.channel || "Chaine Tunisienne",
-                category: v.Categorie || v.category || "Autre",
-                topic: v.Mawdhou3 || v.topic || v.sub_category || "Général",
-                url: v.Lien || v.url || `https://www.youtube.com/watch?v=${vidId}`,
-                thumbnail: `https://img.youtube.com/vi/${vidId}/hqdefault.jpg`
-            };
-        });
+// Function pour initialiser la base
+function initApp(rawList) {
+    if (!rawList || rawList.length === 0) {
+        document.getElementById("videoGrid").innerHTML = "<p style='color:red; text-align:center; grid-column:1/-1;'>⚠️ 0 Vidéos trouvées!</p>";
+        return;
+    }
 
-        document.getElementById("videoCount").textContent = `${allVideos.length} cours 🇹🇳`;
-        buildSidebar();
-        buildChips();
-        renderVideos(allVideos);
-    })
-    .catch(err => {
-        console.error("Error loading JSON:", err);
-        document.getElementById("videoGrid").innerHTML = "<p style='color:red; text-align:center;'>Fichier tounes_courses.json ma l9inehch!</p>";
-    });
+    allVideos = rawList.map(v => {
+        const vidId = v.Video_ID || v.video_id || v.id || extractId(v.Lien || v.url || "");
+        return {
+            id: vidId,
+            title: v.Titre || v.title || "Cours Tounsi",
+            channel: v.Chaine || v.channel || "Chaine Tunisienne",
+            category: v.Categorie || v.category || "Autre",
+            topic: v.Mawdhou3 || v.topic || v.sub_category || "Général",
+            url: v.Lien || v.url || `https://www.youtube.com/watch?v=${vidId}`,
+            thumbnail: `https://img.youtube.com/vi/${vidId}/hqdefault.jpg`
+        };
+    }).filter(v => v.id && v.id.length === 11); // Nthabtou fi l'ID s7i7
+
+    document.getElementById("videoCount").textContent = `${allVideos.length} cours 🇹🇳`;
+    buildSidebar();
+    buildChips();
+    renderVideos(allVideos);
+}
 
 function extractId(url) {
     const match = url.match(/(?:v=|\/)([0-9A-Za-z_-]{11})/);
     return match ? match[1] : "";
 }
 
+// 1. TENTATIVE MEN DATA.JS
+if (typeof rawVideosData !== 'undefined' && Array.isArray(rawVideosData) && rawVideosData.length > 0) {
+    console.log("✅ Data chargée depuis data.js:", rawVideosData.length);
+    initApp(rawVideosData);
+} else {
+    // 2. FALLBACK: TENTATIVE MEN TOUNES_COURSES.JSON
+    console.log("⚠️ data.js ma famech, 9a3ed njarrab men JSON...");
+    fetch("tounes_courses.json?v=" + new Date().getTime())
+        .then(res => res.json())
+        .then(jsonData => {
+            console.log("✅ Data chargée depuis JSON:", jsonData.length);
+            initApp(jsonData);
+        })
+        .catch(err => {
+            console.error("❌ Erreur chargement:", err);
+            document.getElementById("videoGrid").innerHTML = "<p style='color:red; text-align:center; grid-column:1/-1;'>Mochkla: Fichier data.js wala tounes_courses.json ma t-uploadech s7i7 fi GitHub!</p>";
+        });
+}
+
+// ======================= SIDEBAR =======================
 function buildSidebar() {
     const cats = {};
     const subCats = {};
@@ -69,6 +88,7 @@ function buildSidebar() {
     });
 }
 
+// ======================= CHIPS =======================
 function buildChips() {
     const chipsDiv = document.getElementById("filterChips");
     const cats = [...new Set(allVideos.map(v => v.category))];
@@ -79,6 +99,7 @@ function buildChips() {
     });
 }
 
+// ======================= RENDER =======================
 function renderVideos(videos) {
     const grid = document.getElementById("videoGrid");
     const empty = document.getElementById("emptyState");
@@ -109,6 +130,7 @@ function escapeQuotes(str) {
     return (str || "").replace(/'/g, "\\'").replace(/"/g, '\\"');
 }
 
+// ======================= FILTERS =======================
 function showAll() {
     currentFilter = { category: null, subCategory: null, search: "" };
     document.getElementById("searchInput").value = "";
@@ -182,6 +204,7 @@ function updateActiveFilters() {
     div.innerHTML = html;
 }
 
+// ======================= MODAL PLAYER =======================
 function openVideo(videoId, title, channel) {
     const overlay = document.getElementById("modalOverlay");
     const player = document.getElementById("videoPlayer");
