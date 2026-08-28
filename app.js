@@ -1,15 +1,14 @@
 // =====================================================================
-// TUNISIAN YOUTUBE - APP.JS
+// TUNISIAN YOUTUBE - APP.JS (AUTO-UPDATE & ANTI-CACHE)
 // =====================================================================
 
 let allVideos = [];
 let currentFilter = { category: null, subCategory: null, search: "" };
 
-// 1. Fetch data men tounes_courses.json
-fetch("tounes_courses.json")
+// 1. Fetch direct sans cache
+fetch("tounes_courses.json?nocache=" + new Date().getTime(), { cache: "no-store" })
     .then(res => res.json())
     .then(rawVideos => {
-        // Normalisation mta3 el data
         allVideos = rawVideos.map(v => {
             const vidId = v.Video_ID || v.video_id || v.id || extractId(v.Lien || v.url || "");
             return {
@@ -38,7 +37,6 @@ function extractId(url) {
     return match ? match[1] : "";
 }
 
-// 2. Sidebar
 function buildSidebar() {
     const cats = {};
     const subCats = {};
@@ -56,7 +54,7 @@ function buildSidebar() {
     const catIcons = {
         "Design": "🎨", "Programmation": "💻", "Langues": "🗣️",
         "Marketing": "📈", "Montage": "🎬", "Freelance": "💼",
-        "Bureautique": "📊", "Autre": "📦"
+        "Bac & Etudes": "📚", "Bureautique": "📊", "Autre": "📦"
     };
 
     Object.entries(cats).sort((a,b) => b[1] - a[1]).forEach(([cat, count]) => {
@@ -66,12 +64,11 @@ function buildSidebar() {
 
     const subList = document.getElementById("subCategoryList");
     subList.innerHTML = "";
-    Object.entries(subCats).sort((a,b) => b[1] - a[1]).slice(0, 15).forEach(([sub, count]) => {
+    Object.entries(subCats).sort((a,b) => b[1] - a[1]).slice(0, 20).forEach(([sub, count]) => {
         subList.innerHTML += `<button class="sidebar-btn" onclick="filterByTopic('${sub}', this)">📌 ${sub} <span class="cat-count">${count}</span></button>`;
     });
 }
 
-// 3. Chips
 function buildChips() {
     const chipsDiv = document.getElementById("filterChips");
     const cats = [...new Set(allVideos.map(v => v.category))];
@@ -82,7 +79,6 @@ function buildChips() {
     });
 }
 
-// 4. Render Video Cards
 function renderVideos(videos) {
     const grid = document.getElementById("videoGrid");
     const empty = document.getElementById("emptyState");
@@ -97,7 +93,7 @@ function renderVideos(videos) {
     grid.innerHTML = videos.map(v => `
         <div class="video-card" onclick="openVideo('${v.id}', '${escapeQuotes(v.title)}', '${escapeQuotes(v.channel)}')">
             <div class="video-thumbnail">
-                <img src="${v.thumbnail}" alt="${v.title}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=500'">
+                <img src="${v.thumbnail}" alt="${v.title}" loading="lazy" onerror="this.src='https://img.youtube.com/vi/${v.id}/0.jpg'">
                 <span class="sub-cat-badge">${v.topic}</span>
             </div>
             <div class="video-info">
@@ -113,7 +109,6 @@ function escapeQuotes(str) {
     return (str || "").replace(/'/g, "\\'").replace(/"/g, '\\"');
 }
 
-// 5. Filters
 function showAll() {
     currentFilter = { category: null, subCategory: null, search: "" };
     document.getElementById("searchInput").value = "";
@@ -187,7 +182,6 @@ function updateActiveFilters() {
     div.innerHTML = html;
 }
 
-// 6. Video Player Modal
 function openVideo(videoId, title, channel) {
     const overlay = document.getElementById("modalOverlay");
     const player = document.getElementById("videoPlayer");
