@@ -1,14 +1,13 @@
 // =====================================================================
-// TUNISIAN YOUTUBE - APP.JS (MOTEUR DOUBLE HYBRIDE)
+// TUNISIAN YOUTUBE - APP.JS (DYNAMIC FORCE CACHE BUSTER)
 // =====================================================================
 
 let allVideos = [];
 let currentFilter = { category: null, subCategory: null, search: "" };
 
-// Function pour initialiser la base
 function initApp(rawList) {
     if (!rawList || rawList.length === 0) {
-        document.getElementById("videoGrid").innerHTML = "<p style='color:red; text-align:center; grid-column:1/-1;'>⚠️ 0 Vidéos trouvées!</p>";
+        document.getElementById("videoGrid").innerHTML = "<p style='color:red; text-align:center; grid-column:1/-1;'>⚠️ Aucun cours trouvé.</p>";
         return;
     }
 
@@ -23,7 +22,7 @@ function initApp(rawList) {
             url: v.Lien || v.url || `https://www.youtube.com/watch?v=${vidId}`,
             thumbnail: `https://img.youtube.com/vi/${vidId}/hqdefault.jpg`
         };
-    }).filter(v => v.id && v.id.length === 11); // Nthabtou fi l'ID s7i7
+    }).filter(v => v.id && v.id.length === 11);
 
     document.getElementById("videoCount").textContent = `${allVideos.length} cours 🇹🇳`;
     buildSidebar();
@@ -36,22 +35,33 @@ function extractId(url) {
     return match ? match[1] : "";
 }
 
-// 1. TENTATIVE MEN DATA.JS
-if (typeof rawVideosData !== 'undefined' && Array.isArray(rawVideosData) && rawVideosData.length > 0) {
-    console.log("✅ Data chargée depuis data.js:", rawVideosData.length);
-    initApp(rawVideosData);
-} else {
-    // 2. FALLBACK: TENTATIVE MEN TOUNES_COURSES.JSON
-    console.log("⚠️ data.js ma famech, 9a3ed njarrab men JSON...");
-    fetch("tounes_courses.json?v=" + new Date().getTime())
+// ⚡ DYNAMIC LOADER DE DATA.JS SANS CACHE ⚡
+const timestamp = new Date().getTime();
+const scriptLoader = document.createElement("script");
+scriptLoader.src = `data.js?v=${timestamp}`;
+scriptLoader.onload = () => {
+    if (typeof rawVideosData !== 'undefined' && Array.isArray(rawVideosData)) {
+        console.log("✅ data.js chargée avec succès, vids count:", rawVideosData.length);
+        initApp(rawVideosData);
+    } else {
+        fallbackToJSON();
+    }
+};
+scriptLoader.onerror = () => {
+    fallbackToJSON();
+};
+document.head.appendChild(scriptLoader);
+
+// Fallback JSON ken script loadech
+function fallbackToJSON() {
+    console.log("⚠️ data.js ma famech, 9a3ed njarreb men JSON...");
+    fetch(`tounes_courses.json?v=${timestamp}`, { cache: "no-store" })
         .then(res => res.json())
         .then(jsonData => {
-            console.log("✅ Data chargée depuis JSON:", jsonData.length);
             initApp(jsonData);
         })
         .catch(err => {
-            console.error("❌ Erreur chargement:", err);
-            document.getElementById("videoGrid").innerHTML = "<p style='color:red; text-align:center; grid-column:1/-1;'>Mochkla: Fichier data.js wala tounes_courses.json ma t-uploadech s7i7 fi GitHub!</p>";
+            document.getElementById("videoGrid").innerHTML = "<p style='color:red; text-align:center; grid-column:1/-1;'>Mochkla: data.js wala JSON ma loadech!</p>";
         });
 }
 
@@ -204,7 +214,6 @@ function updateActiveFilters() {
     div.innerHTML = html;
 }
 
-// ======================= MODAL PLAYER =======================
 function openVideo(videoId, title, channel) {
     const overlay = document.getElementById("modalOverlay");
     const player = document.getElementById("videoPlayer");
