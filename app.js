@@ -1,5 +1,5 @@
 // =====================================================================
-// TUNISIAN YOUTUBE - APP.JS (SUPER STABLE DIRECT JSON LOADER)
+// TUNISIAN YOUTUBE - APP.JS (SUPER STABLE DIRECT DATA.JS LOADER)
 // =====================================================================
 
 // ====== STORAGE HELPER ======
@@ -29,7 +29,7 @@ let currentFilter = { cat: null, sub: null, search: "" };
 let currentVid = "";
 let activeList = [];
 let displayedCount = 0;
-const BATCH_SIZE = 24; // ⭐ FIX DEFINITIF DE LA VARIABLE BATCH_SIZE
+const BATCH_SIZE = 24; // ⭐ FIX: BATCH_SIZE CORRECTE SANS CONFLICTS
 let user = S.g("user"), isSignUp = true;
 let tempAvatar = "";
 let searchTimer;
@@ -78,7 +78,7 @@ function initRouter() {
     }
 }
 
-// ====== THEME & APPEARANCE ======
+// ====== THEME ======
 function applyTheme() {
     const s = S.g("settings") || { dark: 0 };
     document.documentElement.setAttribute("data-theme", s.dark ? "dark" : "light");
@@ -154,7 +154,7 @@ function toggleAuthMode() {
     document.querySelector("#authOv .btn-primary").textContent = isSignUp ? "Create Account" : "Sign In";
     document.getElementById("nameGroup").style.display = isSignUp ? "block" : "none";
     document.getElementById("signupAvatar").style.display = isSignUp ? "flex" : "none";
-    document.getElementById("authSwitch").innerHTML = isSignUp ? 'Already have an account? <b>Sign In</b>' : 'Don\'t have an account? <b>Sign Up</b>';
+    document.getElementById("authSwitch").innerHTML = isSignUp ? 'Already have an account? b>Sign In</b>' : 'Don\'t have an account? <b>Sign Up</b>';
 }
 let tempAvatar = "";
 function previewAvatar(e) { const f = e.target.files[0]; if (f) { const r = new FileReader(); r.onload = x => { tempAvatar = x.target.result; document.getElementById("signupAvatar").innerHTML = `<img src="${tempAvatar}"><input type="file" accept="image/*" onchange="previewAvatar(event)">`; }; r.readAsDataURL(f); } }
@@ -248,7 +248,6 @@ function renderCmtsLarge(id) {
 }
 
 function shareV(id) { const u = `https://www.youtube.com/watch?v=${id}`; if (navigator.share) navigator.share({ title: "Cours Tounsi", url: u }); else { navigator.clipboard.writeText(u); alert("✅ Link copied!"); } }
-function watchYT(id) { window.open(`https://www.youtube.com/watch?v=${id}`, "_blank"); }
 
 // ====== DOWNLOAD ======
 function downloadV(id) {
@@ -295,7 +294,7 @@ function buildSide() {
     const icons = { Design: "🎨", Programmation: "💻", Langues: "🗣️", Marketing: "📈", Montage: "🎬", Freelance: "💼", "Bac & Etudes": "📚", Bureautique: "📊", Autre: "📦" };
     const cl = document.getElementById("catList");
     if (cl) {
-        cl.innerHTML = `<button class="side-btn active" onclick="showAll()">🌐 All <span class="side-cnt">${allVideos.length}</span></button>`;
+        cl.innerHTML = `<button class="side-btn active" onclick="navigate('home');this.classList.add('active')">🌐 All <span class="side-cnt">${allVideos.length}</span></button>`;
         Object.entries(cats).sort((a, b) => b[1] - a[1]).forEach(([c, n]) => {
             cl.innerHTML += `<button class="side-btn" onclick="navigate('category','${c}')">${icons[c] || "📦"} ${c} <span class="side-cnt">${n}</span></button>`;
         });
