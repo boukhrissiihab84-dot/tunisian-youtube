@@ -1,5 +1,5 @@
 // =====================================================================
-// TUNISIAN YOUTUBE - APP.JS (SUPER STABLE & BULLETPROOF)
+// TUNISIAN YOUTUBE - APP.JS (PURE STABLE DIRECT JSON LOADER)
 // =====================================================================
 
 // ====== STORAGE HELPER ======
@@ -215,7 +215,7 @@ function closeSettings() {
 
 function switchSettingsTab(page, btn) {
     document.querySelectorAll(".settings-tab").forEach(t => t.classList.remove("active"));
-    btn.classList.add("active");
+    btn.add("active");
     document.querySelectorAll(".settings-page").forEach(p => p.classList.remove("active"));
     const sp = document.getElementById("page-" + page);
     if (sp) sp.classList.add("active");
@@ -345,7 +345,7 @@ function shareV(id) {
 }
 function downloadV(id) { window.open(`https://www.y2mate.com/youtube/${id}`, "_blank"); }
 
-// ====== DATA LOADER (STANDARD & SECURE) ======
+// ====== DIRECT JSON DATA LOADER ======
 function initApp(raw) {
     if (!Array.isArray(raw)) {
         console.error("raw is not an array");
@@ -370,21 +370,19 @@ function initApp(raw) {
     render(allVideos);
 }
 
-// Charger depuis la variable globale définie dans data.js
-if (typeof rawVideosData !== 'undefined' && Array.isArray(rawVideosData)) {
-    console.log("✅ rawVideosData chargée depuis data.js");
-    initApp(rawVideosData);
-} else {
-    // Fallback JSON si data.js n'existe pas
-    console.log("⚠️ rawVideosData non détectée, fallback JSON...");
-    fetch(`tounes_courses.json?v=${Date.now()}`)
-        .then(r => r.json())
-        .then(d => initApp(d))
-        .catch(err => {
-            const g = document.getElementById("grid");
-            if (g) g.innerHTML = "<p style='color:red;text-align:center;grid-column:1/-1'>Error loading data.js or tounes_courses.json.</p>";
-        });
-}
+// ⚡ L'in9adh direct men JSON mte3ek (Bypass cache 100%)
+console.log("🚀 Chargement direct de tounes_courses.json...");
+const tsUrl = `tounes_courses.json?v=${Date.now()}`;
+fetch(tsUrl, { cache: "no-store" })
+    .then(r => r.json())
+    .then(d => {
+        initApp(d);
+    })
+    .catch(err => {
+        console.error("❌ Impossible de charger tounes_courses.json", err);
+        const g = document.getElementById("grid");
+        if (g) g.innerHTML = "<p style='color:red;text-align:center;grid-column:1/-1'>Mochkla: Fichier tounes_courses.json ma l9inehch s7i7 fi GitHub!</p>";
+    });
 
 // ====== SIDEBAR ======
 function buildSide() {
