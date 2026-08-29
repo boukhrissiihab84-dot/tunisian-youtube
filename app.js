@@ -1,5 +1,5 @@
 // =====================================================================
-// TUNISIAN YOUTUBE - APP.JS (DYNAMIC FORCE CACHE BUSTER)
+// TUNISIAN YOUTUBE - APP.JS (LOADER 100% ANTI-CACHE)
 // =====================================================================
 
 let allVideos = [];
@@ -35,13 +35,13 @@ function extractId(url) {
     return match ? match[1] : "";
 }
 
-// ⚡ DYNAMIC LOADER DE DATA.JS SANS CACHE ⚡
+// ⚡ DYNAMIC LOADER 100% ANTI-CACHE ⚡
 const timestamp = new Date().getTime();
 const scriptLoader = document.createElement("script");
 scriptLoader.src = `data.js?v=${timestamp}`;
 scriptLoader.onload = () => {
     if (typeof rawVideosData !== 'undefined' && Array.isArray(rawVideosData)) {
-        console.log("✅ data.js chargée avec succès, vids count:", rawVideosData.length);
+        console.log("✅ data.js chargée, vids:", rawVideosData.length);
         initApp(rawVideosData);
     } else {
         fallbackToJSON();
@@ -52,16 +52,12 @@ scriptLoader.onerror = () => {
 };
 document.head.appendChild(scriptLoader);
 
-// Fallback JSON ken script loadech
 function fallbackToJSON() {
-    console.log("⚠️ data.js ma famech, 9a3ed njarreb men JSON...");
     fetch(`tounes_courses.json?v=${timestamp}`, { cache: "no-store" })
         .then(res => res.json())
-        .then(jsonData => {
-            initApp(jsonData);
-        })
+        .then(jsonData => initApp(jsonData))
         .catch(err => {
-            document.getElementById("videoGrid").innerHTML = "<p style='color:red; text-align:center; grid-column:1/-1;'>Mochkla: data.js wala JSON ma loadech!</p>";
+            document.getElementById("videoGrid").innerHTML = "<p style='color:red; text-align:center; grid-column:1/-1;'>Mochkla fel chargement des vidéos.</p>";
         });
 }
 
@@ -214,6 +210,7 @@ function updateActiveFilters() {
     div.innerHTML = html;
 }
 
+// ======================= MODAL PLAYER =======================
 function openVideo(videoId, title, channel) {
     const overlay = document.getElementById("modalOverlay");
     const player = document.getElementById("videoPlayer");
