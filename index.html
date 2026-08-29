@@ -4,12 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TunisianTube 🇹🇳</title>
-    
-    <!-- FAVICON -->
     <link rel="icon" type="image/png" href="logo.png">
-    <link rel="apple-touch-icon" href="logo.png">
-    
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
     <style>
@@ -42,18 +38,15 @@
     :root {
         --radius: 12px; --radius-sm: 8px; --radius-full: 50px;
         --header-h: 58px; --sidebar-w: 240px;
-        --font: 'Inter', sans-serif; --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        --font: 'Inter', 'Cairo', sans-serif; --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: var(--font); background: var(--bg); color: var(--text); overflow-x: hidden; -webkit-font-smoothing: antialiased; }
-    
     ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-thumb { background: var(--surface3); border-radius: 3px; }
     ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
-
-    button { font-family: var(--font); cursor: pointer; border: none; outline: none; background: none; color: inherit; transition: all 0.25s var(--transition); }
+    button { font-family: var(--font); cursor: pointer; border: none; outline: none; background: none; color: inherit; }
     input, textarea, select { font-family: var(--font); outline: none; border: none; }
-    
     body.font-small { font-size: 13px; }
     body.font-normal { font-size: 14px; }
     body.font-large { font-size: 16px; }
@@ -124,6 +117,7 @@
     .form-input { width: 100%; padding: 10px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--bg); color: var(--text); font-size: 13.5px; }
     .form-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(62,166,255,0.15); }
     .form-textarea { width: 100%; padding: 10px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--bg); color: var(--text); font-size: 13.5px; resize: vertical; min-height: 75px; }
+    .form-textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(62,166,255,0.15); }
     .form-btn { width: 100%; padding: 10px; border-radius: var(--radius-sm); font-size: 13.5px; font-weight: 600; text-align: center; cursor: pointer; transition: 0.3s; }
     .btn-primary { background: var(--gradient); color: #fff; box-shadow: 0 4px 14px rgba(62,166,255,0.35); }
     .btn-primary:hover { transform: translateY(-2px); }
@@ -193,7 +187,7 @@
     .card-badge { position: absolute; bottom: 8px; left: 8px; background: rgba(0,0,0,0.85); color: #fff; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; z-index: 1; }
     
     .card-body { padding: 10px; }
-    .card-title { font-size: 13px; font-weight: 600; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 4px; }
+    .card-title { font-size: 13px; font-weight: 600; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 4px; transition: 0.2s; }
     .card:hover .card-title { color: var(--accent); }
     .card-ch { font-size: 11.5px; color: var(--text2); display: flex; align-items: center; gap: 4px; }
     .card-cat { display: inline-block; font-size: 10.5px; color: var(--accent); margin-top: 4px; font-weight: 700; background: rgba(62,166,255,0.1); padding: 2px 6px; border-radius: 4px; }
@@ -265,37 +259,42 @@
     .related-ch { font-size: 11.5px; color: var(--text2); }
     .related-cat { font-size: 10.5px; color: var(--accent); font-weight: 600; margin-top: 2px; }
 
-    .empty-state { text-align: center; padding: 70px 20px; color: var(--text3); }
-    .empty-state i { font-size: 36px; margin-bottom: 10px; }
+    /* DOWNLOAD MODAL */
+    .dl-modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.75); z-index: 4000; justify-content: center; align-items: center; padding: 20px; }
+    .dl-modal.active { display: flex; }
+    .dl-box { background: var(--surface); border-radius: var(--radius); width: 100%; max-width: 420px; padding: 24px; box-shadow: var(--shadow-lg); text-align: center; position: relative; }
+    .dl-icon { width: 64px; height: 64px; margin: 0 auto 14px; background: linear-gradient(135deg, #22c55e, #16a34a); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 26px; }
+    .dl-title { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+    .dl-desc { font-size: 13px; color: var(--text2); margin-bottom: 20px; line-height: 1.5; }
+    .dl-options { display: flex; flex-direction: column; gap: 8px; }
+    .dl-btn { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text); font-size: 13px; font-weight: 600; cursor: pointer; text-decoration: none; transition: 0.2s; text-align: left; }
+    .dl-btn:hover { background: var(--surface3); border-color: var(--accent); transform: translateY(-1px); }
+    .dl-btn i { color: var(--accent); font-size: 16px; }
+    .dl-btn .dl-arrow { color: var(--text3); }
+    .dl-btn.best { background: linear-gradient(135deg, #22c55e, #16a34a); color: #fff; border: none; }
+    .dl-btn.best i, .dl-btn.best .dl-arrow { color: #fff; }
+    .dl-btn.best:hover { background: linear-gradient(135deg, #16a34a, #15803d); }
+    .dl-close { position: absolute; top: 12px; right: 12px; background: var(--surface3); border: none; width: 28px; height: 28px; border-radius: 50%; color: var(--text2); cursor: pointer; font-size: 13px; }
+    .dl-close:hover { background: #ff4d4d; color: #fff; }
 
-    /* Sentinel pour Infinite Scroll */
+    .empty-state { text-align: center; padding: 70px 20px; color: var(--text3); }
+    .empty-state i { font-size: 44px; margin-bottom: 12px; }
+    .empty-state h2 { font-size: 18px; margin-bottom: 6px; color: var(--text); }
+    .empty-state p { font-size: 13px; }
+
+    /* SENTINEL POUR INFINITE SCROLL */
     #sentinel { width: 100%; height: 20px; margin-top: 10px; }
 
-    @media(max-width:1024px) {
-        .video-page-container { grid-template-columns: 1fr; }
-        .related-videos { border-left: none; padding-left: 0; border-top: 1px solid var(--border); padding-top: 20px; }
-        .related-thumb { width: 140px; }
-    }
-    @media(max-width:768px){
-        .side { transform: translateX(-100%); }
-        .side.show { transform: translateX(0); }
-        .main { margin-left: 0; padding: 16px; }
-        .search-wrap { max-width: none; margin: 0 6px; }
-        .grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
-        .hdr { padding: 0 12px; }
-        .video-page-container { padding: 12px; }
-        .video-title-large { font-size: 16px; }
-        .related-thumb { width: 120px; }
-    }
+    @media(max-width: 1024px) { .video-page-container { grid-template-columns: 1fr; } .related-thumb { width: 140px; } }
+    @media(max-width:768px){ .side { transform: translateX(-100%); } .side.show { transform: translateX(0); } .main { margin-left: 0; padding: 14px; } .search-wrap { max-width: none; margin: 0 6px; } .grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; } .hdr { padding: 0 12px; } .video-title-large { font-size: 16px; } .related-thumb { width: 120px; } }
     </style>
 </head>
 <body>
 
-<!-- ====== HEADER ====== -->
 <header class="hdr">
     <div class="hdr-left">
         <i class="fas fa-bars menu-i" onclick="toggleSidebar()"></i>
-        <div class="logo-wrap" onclick="showAll()">
+        <div class="logo-wrap" onclick="navigate('home')">
             <img src="logo.png" alt="Logo" class="logo-img" onerror="this.style.display='none'">
             <span class="logo-t">Tunisian<span class="logo-r">Tube</span></span>
         </div>
@@ -312,14 +311,10 @@
     </div>
 </header>
 
-<!-- ====== DROPDOWN ====== -->
 <div class="dropdown" id="dropdown">
     <div class="dd-header">
         <div class="dd-avatar" id="ddAvatar">U</div>
-        <div class="dd-info">
-            <div class="dd-name" id="ddName">Username</div>
-            <div class="dd-email" id="ddEmail">email</div>
-        </div>
+        <div class="dd-info"><div class="dd-name" id="ddName">Username</div><div class="dd-email" id="ddEmail">email</div></div>
     </div>
     <div class="dd-item" onclick="navigate('channel')"><i class="fas fa-tv"></i> My Channel</div>
     <div class="dd-item" onclick="navigate('account')"><i class="fas fa-user-cog"></i> Account Settings</div>
@@ -332,7 +327,6 @@
     <div class="dd-item danger" onclick="logOut()"><i class="fas fa-sign-out-alt"></i> Sign Out</div>
 </div>
 
-<!-- ====== AUTH ====== -->
 <div class="ov" id="authOv">
     <div class="ov-box">
         <div class="ov-head"><h2 id="authTitle">Create Account</h2><button class="ov-close" onclick="closeAuth()">✕</button></div>
@@ -348,29 +342,11 @@
     </div>
 </div>
 
-<!-- ====== DOWNLOAD MODAL ====== -->
-<div class="dl-modal" id="dlModal" onclick="if(event.target===this)closeDlModal()">
-    <div class="dl-box">
-        <button class="dl-close" onclick="closeDlModal()">✕</button>
-        <div class="dl-icon"><i class="fas fa-download"></i></div>
-        <h2 class="dl-title">Download Video</h2>
-        <p class="dl-desc">Cobalt has 0 ads and is very fast.</p>
-        <div class="dl-options">
-            <a class="dl-btn best" id="dlCobalt" href="#" target="_blank"><span><i class="fas fa-bolt"></i> Cobalt (Best - No Ads)</span><i class="fas fa-arrow-right dl-arrow"></i></a>
-            <a class="dl-btn" id="dlSSYT" href="#" target="_blank"><span><i class="fas fa-download"></i> SSYouTube (Simple)</span><i class="fas fa-arrow-right dl-arrow"></i></a>
-            <a class="dl-btn" id="dlY2Mate" href="#" target="_blank"><span><i class="fas fa-video"></i> Y2Mate (MP4/MP3)</span><i class="fas fa-arrow-right dl-arrow"></i></a>
-            <a class="dl-btn" id="dlSaveFrom" href="#" target="_blank"><span><i class="fas fa-save"></i> SaveFrom (Alternative)</span><i class="fas fa-arrow-right dl-arrow"></i></a>
-        </div>
-    </div>
-</div>
-
-<!-- ====== SIDEBAR ====== -->
 <aside class="side" id="sidebar">
     <h4>Categories</h4><div id="catList"></div>
     <h4>Topics</h4><div id="subList"></div>
 </aside>
 
-<!-- ====== MAIN CONTENT ====== -->
 <main class="main" id="mainContent">
 
     <!-- ============ HOME PAGE ============ -->
@@ -437,7 +413,7 @@
                 <div class="setting-row"><div class="setting-info"><div class="setting-title">📊 Watch History</div><div class="setting-desc">Track videos you watch</div></div><div class="toggle on" id="t-history" onclick="toggleSet('history')"></div></div>
             </div>
             <div class="settings-page-content" id="set-appearance">
-                <div class="setting-row"><div class="setting-info"><div class="setting-title">🌙 Dark Mode</div><div class="setting-desc">Toggle dark theme</div></div><div class="toggle" id="t-dark" onclick="toggleSet('dark')"></div></div>
+                <div class="setting-row"><div class="setting-info"><div class="setting-title">🌙 Dark Mode</div><div class="setting-desc">Toggle theme</div></div><div class="toggle" id="t-dark" onclick="toggleSet('dark')"></div></div>
                 <div class="setting-row"><div class="setting-info"><div class="setting-title">🔤 Font Size</div><div class="setting-desc">Adjust text size</div></div><select class="form-select" id="fontSelect" onchange="setFontSize(this.value)"><option value="small">Small</option><option value="normal" selected>Normal</option><option value="large">Large</option></select></div>
                 <div class="setting-row"><div class="setting-info"><div class="setting-title">📐 Grid Layout</div><div class="setting-desc">Column width</div></div><select class="form-select" id="gridSelect" onchange="setGridSize(this.value)"><option value="250">Compact</option><option value="280" selected>Normal</option><option value="340">Large</option></select></div>
             </div>
@@ -510,7 +486,6 @@
 
 </main>
 
-<!-- RABT EL 2 SCRIPTS S7I7 -->
 <script src="data.js"></script>
 <script src="app.js"></script>
 </body>
