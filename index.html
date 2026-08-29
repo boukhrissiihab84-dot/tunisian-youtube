@@ -3,79 +3,589 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tunisian YouTube 🇹🇳 - منصة الدروس التونسية</title>
-    
-    <!-- FAVICON (Logo mel barra) -->
+    <title>Tunisian YouTube 🇹🇳</title>
     <link rel="icon" type="image/png" href="logo.png">
-    <link rel="apple-touch-icon" href="logo.png">
-    
-    <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box;font-family:'Cairo',sans-serif}
+        body{background:#0f0f0f;color:#fff;direction:ltr}
+
+        /* HEADER */
+        .header{position:fixed;top:0;left:0;right:0;height:56px;background:#0f0f0f;display:flex;align-items:center;justify-content:space-between;padding:0 16px;border-bottom:1px solid #272727;z-index:1000}
+        .header-left{display:flex;align-items:center;gap:12px;cursor:pointer}
+        .custom-logo{height:34px;border-radius:6px}
+        .logo-text{font-size:18px;font-weight:900}
+        .logo-yt{color:#ff0000}
+        .search-bar{flex:1;max-width:500px;margin:0 20px}
+        .search-bar input{width:100%;padding:8px 14px;border-radius:20px;border:1px solid #303030;background:#121212;color:#fff;font-size:14px;outline:none}
+        .search-bar input:focus{border-color:#3ea6ff}
+        .header-right{display:flex;align-items:center;gap:10px}
+        .vid-count{background:#ff0000;color:#fff;padding:3px 10px;border-radius:10px;font-size:12px;font-weight:bold}
+        .auth-btn{padding:6px 14px;border-radius:18px;border:1px solid #3ea6ff;background:transparent;color:#3ea6ff;font-size:12px;cursor:pointer;font-family:'Cairo'}
+        .auth-btn:hover{background:#3ea6ff22}
+        .auth-btn.logout{border-color:#f44;color:#f44}
+        .user-avatar{width:32px;height:32px;border-radius:50%;background:#3ea6ff;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:bold;cursor:pointer}
+        .settings-icon{font-size:20px;cursor:pointer;color:#aaa}
+        .settings-icon:hover{color:#fff}
+
+        /* MODALS */
+        .overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.85);z-index:3000;justify-content:center;align-items:center}
+        .overlay.active{display:flex}
+        .modal-box{background:#1a1a1a;border-radius:16px;padding:30px;width:90%;max-width:420px;position:relative}
+        .modal-box h2{margin-bottom:20px;font-size:20px}
+        .modal-box.wide{max-width:850px;max-height:90vh;overflow-y:auto;padding:0}
+        .m-input{width:100%;padding:10px 14px;margin-bottom:12px;border-radius:10px;border:1px solid #333;background:#0f0f0f;color:#fff;font-size:14px;outline:none}
+        .m-input:focus{border-color:#3ea6ff}
+        .m-btn{width:100%;padding:10px;border-radius:10px;border:none;background:#3ea6ff;color:#fff;font-size:15px;font-weight:bold;cursor:pointer;margin-bottom:8px}
+        .m-btn:hover{background:#2b8fd9}
+        .m-btn.red{background:#f44}
+        .m-btn.red:hover{background:#d33}
+        .m-close{position:absolute;top:12px;right:16px;background:none;border:none;color:#fff;font-size:22px;cursor:pointer;z-index:10}
+        .m-error{color:#f44;font-size:12px;margin-bottom:8px}
+        .m-switch{color:#3ea6ff;cursor:pointer;font-size:13px;text-align:center;margin-top:8px}
+
+        /* SETTINGS */
+        .setting-item{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid #272727}
+        .setting-label{font-size:14px}
+        .toggle{width:44px;height:24px;border-radius:12px;background:#333;position:relative;cursor:pointer;transition:0.3s}
+        .toggle.on{background:#3ea6ff}
+        .toggle::after{content:'';position:absolute;width:20px;height:20px;border-radius:50%;background:#fff;top:2px;left:2px;transition:0.3s}
+        .toggle.on::after{left:22px}
+
+        /* SIDEBAR */
+        .sidebar{position:fixed;top:56px;left:0;width:230px;height:calc(100vh - 56px);background:#0f0f0f;border-right:1px solid #272727;overflow-y:auto;padding:12px;z-index:999;transition:transform 0.3s}
+        .sidebar.hidden{transform:translateX(-100%)}
+        .sidebar h3{font-size:13px;color:#888;margin:12px 0 6px 8px}
+        .sidebar-btn{display:flex;justify-content:space-between;width:100%;padding:8px 10px;background:transparent;border:none;color:#fff;font-size:13px;cursor:pointer;border-radius:8px;margin-bottom:2px}
+        .sidebar-btn:hover,.sidebar-btn.active{background:#272727;font-weight:bold}
+        .cat-count{background:#222;padding:1px 6px;border-radius:8px;font-size:11px;color:#aaa}
+
+        /* MAIN */
+        .main{margin-left:230px;margin-top:56px;padding:16px 20px}
+        .chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:12px;scrollbar-width:none}
+        .chip{padding:6px 14px;border-radius:8px;border:none;background:#272727;color:#fff;font-size:13px;cursor:pointer;white-space:nowrap}
+        .chip.active{background:#fff;color:#000;font-weight:bold}
+        .active-filters{margin-bottom:12px;display:flex;gap:8px;flex-wrap:wrap}
+        .filter-tag{background:rgba(62,166,255,0.15);color:#3ea6ff;padding:4px 12px;border-radius:16px;font-size:12px}
+        .filter-tag .rm{cursor:pointer;font-weight:bold;margin-left:6px}
+
+        /* GRID */
+        .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+        .card{cursor:pointer;border-radius:10px;overflow:hidden;transition:transform 0.2s;background:#181818}
+        .card:hover{transform:scale(1.02)}
+        .thumb{position:relative;width:100%;aspect-ratio:16/9}
+        .thumb img{width:100%;height:100%;object-fit:cover}
+        .badge{position:absolute;bottom:8px;left:8px;background:rgba(0,0,0,0.85);color:#3ea6ff;padding:2px 6px;border-radius:4px;font-size:11px}
+        .info{padding:10px}
+        .info .title{font-size:13px;font-weight:bold;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:4px}
+        .info .channel{font-size:12px;color:#aaa}
+
+        /* VIDEO MODAL */
+        .player{width:100%;aspect-ratio:16/9}
+        .player iframe{width:100%;height:100%;border:none}
+        .modal-details{padding:16px}
+        .modal-details h2{font-size:16px;margin-bottom:6px}
+        .modal-details .ch{color:#aaa;font-size:13px}
+        .modal-actions{display:flex;gap:10px;padding:12px 16px;border-top:1px solid #272727;flex-wrap:wrap}
+        .m-action{background:#272727;border:none;color:#fff;padding:8px 14px;border-radius:20px;font-size:13px;cursor:pointer;display:flex;align-items:center;gap:6px;text-decoration:none}
+        .m-action:hover{background:#3a3a3a}
+        .m-action.liked{background:#3ea6ff33;color:#3ea6ff}
+        .m-action.subscribed{background:#f4433633;color:#f44}
+
+        /* COMMENTS */
+        .comments-section{padding:16px;border-top:1px solid #272727}
+        .comments-section h3{font-size:14px;margin-bottom:12px;color:#aaa}
+        .comment-row{display:flex;gap:8px;margin-bottom:12px}
+        .comment-input{flex:1;padding:8px 12px;border-radius:20px;border:1px solid #333;background:#0f0f0f;color:#fff;font-size:13px;outline:none}
+        .comment-submit{padding:8px 16px;border-radius:20px;border:none;background:#3ea6ff;color:#fff;font-size:13px;cursor:pointer}
+        .comment-item{padding:10px 0;border-bottom:1px solid #222}
+        .comment-user{font-size:12px;color:#3ea6ff;font-weight:bold}
+        .comment-text{font-size:13px;margin-top:4px}
+        .comment-time{font-size:10px;color:#666;margin-top:2px}
+        .comment-delete{background:none;border:none;color:#f44;font-size:11px;cursor:pointer;float:right}
+        .login-prompt{text-align:center;color:#888;font-size:13px;padding:20px}
+        .empty{text-align:center;padding:80px 20px;color:#666}
+
+        @media(max-width:768px){
+            .sidebar{transform:translateX(-100%)}
+            .sidebar.show{transform:translateX(0)}
+            .main{margin-left:0}
+            .search-bar{margin:0 8px}
+            .grid{grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}
+        }
+    </style>
 </head>
 <body>
 
     <!-- HEADER -->
     <header class="header">
-        <div class="header-left">
-            <i class="fas fa-bars menu-icon" onclick="toggleSidebar()"></i>
-            <div class="logo" onclick="showAll()">
-                <img src="logo.png" alt="Logo" class="custom-logo">
-                <span class="logo-text">Tunisian<span class="logo-yt">YouTube</span></span>
-            </div>
+        <div class="header-left" onclick="showAll()">
+            <i class="fas fa-bars" style="font-size:18px;cursor:pointer" onclick="event.stopPropagation();toggleSidebar()"></i>
+            <img src="logo.png" alt="Logo" class="custom-logo">
+            <span class="logo-text">Tunisian<span class="logo-yt">YouTube</span></span>
         </div>
         <div class="search-bar">
-            <input type="text" id="searchInput" placeholder="🔍 Lawwej 3la cours... (Photoshop, Python, Anglais, Bac...)" oninput="searchVideos()">
+            <input type="text" id="searchInput" placeholder="🔍 Lawwej 3la cours..." oninput="searchVideos()">
         </div>
         <div class="header-right">
-            <span class="flag">🇹🇳</span>
-            <span class="video-count" id="videoCount">0 cours</span>
+            <span class="vid-count" id="vCount">0</span>
+            <i class="fas fa-cog settings-icon" onclick="openSettings()"></i>
+            <div id="authArea"></div>
         </div>
     </header>
 
-    <!-- SIDEBAR -->
-    <aside class="sidebar" id="sidebar">
-        <div class="sidebar-section">
-            <h3>📚 Categories</h3>
-            <div id="categoryList"></div>
-        </div>
-        <div class="sidebar-section">
-            <h3>🎯 Mawadhi3 (Topics)</h3>
-            <div id="subCategoryList"></div>
-        </div>
-    </aside>
-
-    <!-- MAIN CONTENT -->
-    <main class="main-content" id="mainContent">
-        <div class="filter-chips" id="filterChips">
-            <button class="chip active" onclick="showAll()">El Kol</button>
-        </div>
-
-        <div class="active-filters" id="activeFilters"></div>
-
-        <div class="video-grid" id="videoGrid">
-            <p style="text-align:center; grid-column:1/-1; padding:50px; font-size:18px;">⏳ 9a3ed nchargi fel coursset...</p>
-        </div>
-
-        <div class="empty-state" id="emptyState" style="display:none;">
-            <i class="fas fa-search" style="font-size:60px;color:#666; margin-bottom:15px;"></i>
-            <h2>Ma l9ina 7atta vidéo!</h2>
-            <p>Jarreb kelma okhra fel recherche</p>
-        </div>
-    </main>
-
-    <!-- VIDEO PLAYER MODAL -->
-    <div class="modal-overlay" id="modalOverlay" onclick="closeModal()">
-        <div class="modal-content" onclick="event.stopPropagation()">
-            <button class="modal-close" onclick="closeModal()">✕</button>
-            <div class="video-player" id="videoPlayer"></div>
-            <div class="modal-info">
-                <h2 id="modalTitle"></h2>
-                <p id="modalChannel"></p>
-            </div>
+    <!-- AUTH MODAL -->
+    <div class="overlay" id="authOverlay">
+        <div class="modal-box">
+            <button class="m-close" onclick="closeAuth()">✕</button>
+            <h2 id="authTitle">Sign Up 🇹🇳</h2>
+            <p class="m-error" id="authError"></p>
+            <input class="m-input" id="authName" placeholder="Esmek (Username)">
+            <input class="m-input" id="authEmail" type="email" placeholder="Email">
+            <input class="m-input" id="authPass" type="password" placeholder="Mot de passe (min 6 caractères)">
+            <button class="m-btn" onclick="handleAuth()">Sign Up</button>
+            <p class="m-switch" id="authSwitch" onclick="toggleAuthMode()">Déjà un compte? Log In</p>
         </div>
     </div>
 
-    <script src="app.js"></script>
+    <!-- SETTINGS MODAL -->
+    <div class="overlay" id="settingsOverlay">
+        <div class="modal-box">
+            <button class="m-close" onclick="closeSettings()">✕</button>
+            <h2>⚙️ Settings</h2>
+            <div class="setting-item">
+                <span class="setting-label">🌙 Dark Mode</span>
+                <div class="toggle on" id="toggleDark" onclick="toggleSetting('dark')"></div>
+            </div>
+            <div class="setting-item">
+                <span class="setting-label">🔔 Notifications</span>
+                <div class="toggle" id="toggleNotif" onclick="toggleSetting('notif')"></div>
+            </div>
+            <div class="setting-item">
+                <span class="setting-label">▶️ Autoplay</span>
+                <div class="toggle on" id="toggleAuto" onclick="toggleSetting('auto')"></div>
+            </div>
+            <div class="setting-item">
+                <span class="setting-label">🗑️ Clear All Data</span>
+                <button class="m-btn red" style="width:auto;padding:6px 14px;font-size:12px" onclick="clearAllData()">Reset</button>
+            </div>
+            <br>
+            <button class="m-btn" onclick="closeSettings()">✅ Fermer</button>
+        </div>
+    </div>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+        <h3>📚 Categories</h3>
+        <div id="catList"></div>
+        <h3>🎯 Mawadhi3</h3>
+        <div id="subList"></div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main" id="mainContent">
+        <div class="chips" id="chipsList"></div>
+        <div class="active-filters" id="activeFilters"></div>
+        <div class="grid" id="grid"></div>
+        <div class="empty" id="empty" style="display:none">
+            <i class="fas fa-search" style="font-size:50px;margin-bottom:15px"></i>
+            <h2>Ma l9ina 7atta vidéo!</h2>
+        </div>
+    </main>
+
+    <!-- VIDEO MODAL -->
+    <div class="overlay" id="videoOverlay" onclick="closeModal()">
+        <div class="modal-box wide" onclick="event.stopPropagation()">
+            <button class="m-close" onclick="closeModal()">✕</button>
+            <div class="player" id="player"></div>
+            <div class="modal-details">
+                <h2 id="mTitle"></h2>
+                <p class="ch" id="mChan"></p>
+            </div>
+            <div class="modal-actions" id="modalActions"></div>
+            <div class="comments-section" id="commentsSection"></div>
+        </div>
+    </div>
+
+    <script>
+    // =====================================================================
+    // LOCAL STORAGE DATABASE (ZERO CONFIG - WORKS INSTANTLY)
+    // =====================================================================
+    const DB = {
+        get(key) { try { return JSON.parse(localStorage.getItem(key)) || null; } catch { return null; } },
+        set(key, val) { localStorage.setItem(key, JSON.stringify(val)); },
+        remove(key) { localStorage.removeItem(key); }
+    };
+
+    // =====================================================================
+    // AUTH SYSTEM (LOCAL - NO SERVER NEEDED)
+    // =====================================================================
+    let currentUser = DB.get("currentUser");
+    let isSignUp = true;
+
+    function renderAuth() {
+        const area = document.getElementById("authArea");
+        if (currentUser) {
+            const initial = (currentUser.name || currentUser.email || "U")[0].toUpperCase();
+            area.innerHTML = `
+                <div class="user-avatar" title="${currentUser.email}">${initial}</div>
+                <button class="auth-btn logout" onclick="logOut()">Logout</button>`;
+        } else {
+            area.innerHTML = `<button class="auth-btn" onclick="openAuth()">Login / Sign Up</button>`;
+        }
+    }
+
+    function openAuth() { document.getElementById("authOverlay").classList.add("active"); }
+    function closeAuth() { document.getElementById("authOverlay").classList.remove("active"); document.getElementById("authError").textContent = ""; }
+
+    function toggleAuthMode() {
+        isSignUp = !isSignUp;
+        document.getElementById("authTitle").textContent = isSignUp ? "Sign Up 🇹🇳" : "Log In 🇹🇳";
+        document.querySelector(".m-btn").textContent = isSignUp ? "Sign Up" : "Log In";
+        document.getElementById("authName").style.display = isSignUp ? "block" : "none";
+        document.getElementById("authSwitch").textContent = isSignUp ? "Déjà un compte? Log In" : "Pas de compte? Sign Up";
+    }
+
+    function handleAuth() {
+        const name = document.getElementById("authName").value.trim();
+        const email = document.getElementById("authEmail").value.trim();
+        const pass = document.getElementById("authPass").value;
+        const err = document.getElementById("authError");
+        err.textContent = "";
+
+        if (!email || !pass) { err.textContent = "Amli kol les champs!"; return; }
+        if (pass.length < 6) { err.textContent = "Mot de passe lazem ykoun 6 caractères minimum!"; return; }
+
+        let users = DB.get("users") || [];
+
+        if (isSignUp) {
+            if (!name) { err.textContent = "Amli esmek!"; return; }
+            if (users.find(u => u.email === email)) { err.textContent = "Email hedha deja mawjoud!"; return; }
+            const user = { name, email, pass, id: Date.now().toString() };
+            users.push(user);
+            DB.set("users", users);
+            currentUser = user;
+            DB.set("currentUser", user);
+        } else {
+            const user = users.find(u => u.email === email && u.pass === pass);
+            if (!user) { err.textContent = "Email wala mot de passe ghalet!"; return; }
+            currentUser = user;
+            DB.set("currentUser", user);
+        }
+
+        renderAuth();
+        closeAuth();
+    }
+
+    function logOut() {
+        currentUser = null;
+        DB.remove("currentUser");
+        renderAuth();
+    }
+
+    // =====================================================================
+    // SETTINGS
+    // =====================================================================
+    function loadSettings() {
+        const s = DB.get("settings") || { dark: true, notif: false, auto: true };
+        if (s.dark) document.getElementById("toggleDark").classList.add("on"); else document.getElementById("toggleDark").classList.remove("on");
+        if (s.notif) document.getElementById("toggleNotif").classList.add("on"); else document.getElementById("toggleNotif").classList.remove("on");
+        if (s.auto) document.getElementById("toggleAuto").classList.add("on"); else document.getElementById("toggleAuto").classList.remove("on");
+    }
+
+    function toggleSetting(key) {
+        const s = DB.get("settings") || { dark: true, notif: false, auto: true };
+        s[key] = !s[key];
+        DB.set("settings", s);
+        loadSettings();
+    }
+
+    function openSettings() { loadSettings(); document.getElementById("settingsOverlay").classList.add("active"); }
+    function closeSettings() { document.getElementById("settingsOverlay").classList.remove("active"); }
+
+    function clearAllData() {
+        if (confirm("T7eb tefsa5 kol el data? (Likes, Comments, Settings)")) {
+            localStorage.clear();
+            location.reload();
+        }
+    }
+
+    // =====================================================================
+    // LIKES SYSTEM
+    // =====================================================================
+    function getLikes(videoId) {
+        const likes = DB.get("likes") || {};
+        return likes[videoId] || [];
+    }
+
+    function toggleLike(videoId) {
+        if (!currentUser) { openAuth(); return; }
+        const likes = DB.get("likes") || {};
+        if (!likes[videoId]) likes[videoId] = [];
+        const idx = likes[videoId].indexOf(currentUser.id);
+        if (idx > -1) likes[videoId].splice(idx, 1);
+        else likes[videoId].push(currentUser.id);
+        DB.set("likes", likes);
+        refreshModalActions(videoId);
+    }
+
+    function isLiked(videoId) {
+        if (!currentUser) return false;
+        return getLikes(videoId).includes(currentUser.id);
+    }
+
+    // =====================================================================
+    // SUBSCRIBE SYSTEM
+    // =====================================================================
+    function getSubs() {
+        if (!currentUser) return [];
+        const subs = DB.get("subs_" + currentUser.id) || [];
+        return subs;
+    }
+
+    function toggleSubscribe(channel) {
+        if (!currentUser) { openAuth(); return; }
+        const key = "subs_" + currentUser.id;
+        let subs = DB.get(key) || [];
+        const idx = subs.indexOf(channel);
+        if (idx > -1) subs.splice(idx, 1);
+        else subs.push(channel);
+        DB.set(key, subs);
+        refreshModalActions(currentVideoId);
+    }
+
+    function isSubscribed(channel) {
+        return getSubs().includes(channel);
+    }
+
+    // =====================================================================
+    // COMMENTS SYSTEM
+    // =====================================================================
+    function getComments(videoId) {
+        const comments = DB.get("comments") || {};
+        return comments[videoId] || [];
+    }
+
+    function postComment(videoId) {
+        if (!currentUser) { openAuth(); return; }
+        const input = document.getElementById("commentInput");
+        const text = input.value.trim();
+        if (!text) return;
+
+        const comments = DB.get("comments") || {};
+        if (!comments[videoId]) comments[videoId] = [];
+        comments[videoId].unshift({
+            id: Date.now().toString(),
+            userId: currentUser.id,
+            userName: currentUser.name,
+            text: text,
+            time: new Date().toLocaleString()
+        });
+        DB.set("comments", comments);
+        input.value = "";
+        renderComments(videoId);
+    }
+
+    function deleteComment(videoId, commentId) {
+        const comments = DB.get("comments") || {};
+        if (comments[videoId]) {
+            comments[videoId] = comments[videoId].filter(c => c.id !== commentId);
+            DB.set("comments", comments);
+            renderComments(videoId);
+        }
+    }
+
+    function renderComments(videoId) {
+        const section = document.getElementById("commentsSection");
+        const comments = getComments(videoId);
+
+        let inputHTML = "";
+        if (currentUser) {
+            inputHTML = `<div class="comment-row">
+                <input class="comment-input" id="commentInput" placeholder="Zid commentaire..." onkeypress="if(event.key==='Enter')postComment('${videoId}')">
+                <button class="comment-submit" onclick="postComment('${videoId}')">Publier</button>
+            </div>`;
+        } else {
+            inputHTML = `<p class="login-prompt">🔒 <span style="color:#3ea6ff;cursor:pointer" onclick="openAuth()">Connecte-toi</span> bech tzid commentaire</p>`;
+        }
+
+        let listHTML = "";
+        if (comments.length === 0) {
+            listHTML = "<p style='color:#666;font-size:13px'>Ma fammach commentaires. Koune enti el awel! 💬</p>";
+        } else {
+            comments.forEach(c => {
+                const canDelete = currentUser && currentUser.id === c.userId;
+                listHTML += `<div class="comment-item">
+                    ${canDelete ? `<button class="comment-delete" onclick="deleteComment('${videoId}','${c.id}')">🗑️</button>` : ""}
+                    <span class="comment-user">@${c.userName}</span>
+                    <p class="comment-text">${c.text}</p>
+                    <span class="comment-time">${c.time}</span>
+                </div>`;
+            });
+        }
+
+        section.innerHTML = `<h3>💬 Commentaires (${comments.length})</h3>${inputHTML}${listHTML}`;
+    }
+
+    // =====================================================================
+    // SHARE & DOWNLOAD
+    // =====================================================================
+    function shareVideo(id) {
+        const url = `https://www.youtube.com/watch?v=${id}`;
+        if (navigator.share) {
+            navigator.share({ title: "Cours Tounsi 🇹🇳", url });
+        } else {
+            navigator.clipboard.writeText(url);
+            alert("✅ Lien copié!");
+        }
+    }
+
+    function downloadVideo(id) {
+        window.open(`https://www.y2mate.com/youtube/${id}`, "_blank");
+    }
+
+    // =====================================================================
+    // VIDEO DATA LOADER
+    // =====================================================================
+    let allVideos = [];
+    let currentFilter = { cat: null, sub: null, search: "" };
+    let currentVideoId = "";
+
+    const ts = new Date().getTime();
+    const loader = document.createElement("script");
+    loader.src = `data.js?v=${ts}`;
+    loader.onload = () => {
+        if (typeof rawVideosData !== 'undefined') initApp(rawVideosData);
+        else fetchJSON();
+    };
+    loader.onerror = fetchJSON;
+    document.head.appendChild(loader);
+
+    function fetchJSON() {
+        fetch(`tounes_courses.json?v=${ts}`, { cache: "no-store" })
+            .then(r => r.json())
+            .then(d => initApp(d))
+            .catch(() => { document.getElementById("grid").innerHTML = "<p style='color:red;text-align:center;grid-column:1/-1'>Error loading data</p>"; });
+    }
+
+    function initApp(raw) {
+        allVideos = raw.map(v => {
+            const id = v.Video_ID || v.video_id || v.id || "";
+            return { id, title: v.Titre || v.title || "", channel: v.Chaine || v.channel || "", category: v.Categorie || v.category || "Autre", topic: v.Mawdhou3 || v.topic || "Général", thumb: `https://img.youtube.com/vi/${id}/hqdefault.jpg` };
+        }).filter(v => v.id && v.id.length === 11);
+
+        document.getElementById("vCount").textContent = `${allVideos.length} cours`;
+        buildSidebar(); buildChips(); render(allVideos);
+    }
+
+    // =====================================================================
+    // SIDEBAR & CHIPS & RENDER & FILTERS
+    // =====================================================================
+    function buildSidebar() {
+        const cats = {}, subs = {};
+        allVideos.forEach(v => { cats[v.category] = (cats[v.category]||0)+1; if (v.topic !== "Général") subs[v.topic] = (subs[v.topic]||0)+1; });
+        const icons = { Design:"🎨", Programmation:"💻", Langues:"🗣️", Marketing:"📈", Montage:"🎬", Freelance:"💼", "Bac & Etudes":"📚", Bureautique:"📊", Autre:"📦" };
+        const cl = document.getElementById("catList");
+        cl.innerHTML = `<button class="sidebar-btn active" onclick="filterCat(null,this)">🌐 El Kol <span class="cat-count">${allVideos.length}</span></button>`;
+        Object.entries(cats).sort((a,b)=>b[1]-a[1]).forEach(([c,n]) => { cl.innerHTML += `<button class="sidebar-btn" onclick="filterCat('${c}',this)">${icons[c]||"📦"} ${c} <span class="cat-count">${n}</span></button>`; });
+        const sl = document.getElementById("subList");
+        sl.innerHTML = "";
+        Object.entries(subs).sort((a,b)=>b[1]-a[1]).slice(0,20).forEach(([s,n]) => { sl.innerHTML += `<button class="sidebar-btn" onclick="filterSub('${s}',this)">📌 ${s} <span class="cat-count">${n}</span></button>`; });
+    }
+
+    function buildChips() {
+        const ch = document.getElementById("chipsList");
+        const cats = [...new Set(allVideos.map(v=>v.category))];
+        ch.innerHTML = `<button class="chip active" onclick="showAll()">El Kol</button>`;
+        cats.forEach(c => { ch.innerHTML += `<button class="chip" onclick="filterChip('${c}',this)">${c}</button>`; });
+    }
+
+    function render(list) {
+        const g = document.getElementById("grid"), e = document.getElementById("empty");
+        if (!list.length) { g.innerHTML=""; e.style.display="block"; return; }
+        e.style.display = "none";
+        g.innerHTML = list.map(v => `
+            <div class="card" onclick="openModal('${v.id}','${esc(v.title)}','${esc(v.channel)}')">
+                <div class="thumb">
+                    <img src="${v.thumb}" loading="lazy" onerror="this.src='https://img.youtube.com/vi/${v.id}/0.jpg'">
+                    <span class="badge">${v.topic}</span>
+                </div>
+                <div class="info">
+                    <div class="title">${v.title}</div>
+                    <div class="channel">📺 ${v.channel}</div>
+                </div>
+            </div>`).join("");
+    }
+
+    function esc(s) { return (s||"").replace(/'/g,"\\'").replace(/"/g,'\\"'); }
+
+    function showAll() { currentFilter={cat:null,sub:null,search:""}; document.getElementById("searchInput").value=""; document.querySelectorAll(".sidebar-btn,.chip").forEach(b=>b.classList.remove("active")); document.querySelector(".chip")?.classList.add("active"); apply(); }
+    function filterCat(c,btn) { currentFilter.cat=c; currentFilter.sub=null; document.querySelectorAll("#catList .sidebar-btn").forEach(b=>b.classList.remove("active")); btn?.classList.add("active"); apply(); }
+    function filterSub(s,btn) { currentFilter.sub=s; document.querySelectorAll("#subList .sidebar-btn").forEach(b=>b.classList.remove("active")); btn?.classList.add("active"); apply(); }
+    function filterChip(c,btn) { currentFilter.cat=c; currentFilter.sub=null; document.querySelectorAll(".chip").forEach(b=>b.classList.remove("active")); btn?.classList.add("active"); apply(); }
+    function searchVideos() { currentFilter.search=document.getElementById("searchInput").value.toLowerCase(); apply(); }
+
+    function apply() {
+        let r = allVideos;
+        if (currentFilter.cat) r = r.filter(v=>v.category===currentFilter.cat);
+        if (currentFilter.sub) r = r.filter(v=>v.topic===currentFilter.sub);
+        if (currentFilter.search) r = r.filter(v=>(v.title+v.channel+v.topic+v.category).toLowerCase().includes(currentFilter.search));
+        render(r);
+    }
+
+    // =====================================================================
+    // VIDEO MODAL
+    // =====================================================================
+    function openModal(id, title, chan) {
+        currentVideoId = id;
+        const settings = DB.get("settings") || { auto: true };
+        const autoParam = settings.auto ? "?autoplay=1" : "";
+        document.getElementById("player").innerHTML = `<iframe src="https://www.youtube.com/embed/${id}${autoParam}" allowfullscreen allow="autoplay"></iframe>`;
+        document.getElementById("mTitle").textContent = title;
+        document.getElementById("mChan").textContent = "📺 " + chan;
+        refreshModalActions(id);
+        renderComments(id);
+        document.getElementById("videoOverlay").classList.add("active");
+        document.body.style.overflow = "hidden";
+    }
+
+    function refreshModalActions(videoId) {
+        const liked = isLiked(videoId);
+        const likeCount = getLikes(videoId).length;
+        const chan = document.getElementById("mChan").textContent.replace("📺 ", "");
+        const subbed = isSubscribed(chan);
+
+        document.getElementById("modalActions").innerHTML = `
+            <button class="m-action ${liked?'liked':''}" onclick="toggleLike('${videoId}')">
+                <i class="fas fa-thumbs-up"></i> ${likeCount} Like
+            </button>
+            <button class="m-action ${subbed?'subscribed':''}" onclick="toggleSubscribe('${esc(chan)}')">
+                <i class="fas fa-bell"></i> ${subbed ? 'Subscribed ✓' : 'Subscribe'}
+            </button>
+            <button class="m-action" onclick="downloadVideo('${videoId}')">
+                <i class="fas fa-download"></i> Download
+            </button>
+            <button class="m-action" onclick="shareVideo('${videoId}')">
+                <i class="fas fa-share"></i> Share
+            </button>`;
+    }
+
+    function closeModal() {
+        document.getElementById("videoOverlay").classList.remove("active");
+        document.getElementById("player").innerHTML = "";
+        document.body.style.overflow = "";
+    }
+
+    // =====================================================================
+    // KEYBOARD & SIDEBAR
+    // =====================================================================
+    document.addEventListener("keydown", e => { if (e.key === "Escape") { closeModal(); closeAuth(); closeSettings(); } });
+    function toggleSidebar() { const s=document.getElementById("sidebar"),m=document.getElementById("mainContent"); s.classList.toggle("hidden"); m.style.marginLeft=s.classList.contains("hidden")?"0":"230px"; }
+
+    // INIT
+    renderAuth();
+    loadSettings();
+    </script>
 </body>
 </html>
