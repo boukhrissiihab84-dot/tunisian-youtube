@@ -1,211 +1,842 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tunisian YouTube 🇹🇳 - منصة الدروس التونسية</title>
-    
-    <!-- FAVICON -->
+    <title>Tunisian YouTube 🇹🇳</title>
     <link rel="icon" type="image/png" href="logo.png">
-    
-    <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <style>
+    /* ============ LIGHT MODE (DEFAULT) ============ */
+    :root, [data-theme="light"] {
+        --bg: #ffffff;
+        --surface: #f8f9fa;
+        --surface2: #f0f2f5;
+        --surface3: #e4e6eb;
+        --border: #dcdfe3;
+        --border2: #c8ccd1;
+        --text: #0f0f0f;
+        --text2: #606060;
+        --text3: #909090;
+        --accent: #065fd4;
+        --red: #ff0033;
+        --gradient: linear-gradient(135deg, #065fd4 0%, #a855f7 100%);
+        --gradient2: linear-gradient(135deg, #ff0033 0%, #ff6b35 100%);
+        --header-bg: rgba(255, 255, 255, 0.9);
+        --shadow-sm: 0 2px 8px rgba(0,0,0,0.06);
+        --shadow-md: 0 8px 24px rgba(0,0,0,0.1);
+        --shadow-lg: 0 20px 50px rgba(0,0,0,0.15);
+    }
+
+    /* ============ DARK MODE ============ */
+    [data-theme="dark"] {
+        --bg: #0a0a0a;
+        --surface: #141414;
+        --surface2: #1f1f1f;
+        --surface3: #2b2b2b;
+        --border: #282828;
+        --border2: #383838;
+        --text: #ffffff;
+        --text2: #aaaaaa;
+        --text3: #666666;
+        --accent: #3ea6ff;
+        --red: #ff0033;
+        --gradient: linear-gradient(135deg, #3ea6ff 0%, #a855f7 100%);
+        --gradient2: linear-gradient(135deg, #ff0033 0%, #ff6b35 100%);
+        --header-bg: rgba(10, 10, 10, 0.85);
+        --shadow-sm: 0 2px 8px rgba(0,0,0,0.4);
+        --shadow-md: 0 8px 24px rgba(0,0,0,0.6);
+        --shadow-lg: 0 20px 50px rgba(0,0,0,0.8);
+    }
+
+    :root {
+        --radius: 14px;
+        --radius-sm: 8px;
+        --radius-full: 50px;
+        --header-h: 60px;
+        --sidebar-w: 240px;
+        --font: 'Inter', sans-serif;
+        --transition: cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font); background: var(--bg); color: var(--text); overflow-x: hidden; transition: background 0.3s, color 0.3s; }
+
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-thumb { background: var(--surface3); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+    button { font-family: var(--font); cursor: pointer; border: none; outline: none; background: none; color: inherit; transition: all 0.25s var(--transition); }
+    input, textarea, select { font-family: var(--font); outline: none; border: none; }
+
+    /* Animations */
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes slideDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes scaleIn { from { opacity: 0; transform: scale(0.93); } to { opacity: 1; transform: scale(1); } }
+    @keyframes pulseGlow { 0%, 100% { transform: scale(1); box-shadow: 0 0 10px rgba(255,0,51,0.3); } 50% { transform: scale(1.05); box-shadow: 0 0 20px rgba(255,0,51,0.6); } }
+
+    /* Font size classes */
+    body.font-small { font-size: 13px; }
+    body.font-normal { font-size: 14px; }
+    body.font-large { font-size: 16px; }
+
+    /* ====== HEADER ====== */
+    .hdr {
+        position: fixed;
+        top: 0; left: 0; right: 0;
+        height: var(--header-h);
+        background: var(--header-bg);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 20px;
+        border-bottom: 1px solid var(--border);
+        z-index: 1000;
+        animation: slideDown 0.4s var(--transition);
+    }
+    .hdr-left { display: flex; align-items: center; gap: 16px; }
+    .menu-i { font-size: 18px; color: var(--text); padding: 8px; border-radius: 50%; cursor: pointer; transition: 0.3s; }
+    .menu-i:hover { background: var(--surface2); transform: rotate(90deg); }
+    .logo-wrap { display: flex; align-items: center; gap: 10px; cursor: pointer; transition: 0.3s; }
+    .logo-wrap:hover { transform: scale(1.04); }
+    .logo-img { height: 34px; border-radius: 8px; box-shadow: 0 4px 14px rgba(62,166,255,0.2); }
+    .logo-t { font-size: 19px; font-weight: 900; letter-spacing: -0.5px; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .logo-r { background: var(--gradient2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+    .search-wrap { flex: 1; max-width: 520px; margin: 0 20px; position: relative; }
+    .search-wrap input { width: 100%; padding: 9px 20px; padding-right: 48px; border-radius: var(--radius-full); border: 1px solid var(--border); background: var(--surface); color: var(--text); font-size: 14px; transition: 0.3s; }
+    .search-wrap input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(62,166,255,0.15); }
+    .search-btn { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--text2); font-size: 14px; transition: 0.3s; }
+    .search-btn:hover { background: var(--accent); color: #fff; }
+
+    .hdr-right { display: flex; align-items: center; gap: 12px; }
+    .vid-count { background: var(--gradient2); color: #fff; padding: 4px 12px; border-radius: var(--radius-full); font-size: 12px; font-weight: 700; animation: pulseGlow 2.5s infinite; }
+    .icon-btn { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--text2); font-size: 16px; transition: 0.3s; }
+    .icon-btn:hover { background: var(--surface2); color: var(--text); transform: translateY(-2px); }
+
+    .avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--gradient); display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 700; cursor: pointer; overflow: hidden; color: #fff; box-shadow: 0 4px 14px rgba(62,166,255,0.35); transition: 0.3s; }
+    .avatar:hover { transform: scale(1.1); }
+    .avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+    .auth-cta { padding: 7px 18px; border-radius: var(--radius-full); background: var(--gradient); color: #fff; font-size: 13px; font-weight: 600; box-shadow: 0 4px 14px rgba(62,166,255,0.3); display: flex; align-items: center; gap: 6px; transition: 0.3s; }
+    .auth-cta:hover { transform: translateY(-2px); }
+
+    /* Dropdown */
+    .dropdown { position: absolute; top: 68px; right: 20px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); width: 280px; z-index: 2000; display: none; box-shadow: var(--shadow-lg); overflow: hidden; }
+    .dropdown.show { display: block; animation: scaleIn 0.25s var(--transition); }
+    .dd-header { padding: 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px; background: var(--surface2); }
+    .dd-avatar { width: 44px; height: 44px; border-radius: 50%; background: var(--gradient); display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; overflow: hidden; color: #fff; flex-shrink: 0; }
+    .dd-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .dd-info { flex: 1; min-width: 0; }
+    .dd-name { font-size: 14px; font-weight: 700; }
+    .dd-email { font-size: 12px; color: var(--text2); }
+    .dd-item { padding: 11px 18px; display: flex; align-items: center; gap: 12px; font-size: 13.5px; color: var(--text); cursor: pointer; transition: 0.2s; width: 100%; text-align: left; }
+    .dd-item:hover { background: var(--surface2); padding-left: 24px; }
+    .dd-item i { width: 20px; text-align: center; color: var(--text2); font-size: 14px; }
+    .dd-sep { height: 1px; background: var(--border); margin: 4px 0; }
+    .dd-item.danger { color: #ff4d4d; }
+    .dd-item.danger i { color: #ff4d4d; }
+
+    /* Modals */
+    .ov { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(10px); z-index: 3000; justify-content: center; align-items: flex-start; padding-top: 60px; overflow-y: auto; }
+    .ov.active { display: flex; animation: fadeIn 0.3s var(--transition); }
+    .ov-box { background: var(--surface); border-radius: var(--radius); border: 1px solid var(--border); width: 92%; max-width: 480px; margin-bottom: 40px; overflow: hidden; position: relative; box-shadow: var(--shadow-lg); animation: scaleIn 0.3s var(--transition); }
+    .ov-box.lg { max-width: 900px; }
+    .ov-head { padding: 18px 22px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; background: var(--surface2); }
+    .ov-head h2 { font-size: 17px; font-weight: 700; }
+    .ov-close { background: var(--surface3); color: var(--text2); font-size: 14px; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; }
+    .ov-close:hover { background: #ff4d4d; color: #fff; transform: rotate(90deg); }
+    .ov-body { padding: 22px; }
+
+    /* Forms */
+    .form-group { margin-bottom: 16px; }
+    .form-label { font-size: 12px; color: var(--text2); margin-bottom: 6px; display: block; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; text-align: left; }
+    .form-input { width: 100%; padding: 11px 14px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--bg); color: var(--text); font-size: 14px; transition: 0.3s; }
+    .form-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(62,166,255,0.15); }
+    .form-textarea { width: 100%; padding: 11px 14px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--bg); color: var(--text); font-size: 14px; resize: vertical; min-height: 85px; }
+    .form-btn { width: 100%; padding: 11px; border-radius: var(--radius-sm); font-size: 14px; font-weight: 600; text-align: center; cursor: pointer; transition: 0.3s; }
+    .btn-primary { background: var(--gradient); color: #fff; box-shadow: 0 4px 14px rgba(62,166,255,0.35); }
+    .btn-primary:hover { transform: translateY(-2px); }
+    .btn-danger { background: var(--gradient2); color: #fff; }
+    .btn-outline { border: 1px solid var(--border2); color: var(--text); background: var(--surface2); }
+    .form-error { color: #ff4d4d; font-size: 13px; margin-bottom: 10px; text-align: center; font-weight: 600; }
+    .form-switch { color: var(--accent); font-size: 13px; text-align: center; margin-top: 12px; cursor: pointer; }
+    .avatar-upload { width: 84px; height: 84px; border-radius: 50%; background: var(--surface2); display: flex; align-items: center; justify-content: center; cursor: pointer; margin: 0 auto 16px; overflow: hidden; border: 2px dashed var(--border2); position: relative; transition: 0.3s; }
+    .avatar-upload:hover { border-color: var(--accent); }
+    .avatar-upload img { width: 100%; height: 100%; object-fit: cover; }
+    .avatar-upload i { font-size: 22px; color: var(--text3); }
+    .avatar-upload input { position: absolute; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
+
+    /* Settings */
+    .settings-nav { display: flex; border-bottom: 1px solid var(--border); overflow-x: auto; background: var(--surface2); scrollbar-width: none; }
+    .settings-nav::-webkit-scrollbar { display: none; }
+    .settings-tab { padding: 12px 20px; font-size: 13px; font-weight: 600; color: var(--text2); border-bottom: 2px solid transparent; white-space: nowrap; cursor: pointer; transition: 0.3s; }
+    .settings-tab:hover { color: var(--text); }
+    .settings-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+    .settings-page { display: none; padding: 20px; animation: fadeIn 0.3s; }
+    .settings-page.active { display: block; }
+    .setting-row { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid var(--border); }
+    .setting-row:last-child { border: none; }
+    .setting-info { flex: 1; padding-right: 14px; text-align: left; }
+    .setting-title { font-size: 14px; font-weight: 600; }
+    .setting-desc { font-size: 12px; color: var(--text2); margin-top: 3px; }
+    .toggle { width: 44px; height: 24px; border-radius: 12px; background: var(--surface3); position: relative; cursor: pointer; transition: 0.3s; flex-shrink: 0; }
+    .toggle.on { background: var(--gradient); box-shadow: 0 0 12px rgba(62,166,255,0.4); }
+    .toggle::after { content: ''; position: absolute; width: 18px; height: 18px; border-radius: 50%; background: #fff; top: 3px; left: 3px; transition: 0.3s; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+    .toggle.on::after { left: 23px; }
+    .form-select { padding: 8px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--bg); color: var(--text); font-size: 13px; cursor: pointer; }
+
+    /* Sidebar */
+    .side { position: fixed; top: var(--header-h); left: 0; width: var(--sidebar-w); height: calc(100vh - var(--header-h)); background: var(--bg); border-right: 1px solid var(--border); overflow-y: auto; padding: 10px 8px; z-index: 999; transition: transform 0.3s var(--transition); }
+    .side.hidden { transform: translateX(-100%); }
+    .side h4 { font-size: 11px; color: var(--text3); padding: 12px 12px 6px; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 700; text-align: left; }
+    .side-btn { display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 9px 12px; background: transparent; color: var(--text); font-size: 13.5px; border-radius: var(--radius-sm); margin-bottom: 2px; transition: all 0.2s; text-align: left; position: relative; }
+    .side-btn::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--accent); transform: scaleY(0); transition: 0.25s; }
+    .side-btn:hover, .side-btn.active { background: var(--surface2); font-weight: 600; padding-left: 18px; }
+    .side-btn.active::before { transform: scaleY(1); }
+    .side-cnt { background: var(--surface3); padding: 2px 7px; border-radius: 10px; font-size: 11px; color: var(--text2); font-weight: 600; }
+    .side-btn.active .side-cnt { background: var(--accent); color: #fff; }
+
+    /* Main */
+    .main { margin-left: var(--sidebar-w); margin-top: var(--header-h); padding: 18px 24px; min-height: calc(100vh - var(--header-h)); transition: margin-left 0.3s var(--transition); animation: fadeIn 0.4s var(--transition); }
+    .filter-bar { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 14px; scrollbar-width: none; align-items: center; }
+    .filter-bar::-webkit-scrollbar { display: none; }
+    .f-chip { padding: 7px 16px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--surface2); color: var(--text); font-size: 13px; white-space: nowrap; font-weight: 500; transition: 0.25s; }
+    .f-chip:hover { background: var(--surface3); transform: translateY(-2px); }
+    .f-chip.active { background: var(--text); color: var(--bg); font-weight: 700; border-color: var(--text); }
+
+    /* Grid */
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 18px; margin-top: 6px; }
+    .card { border-radius: var(--radius); overflow: hidden; transition: 0.3s; cursor: pointer; animation: fadeIn 0.4s both; }
+    .card:hover { transform: translateY(-6px); }
+    .card-thumb { position: relative; width: 100%; aspect-ratio: 16/9; overflow: hidden; background: var(--surface2); border-radius: var(--radius); box-shadow: var(--shadow-sm); transition: 0.3s; }
+    .card:hover .card-thumb { box-shadow: var(--shadow-md); }
+    .card-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s var(--transition); }
+    .card:hover .card-thumb img { transform: scale(1.08); }
+    .card-thumb::after { content: '▶'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0); color: #fff; font-size: 22px; z-index: 2; background: rgba(255,0,51,0.9); width: 52px; height: 52px; border-radius: 50%; display: flex; align-items: center; justify-content: center; padding-left: 4px; transition: 0.35s; box-shadow: 0 6px 20px rgba(255,0,51,0.5); }
+    .card:hover .card-thumb::after { transform: translate(-50%, -50%) scale(1); }
+    .card-badge { position: absolute; bottom: 8px; left: 8px; background: rgba(0,0,0,0.85); color: #fff; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; z-index: 1; }
+    .card-body { padding: 10px 2px; }
+    .card-title { font-size: 13.5px; font-weight: 600; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 4px; transition: 0.2s; }
+    .card:hover .card-title { color: var(--accent); }
+    .card-ch { font-size: 12px; color: var(--text2); display: flex; align-items: center; gap: 6px; }
+    .card-cat { display: inline-block; font-size: 11px; color: var(--accent); margin-top: 4px; font-weight: 700; background: rgba(62,166,255,0.1); padding: 2px 7px; border-radius: 4px; }
+
+    /* Video Player */
+    .v-player { width: 100%; aspect-ratio: 16/9; background: #000; }
+    .v-player iframe { width: 100%; height: 100%; border: none; }
+    .v-details { padding: 18px 22px; text-align: left; }
+    .v-title { font-size: 17px; font-weight: 700; margin-bottom: 6px; line-height: 1.4; }
+    .v-ch { color: var(--text2); font-size: 13px; }
+    .v-actions { display: flex; gap: 8px; padding: 12px 22px; border-top: 1px solid var(--border); flex-wrap: wrap; background: var(--surface2); }
+    .v-act { background: var(--surface3); color: var(--text); padding: 8px 16px; border-radius: var(--radius-full); font-size: 12.5px; font-weight: 600; display: flex; align-items: center; gap: 6px; transition: 0.25s; cursor: pointer; }
+    .v-act:hover { transform: translateY(-2px); }
+    .v-act.liked { background: rgba(62,166,255,0.15); color: var(--accent); }
+    .v-act.subscribed { background: rgba(255,0,51,0.12); color: var(--red); }
+
+    /* Comments */
+    .cmt-section { padding: 20px 22px; border-top: 1px solid var(--border); text-align: left; }
+    .cmt-section h3 { font-size: 14px; margin-bottom: 14px; font-weight: 700; }
+    .cmt-form { display: flex; gap: 12px; margin-bottom: 16px; align-items: flex-start; }
+    .cmt-avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--gradient); display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; color: #fff; overflow: hidden; }
+    .cmt-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .cmt-input-wrap { flex: 1; }
+    .cmt-input { width: 100%; padding: 8px 0; border-bottom: 1.5px solid var(--border); background: transparent; color: var(--text); font-size: 14px; transition: 0.3s; }
+    .cmt-input:focus { border-bottom-color: var(--accent); }
+    .cmt-btns { display: flex; gap: 8px; justify-content: flex-end; margin-top: 8px; }
+    .cmt-submit { padding: 6px 16px; border-radius: var(--radius-full); background: var(--gradient); color: #fff; font-size: 13px; font-weight: 600; cursor: pointer; }
+    .cmt-item { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); }
+    .cmt-item:last-child { border: none; }
+    .cmt-user { font-size: 12px; font-weight: 700; color: var(--accent); }
+    .cmt-text { font-size: 13.5px; margin-top: 4px; line-height: 1.5; }
+    .cmt-time { font-size: 11px; color: var(--text3); margin-top: 3px; }
+    .cmt-del { background: none; color: var(--text3); font-size: 11px; cursor: pointer; float: right; }
+    .cmt-del:hover { color: #ff4d4d; }
+    .cmt-login { text-align: center; color: var(--text3); font-size: 13px; padding: 20px; background: var(--surface2); border-radius: var(--radius-sm); }
+    .cmt-login a { color: var(--accent); cursor: pointer; font-weight: 600; }
+
+    .empty-state { text-align: center; padding: 80px 20px; color: var(--text3); }
+    .empty-state i { font-size: 40px; margin-bottom: 12px; }
+
+    @media(max-width:768px){
+        .side { transform: translateX(-100%); }
+        .side.show { transform: translateX(0); }
+        .main { margin-left: 0; padding: 16px; }
+        .search-wrap { max-width: none; margin: 0 6px; }
+        .grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+        .hdr { padding: 0 12px; }
+    }
+    </style>
 </head>
 <body>
 
-    <!-- HEADER -->
-    <header class="hdr">
-        <div class="hdr-left">
-            <i class="fas fa-bars menu-i" onclick="toggleSidebar()"></i>
-            <div class="logo-wrap" onclick="showAll()">
-                <img src="logo.png" alt="Logo" class="logo-img">
-                <span class="logo-t">Tunisian<span class="logo-r">YouTube</span></span>
-            </div>
-        </div>
-        <div class="search-bar">
-            <input type="text" id="searchInput" placeholder="Search courses..." oninput="searchVideos()">
-        </div>
-        <div class="hdr-right">
-            <span class="vid-count" id="vCount">0 cours</span>
-            <button class="icon-btn" onclick="openSettings()" title="Settings"><i class="fas fa-cog"></i></button>
-            <div id="authArea"></div>
-        </div>
-    </header>
-
-    <!-- USER DROPDOWN -->
-    <div class="dropdown" id="dropdown">
-        <div class="dd-header">
-            <div class="dd-avatar" id="ddAvatar">U</div>
-            <div class="dd-info">
-                <div class="dd-name" id="ddName">Username</div>
-                <div class="dd-email" id="ddEmail">email@email.com</div>
-            </div>
-        </div>
-        <div class="dd-item" onclick="openProfile()"><i class="fas fa-user-circle"></i> My Channel</div>
-        <div class="dd-item" onclick="openSettings()"><i class="fas fa-cog"></i> Settings</div>
-        <div class="dd-item" onclick="openLikedVideos()"><i class="fas fa-heart"></i> Liked Videos</div>
-        <div class="dd-item" onclick="openSubscriptions()"><i class="fas fa-bell"></i> Subscriptions</div>
-        <div class="dd-sep"></div>
-        <div class="dd-item danger" onclick="logOut()"><i class="fas fa-sign-out-alt"></i> Sign Out</div>
-    </div>
-
-    <!-- AUTH MODAL -->
-    <div class="ov" id="authOv">
-        <div class="ov-box">
-            <div class="ov-head"><h2 id="authTitle">Create Account</h2><button class="ov-close" onclick="closeAuth()">✕</button></div>
-            <div class="ov-body">
-                <div class="avatar-upload" id="signupAvatar">
-                    <i class="fas fa-camera"></i>
-                    <input type="file" accept="image/*" onchange="previewAvatar(event)">
-                </div>
-                <div class="form-group" id="nameGroup">
-                    <label class="form-label">Display Name</label>
-                    <input class="form-input" id="authName" placeholder="Your name">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Email</label>
-                    <input class="form-input" id="authEmail" type="email" placeholder="email@example.com">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Password</label>
-                    <input class="form-input" id="authPass" type="password" placeholder="Min 6 characters">
-                </div>
-                <p class="form-error" id="authError"></p>
-                <button class="form-btn btn-primary" onclick="handleAuth()">Create Account</button>
-                <p class="form-switch" id="authSwitch" onclick="toggleAuthMode()">Already have an account? <b>Sign In</b></p>
-            </div>
+<header class="hdr">
+    <div class="hdr-left">
+        <i class="fas fa-bars menu-i" onclick="toggleSidebar()"></i>
+        <div class="logo-wrap" onclick="showAll()">
+            <img src="logo.png" alt="Logo" class="logo-img" onerror="this.style.display='none'">
+            <span class="logo-t">Tunisian<span class="logo-r">YouTube</span></span>
         </div>
     </div>
+    <div class="search-wrap">
+        <input type="text" id="searchInput" placeholder="Search courses..." oninput="searchVideos()">
+        <button class="search-btn" onclick="searchVideos()"><i class="fas fa-search"></i></button>
+    </div>
+    <div class="hdr-right">
+        <span class="vid-count" id="vCount">0 cours</span>
+        <button class="icon-btn" onclick="toggleTheme()" title="Toggle Theme" id="themeBtn"><i class="fas fa-moon"></i></button>
+        <button class="icon-btn" onclick="openSettings()" title="Settings"><i class="fas fa-cog"></i></button>
+        <div id="authArea"></div>
+    </div>
+</header>
 
-    <!-- PROFILE / CHANNEL MODAL -->
-    <div class="ov" id="profileOv">
-        <div class="ov-box">
-            <div class="ov-head"><h2>My Channel</h2><button class="ov-close" onclick="closeProfile()">✕</button></div>
-            <div class="ov-body">
-                <div class="avatar-upload" id="profileAvatarWrap">
-                    <i class="fas fa-camera"></i>
-                    <input type="file" accept="image/*" onchange="changeProfilePic(event)">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Channel Name</label>
-                    <input class="form-input" id="profileName" placeholder="Your channel name">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Email</label>
-                    <input class="form-input" id="profileEmail" disabled>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Bio / Description</label>
-                    <textarea class="form-textarea" id="profileBio" placeholder="Tell us about yourself..."></textarea>
-                </div>
-                <button class="form-btn btn-primary" onclick="saveProfile()">Save Changes</button>
+<div class="dropdown" id="dropdown">
+    <div class="dd-header">
+        <div class="dd-avatar" id="ddAvatar">U</div>
+        <div class="dd-info">
+            <div class="dd-name" id="ddName">Username</div>
+            <div class="dd-email" id="ddEmail">email@email.com</div>
+        </div>
+    </div>
+    <div class="dd-item" onclick="openProfile()"><i class="fas fa-user-circle"></i> My Channel</div>
+    <div class="dd-item" onclick="openSettings()"><i class="fas fa-cog"></i> Settings</div>
+    <div class="dd-item" onclick="openLikedVideos()"><i class="fas fa-heart"></i> Liked Videos</div>
+    <div class="dd-item" onclick="openSubscriptions()"><i class="fas fa-bell"></i> Subscriptions</div>
+    <div class="dd-item" onclick="openHistory()"><i class="fas fa-history"></i> Watch History</div>
+    <div class="dd-sep"></div>
+    <div class="dd-item danger" onclick="logOut()"><i class="fas fa-sign-out-alt"></i> Sign Out</div>
+</div>
+
+<div class="ov" id="authOv">
+    <div class="ov-box">
+        <div class="ov-head"><h2 id="authTitle">Create Account</h2><button class="ov-close" onclick="closeAuth()">✕</button></div>
+        <div class="ov-body">
+            <div class="avatar-upload" id="signupAvatar">
+                <i class="fas fa-camera"></i>
+                <input type="file" accept="image/*" onchange="previewAvatar(event)">
+            </div>
+            <div class="form-group" id="nameGroup">
+                <label class="form-label">Display Name</label>
+                <input class="form-input" id="authName" placeholder="Your name">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Email</label>
+                <input class="form-input" id="authEmail" type="email" placeholder="email@example.com">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Password</label>
+                <input class="form-input" id="authPass" type="password" placeholder="Min 6 characters">
+            </div>
+            <p class="form-error" id="authError"></p>
+            <button class="form-btn btn-primary" onclick="handleAuth()">Create Account</button>
+            <p class="form-switch" id="authSwitch" onclick="toggleAuthMode()">Already have an account? <b>Sign In</b></p>
+        </div>
+    </div>
+</div>
+
+<div class="ov" id="profileOv">
+    <div class="ov-box">
+        <div class="ov-head"><h2>My Channel</h2><button class="ov-close" onclick="closeProfile()">✕</button></div>
+        <div class="ov-body">
+            <div class="avatar-upload" id="profileAvatarWrap">
+                <i class="fas fa-camera"></i>
+                <input type="file" accept="image/*" onchange="changeProfilePic(event)">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Channel Name</label>
+                <input class="form-input" id="profileName" placeholder="Your channel name">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Email</label>
+                <input class="form-input" id="profileEmail" disabled>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Bio / Description</label>
+                <textarea class="form-textarea" id="profileBio" placeholder="Tell us about yourself..."></textarea>
+            </div>
+            <button class="form-btn btn-primary" onclick="saveProfile()">Save Changes</button>
+        </div>
+    </div>
+</div>
+
+<div class="ov" id="settingsOv">
+    <div class="ov-box">
+        <div class="ov-head"><h2><i class="fas fa-cog"></i> Settings</h2><button class="ov-close" onclick="closeSettings()">✕</button></div>
+        <div class="settings-nav">
+            <button class="settings-tab active" onclick="switchSettingsTab('general',this)">General</button>
+            <button class="settings-tab" onclick="switchSettingsTab('appearance',this)">Appearance</button>
+            <button class="settings-tab" onclick="switchSettingsTab('playback',this)">Playback</button>
+            <button class="settings-tab" onclick="switchSettingsTab('privacy',this)">Privacy</button>
+            <button class="settings-tab" onclick="switchSettingsTab('advanced',this)">Advanced</button>
+        </div>
+
+        <div class="settings-page active" id="page-general">
+            <div class="setting-row">
+                <div class="setting-info"><div class="setting-title">🌐 Language</div><div class="setting-desc">Choose your display language</div></div>
+                <select class="form-select" id="langSelect" onchange="setLang(this.value)">
+                    <option value="derja">🇹🇳 Derja Tounsiya</option>
+                    <option value="fr">🇫🇷 Français</option>
+                    <option value="en">🇬🇧 English</option>
+                </select>
+            </div>
+            <div class="setting-row">
+                <div class="setting-info"><div class="setting-title">🔔 Notifications</div><div class="setting-desc">Enable browser notifications</div></div>
+                <div class="toggle" id="t-notif" onclick="toggleSet('notif')"></div>
+            </div>
+            <div class="setting-row">
+                <div class="setting-info"><div class="setting-title">📊 Watch History</div><div class="setting-desc">Track videos you watch</div></div>
+                <div class="toggle on" id="t-history" onclick="toggleSet('history')"></div>
+            </div>
+        </div>
+
+        <div class="settings-page" id="page-appearance">
+            <div class="setting-row">
+                <div class="setting-info"><div class="setting-title">🌙 Dark Mode</div><div class="setting-desc">Toggle between light and dark theme</div></div>
+                <div class="toggle" id="t-dark" onclick="toggleSet('dark')"></div>
+            </div>
+            <div class="setting-row">
+                <div class="setting-info"><div class="setting-title">🔤 Font Size</div><div class="setting-desc">Adjust text size</div></div>
+                <select class="form-select" id="fontSelect" onchange="setFontSize(this.value)">
+                    <option value="small">Small</option>
+                    <option value="normal" selected>Normal</option>
+                    <option value="large">Large</option>
+                </select>
+            </div>
+            <div class="setting-row">
+                <div class="setting-info"><div class="setting-title">📐 Grid Layout</div><div class="setting-desc">Number of columns</div></div>
+                <select class="form-select" id="gridSelect" onchange="setGridSize(this.value)">
+                    <option value="280">Compact</option>
+                    <option value="320" selected>Normal</option>
+                    <option value="380">Large</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="settings-page" id="page-playback">
+            <div class="setting-row">
+                <div class="setting-info"><div class="setting-title">▶️ Autoplay Videos</div><div class="setting-desc">Auto-play when video opens</div></div>
+                <div class="toggle on" id="t-auto" onclick="toggleSet('auto')"></div>
+            </div>
+            <div class="setting-row">
+                <div class="setting-info"><div class="setting-title">📺 Video Quality</div><div class="setting-desc">Preferred quality (default auto)</div></div>
+                <select class="form-select" id="qualitySelect" onchange="setQuality(this.value)">
+                    <option value="auto">Auto</option>
+                    <option value="hd1080">1080p HD</option>
+                    <option value="hd720">720p HD</option>
+                    <option value="large">480p</option>
+                    <option value="medium">360p</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="settings-page" id="page-privacy">
+            <div class="setting-row">
+                <div class="setting-info"><div class="setting-title">👁️ Public Profile</div><div class="setting-desc">Allow others to see your profile</div></div>
+                <div class="toggle on" id="t-public" onclick="toggleSet('public')"></div>
+            </div>
+            <div class="setting-row">
+                <div class="setting-info"><div class="setting-title">💾 Save Search History</div><div class="setting-desc">Remember your searches</div></div>
+                <div class="toggle on" id="t-search" onclick="toggleSet('search')"></div>
+            </div>
+        </div>
+
+        <div class="settings-page" id="page-advanced">
+            <div class="setting-row">
+                <div class="setting-info"><div class="setting-title">🗑️ Clear Watch History</div><div class="setting-desc">Delete all watched videos</div></div>
+                <button class="form-btn btn-outline" style="width:auto;padding:6px 16px;font-size:13px" onclick="clearHistory()">Clear</button>
+            </div>
+            <div class="setting-row">
+                <div class="setting-info"><div class="setting-title">💔 Clear Liked Videos</div><div class="setting-desc">Remove all likes</div></div>
+                <button class="form-btn btn-outline" style="width:auto;padding:6px 16px;font-size:13px" onclick="clearLikes()">Clear</button>
+            </div>
+            <div class="setting-row">
+                <div class="setting-info"><div class="setting-title">🔄 Reset Everything</div><div class="setting-desc">Delete all local data</div></div>
+                <button class="form-btn btn-danger" style="width:auto;padding:6px 16px;font-size:13px" onclick="resetAll()">Reset All</button>
             </div>
         </div>
     </div>
+</div>
 
-    <!-- SETTINGS MODAL -->
-    <div class="ov" id="settingsOv">
-        <div class="ov-box">
-            <div class="ov-head"><h2>Settings</h2><button class="ov-close" onclick="closeSettings()">✕</button></div>
-            <div class="settings-nav">
-                <button class="settings-tab active" onclick="switchSettingsTab('general',this)">General</button>
-                <button class="settings-tab" onclick="switchSettingsTab('playback',this)">Playback</button>
-                <button class="settings-tab" onclick="switchSettingsTab('notifications',this)">Notifications</button>
-                <button class="settings-tab" onclick="switchSettingsTab('privacy',this)">Privacy</button>
-                <button class="settings-tab" onclick="switchSettingsTab('advanced',this)">Advanced</button>
-            </div>
+<aside class="side" id="sidebar">
+    <h4>Categories</h4>
+    <div id="catList"></div>
+    <h4>Topics</h4>
+    <div id="subList"></div>
+</aside>
 
-            <!-- General -->
-            <div class="settings-page active" id="page-general">
-                <div class="setting-row">
-                    <div class="setting-info"><div class="setting-title">🌙 Dark Mode</div><div class="setting-desc">Use dark theme across the app</div></div>
-                    <div class="toggle on" id="t-dark" onclick="toggleSet('dark')"></div>
-                </div>
-                <div class="setting-row">
-                    <div class="setting-info"><div class="setting-title">🌐 Language</div><div class="setting-desc">Display language preference</div></div>
-                    <select class="form-select" onchange="saveLang(this.value)">
-                        <option value="derja">🇹🇳 Derja Tounsiya</option>
-                        <option value="fr">🇫🇷 Français</option>
-                        <option value="en">🇬🇧 English</option>
-                    </select>
-                </div>
-            </div>
+<main class="main" id="mainContent">
+    <div class="filter-bar" id="filterBar"></div>
+    <div class="grid" id="grid"></div>
+    <div class="empty-state" id="empty" style="display:none"><i class="fas fa-search"></i><h2>No videos found</h2><p>Try a different search term</p></div>
+</main>
 
-            <!-- Playback -->
-            <div class="settings-page" id="page-playback">
-                <div class="setting-row">
-                    <div class="setting-info"><div class="setting-title">▶️ Autoplay</div><div class="setting-desc">Auto-play videos when opened</div></div>
-                    <div class="toggle on" id="t-auto" onclick="toggleSet('auto')"></div>
-                </div>
-            </div>
-
-            <!-- Notifications -->
-            <div class="settings-page" id="page-notifications">
-                <div class="setting-row">
-                    <div class="setting-info"><div class="setting-title">🔔 Push Notifications</div><div class="setting-desc">Receive browser notifications</div></div>
-                    <div class="toggle" id="t-notif" onclick="toggleSet('notif')"></div>
-                </div>
-                <div class="setting-row">
-                    <div class="setting-info"><div class="setting-title">💬 Comment Replies</div><div class="setting-desc">Notify when someone replies to you</div></div>
-                    <div class="toggle on" id="t-replies" onclick="toggleSet('replies')"></div>
-                </div>
-            </div>
-
-            <!-- Privacy -->
-            <div class="settings-page" id="page-privacy">
-                <div class="setting-row">
-                    <div class="setting-info"><div class="setting-title">👁️ Profile Visibility</div><div class="setting-desc">Make your profile public</div></div>
-                    <div class="toggle on" id="t-public" onclick="toggleSet('public')"></div>
-                </div>
-                <div class="setting-row">
-                    <div class="setting-info"><div class="setting-title">📊 Watch History</div><div class="setting-desc">Save your watch history</div></div>
-                    <div class="toggle on" id="t-history" onclick="toggleSet('history')"></div>
-                </div>
-            </div>
-
-            <!-- Advanced -->
-            <div class="settings-page" id="page-advanced">
-                <div class="setting-row">
-                    <div class="setting-info"><div class="setting-title">🗑️ Clear Watch History</div><div class="setting-desc">Remove all watched videos data</div></div>
-                    <button class="form-btn btn-outline" style="width:auto;padding:6px 16px;font-size:13px" onclick="clearHistory()">Clear</button>
-                </div>
-                <div class="setting-row">
-                    <div class="setting-info"><div class="setting-title">🔄 Reset Everything</div><div class="setting-desc">Delete all local data and start fresh</div></div>
-                    <button class="form-btn btn-danger" style="width:auto;padding:6px 16px;font-size:13px" onclick="resetAll()">Reset All</button>
-                </div>
-            </div>
-        </div>
+<div class="ov" id="videoOv" onclick="closeModal()">
+    <div class="ov-box lg" onclick="event.stopPropagation()">
+        <button class="ov-close" onclick="closeModal()" style="position:absolute;top:12px;right:16px;z-index:10">✕</button>
+        <div class="v-player" id="player"></div>
+        <div class="v-details"><h2 class="v-title" id="mTitle"></h2><p class="v-ch" id="mChan"></p></div>
+        <div class="v-actions" id="mActions"></div>
+        <div class="cmt-section" id="cmtSection"></div>
     </div>
+</div>
 
-    <!-- ====== SIDEBAR ====== -->
-    <aside class="side" id="sidebar">
-        <h4>Categories</h4>
-        <div id="catList"></div>
-        <h4>Topics</h4>
-        <div id="subList"></div>
-    </aside>
+<script>
+const S = {
+    g(k){try{const v=localStorage.getItem(k);return v?JSON.parse(v):null}catch(e){return null}},
+    s(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}},
+    r(k){try{localStorage.removeItem(k)}catch(e){}}
+};
 
-    <!-- ====== MAIN ====== -->
-    <main class="main" id="mainContent">
-        <div class="filter-bar" id="filterBar"></div>
-        <div class="active-filters" id="activeFilters"></div>
-        <div class="grid" id="grid"></div>
-        <div class="empty-state" id="empty" style="display:none"><i class="fas fa-search"></i><h2>No videos found</h2><p>Try a different search term</p></div>
-    </main>
+// ====== THEME (LIGHT/DARK) ======
+function applyTheme() {
+    const s = S.g("settings") || { dark: 0 };
+    document.documentElement.setAttribute("data-theme", s.dark ? "dark" : "light");
+    const btn = document.getElementById("themeBtn");
+    if (btn) btn.innerHTML = s.dark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+}
 
-    <!-- ====== VIDEO MODAL ====== -->
-    <div class="ov" id="videoOv" onclick="closeModal()">
-        <div class="ov-box lg" onclick="event.stopPropagation()">
-            <button class="ov-close" onclick="closeModal()" style="position:absolute;top:12px;right:16px;z-index:10">✕</button>
-            <div class="v-player" id="player"></div>
-            <div class="v-details"><h2 class="v-title" id="mTitle"></h2><p class="v-ch" id="mChan"></p></div>
-            <div class="v-actions" id="mActions"></div>
-            <div class="cmt-section" id="cmtSection"></div>
-        </div>
-    </div>
+function toggleTheme() {
+    const s = S.g("settings") || { dark: 0, auto: 1, notif: 0, history: 1, public: 1, search: 1 };
+    s.dark = s.dark ? 0 : 1;
+    S.s("settings", s);
+    applyTheme();
+    loadToggles();
+}
 
-    <!-- DIRECT APP.JS SANS APPEL DATA.JS DANS HTML -->
-    <script src="app.js"></script>
+// ====== FONT SIZE ======
+function applyFontSize() {
+    const s = S.g("settings") || { fontSize: "normal" };
+    document.body.classList.remove("font-small", "font-normal", "font-large");
+    document.body.classList.add("font-" + (s.fontSize || "normal"));
+}
+function setFontSize(v) {
+    const s = S.g("settings") || {};
+    s.fontSize = v;
+    S.s("settings", s);
+    applyFontSize();
+}
+
+// ====== GRID SIZE ======
+function applyGridSize() {
+    const s = S.g("settings") || { gridSize: "320" };
+    document.querySelector(".grid").style.gridTemplateColumns = `repeat(auto-fill, minmax(${s.gridSize || 320}px, 1fr))`;
+}
+function setGridSize(v) {
+    const s = S.g("settings") || {};
+    s.gridSize = v;
+    S.s("settings", s);
+    applyGridSize();
+}
+
+// ====== LANGUAGE ======
+function setLang(v) {
+    const s = S.g("settings") || {};
+    s.lang = v;
+    S.s("settings", s);
+    const trans = {
+        derja: { search: "Lawwej 3la cours...", cours: " cours", signin: "Sign In", all: "El Kol" },
+        fr: { search: "Rechercher...", cours: " cours", signin: "Se connecter", all: "Tout" },
+        en: { search: "Search courses...", cours: " courses", signin: "Sign In", all: "All" }
+    };
+    const t = trans[v] || trans.en;
+    document.getElementById("searchInput").placeholder = t.search;
+    document.getElementById("vCount").textContent = allVideos.length + t.cours;
+}
+
+// ====== QUALITY ======
+function setQuality(v) {
+    const s = S.g("settings") || {};
+    s.quality = v;
+    S.s("settings", s);
+}
+
+// ====== SETTINGS ======
+function openSettings() {
+    document.getElementById("dropdown")?.classList.remove("show");
+    loadToggles();
+    document.getElementById("settingsOv")?.classList.add("active");
+}
+function closeSettings() { document.getElementById("settingsOv")?.classList.remove("active"); }
+
+function switchSettingsTab(page, btn) {
+    document.querySelectorAll(".settings-tab").forEach(t => t.classList.remove("active"));
+    btn.classList.add("active");
+    document.querySelectorAll(".settings-page").forEach(p => p.classList.remove("active"));
+    document.getElementById("page-" + page)?.classList.add("active");
+}
+
+function loadToggles() {
+    const s = S.g("settings") || { dark: 0, auto: 1, notif: 0, history: 1, public: 1, search: 1, fontSize: "normal", gridSize: "320", lang: "derja", quality: "auto" };
+    ["dark", "auto", "notif", "history", "public", "search"].forEach(k => {
+        const el = document.getElementById("t-" + k);
+        if (el) { if (s[k]) el.classList.add("on"); else el.classList.remove("on"); }
+    });
+    const langSel = document.getElementById("langSelect"); if (langSel && s.lang) langSel.value = s.lang;
+    const fontSel = document.getElementById("fontSelect"); if (fontSel) fontSel.value = s.fontSize || "normal";
+    const gridSel = document.getElementById("gridSelect"); if (gridSel) gridSel.value = s.gridSize || "320";
+    const qSel = document.getElementById("qualitySelect"); if (qSel) qSel.value = s.quality || "auto";
+}
+
+function toggleSet(k) {
+    const s = S.g("settings") || { dark: 0, auto: 1, notif: 0, history: 1, public: 1, search: 1 };
+    s[k] = s[k] ? 0 : 1;
+    S.s("settings", s);
+    loadToggles();
+    if (k === "dark") applyTheme();
+    if (k === "notif" && s.notif) {
+        if (Notification.permission !== "granted") Notification.requestPermission();
+    }
+}
+
+function clearHistory() { S.r("history"); alert("✅ Watch history cleared"); }
+function clearLikes() { S.r("likes"); alert("✅ Liked videos cleared"); }
+function resetAll() { if (confirm("Reset everything? This will delete all your data.")) { localStorage.clear(); location.reload(); } }
+
+// ====== AUTH ======
+let user = S.g("user"), isSignUp = true;
+
+function renderAuth() {
+    const a = document.getElementById("authArea");
+    if (!a) return;
+    if (user) {
+        const pic = user.avatar ? `<img src="${user.avatar}">` : (user.name || "U")[0].toUpperCase();
+        a.innerHTML = `<div class="avatar" onclick="toggleDropdown()">${typeof pic === 'string' && pic.length === 1 ? pic : `<img src="${user.avatar}">`}</div>`;
+        const ddN = document.getElementById("ddName"), ddE = document.getElementById("ddEmail"), da = document.getElementById("ddAvatar");
+        if (ddN) ddN.textContent = user.name || "User";
+        if (ddE) ddE.textContent = user.email;
+        if (da) da.innerHTML = user.avatar ? `<img src="${user.avatar}">` : (user.name || "U")[0].toUpperCase();
+    } else {
+        a.innerHTML = `<button class="auth-cta" onclick="openAuth()"><i class="fas fa-user-circle"></i> Sign In</button>`;
+    }
+}
+
+function toggleDropdown() { document.getElementById("dropdown")?.classList.toggle("show"); }
+document.addEventListener("click", e => { const dd = document.getElementById("dropdown"); if (dd && !e.target.closest(".avatar") && !e.target.closest(".dropdown")) dd.classList.remove("show"); });
+function openAuth() { document.getElementById("authOv")?.classList.add("active"); }
+function closeAuth() { document.getElementById("authOv")?.classList.remove("active"); document.getElementById("authError").textContent = ""; }
+
+function toggleAuthMode() {
+    isSignUp = !isSignUp;
+    document.getElementById("authTitle").textContent = isSignUp ? "Create Account" : "Welcome Back";
+    document.querySelector("#authOv .btn-primary").textContent = isSignUp ? "Create Account" : "Sign In";
+    document.getElementById("nameGroup").style.display = isSignUp ? "block" : "none";
+    document.getElementById("signupAvatar").style.display = isSignUp ? "flex" : "none";
+    document.getElementById("authSwitch").innerHTML = isSignUp ? 'Already have an account? <b>Sign In</b>' : 'Don\'t have an account? <b>Sign Up</b>';
+}
+
+let tempAvatar = "";
+function previewAvatar(e) {
+    const f = e.target.files[0];
+    if (f) { const r = new FileReader(); r.onload = x => { tempAvatar = x.target.result; document.getElementById("signupAvatar").innerHTML = `<img src="${tempAvatar}"><input type="file" accept="image/*" onchange="previewAvatar(event)">`; }; r.readAsDataURL(f); }
+}
+
+function handleAuth() {
+    const n = document.getElementById("authName").value.trim(), em = document.getElementById("authEmail").value.trim(), p = document.getElementById("authPass").value, err = document.getElementById("authError");
+    err.textContent = "";
+    if (!em || !p) { err.textContent = "Fill all fields!"; return; }
+    if (p.length < 6) { err.textContent = "Password must be 6+ characters"; return; }
+    let users = S.g("users") || [];
+    if (isSignUp) {
+        if (!n) { err.textContent = "Enter your name!"; return; }
+        if (users.find(u => u.email === em)) { err.textContent = "Email already exists!"; return; }
+        user = { id: Date.now().toString(), name: n, email: em, pass: p, avatar: tempAvatar || "", bio: "" };
+        users.push(user); S.s("users", users); S.s("user", user);
+    } else {
+        const found = users.find(u => u.email === em && u.pass === p);
+        if (!found) { err.textContent = "Wrong email or password!"; return; }
+        user = found; S.s("user", user);
+    }
+    renderAuth(); closeAuth(); tempAvatar = "";
+}
+
+function logOut() { user = null; S.r("user"); renderAuth(); document.getElementById("dropdown")?.classList.remove("show"); }
+
+// ====== PROFILE ======
+function openProfile() {
+    document.getElementById("dropdown")?.classList.remove("show");
+    if (!user) { openAuth(); return; }
+    document.getElementById("profileName").value = user.name || "";
+    document.getElementById("profileEmail").value = user.email || "";
+    document.getElementById("profileBio").value = user.bio || "";
+    document.getElementById("profileAvatarWrap").innerHTML = user.avatar ? `<img src="${user.avatar}"><input type="file" accept="image/*" onchange="changeProfilePic(event)">` : `<i class="fas fa-camera"></i><input type="file" accept="image/*" onchange="changeProfilePic(event)">`;
+    document.getElementById("profileOv")?.classList.add("active");
+}
+function closeProfile() { document.getElementById("profileOv")?.classList.remove("active"); }
+function changeProfilePic(e) {
+    const f = e.target.files[0];
+    if (f) { const r = new FileReader(); r.onload = x => { user.avatar = x.target.result; S.s("user", user); let users = S.g("users") || []; const idx = users.findIndex(u => u.id === user.id); if (idx > -1) { users[idx] = user; S.s("users", users); } renderAuth(); openProfile(); }; r.readAsDataURL(f); }
+}
+function saveProfile() {
+    user.name = document.getElementById("profileName").value.trim();
+    user.bio = document.getElementById("profileBio").value.trim();
+    S.s("user", user);
+    let users = S.g("users") || []; const idx = users.findIndex(u => u.id === user.id);
+    if (idx > -1) { users[idx] = user; S.s("users", users); }
+    renderAuth(); closeProfile(); alert("✅ Profile saved!");
+}
+
+// ====== VIEWS ======
+function openLikedVideos() {
+    document.getElementById("dropdown")?.classList.remove("show");
+    if (!user) return;
+    const likes = S.g("likes") || {};
+    const likedIds = Object.keys(likes).filter(k => likes[k].includes(user.id));
+    render(allVideos.filter(v => likedIds.includes(v.id)));
+}
+function openSubscriptions() {
+    document.getElementById("dropdown")?.classList.remove("show");
+    if (!user) return;
+    const subs = S.g("subs_" + user.id) || [];
+    render(allVideos.filter(v => subs.some(s => v.channel.includes(s))));
+}
+function openHistory() {
+    document.getElementById("dropdown")?.classList.remove("show");
+    const h = S.g("history") || [];
+    render(allVideos.filter(v => h.includes(v.id)));
+}
+
+// ====== LIKES ======
+function getLikes(id) { return (S.g("likes") || {})[id] || []; }
+function toggleLike(id) {
+    if (!user) { openAuth(); return; }
+    const l = S.g("likes") || {};
+    if (!l[id]) l[id] = [];
+    const i = l[id].indexOf(user.id);
+    if (i > -1) l[id].splice(i, 1); else l[id].push(user.id);
+    S.s("likes", l); refreshActions(id);
+}
+function isLiked(id) { return user ? getLikes(id).includes(user.id) : false; }
+
+// ====== SUBS ======
+function getSubs() { return user ? S.g("subs_" + user.id) || [] : []; }
+function toggleSub(ch) {
+    if (!user) { openAuth(); return; }
+    const k = "subs_" + user.id; let s = S.g(k) || [];
+    const i = s.indexOf(ch);
+    if (i > -1) s.splice(i, 1); else s.push(ch);
+    S.s(k, s); refreshActions(currentVid);
+}
+function isSub(ch) { return getSubs().includes(ch); }
+
+// ====== COMMENTS ======
+function getCmts(id) { return (S.g("comments") || {})[id] || []; }
+function postCmt(id) {
+    if (!user) { openAuth(); return; }
+    const inp = document.getElementById("cmtInput"); if (!inp) return;
+    const t = inp.value.trim(); if (!t) return;
+    const c = S.g("comments") || {};
+    if (!c[id]) c[id] = [];
+    c[id].unshift({ id: Date.now().toString(), uid: user.id, name: user.name, text: t, time: new Date().toLocaleString() });
+    S.s("comments", c); inp.value = ""; renderCmts(id);
+}
+function delCmt(vid, cid) {
+    const c = S.g("comments") || {};
+    if (c[vid]) { c[vid] = c[vid].filter(x => x.id !== cid); S.s("comments", c); renderCmts(vid); }
+}
+function renderCmts(id) {
+    const s = document.getElementById("cmtSection"), cmts = getCmts(id);
+    if (!s) return;
+    let inp = "";
+    if (user) {
+        const av = user.avatar ? `<img src="${user.avatar}">` : user.name[0].toUpperCase();
+        inp = `<div class="cmt-form"><div class="cmt-avatar">${av}</div><div class="cmt-input-wrap"><input class="cmt-input" id="cmtInput" placeholder="Add a comment..." onkeypress="if(event.key==='Enter')postCmt('${id}')"><div class="cmt-btns"><button class="cmt-submit" onclick="postCmt('${id}')">Comment</button></div></div></div>`;
+    } else {
+        inp = `<p class="cmt-login"><a onclick="openAuth()">Sign in</a> to comment</p>`;
+    }
+    let list = "";
+    if (!cmts.length) list = `<p style="color:var(--text3);font-size:13px;padding:8px 0">No comments yet. Be the first! 💬</p>`;
+    else cmts.forEach(c => { list += `<div class="cmt-item"><div class="cmt-avatar" style="width:32px;height:32px;font-size:12px">${c.name[0].toUpperCase()}</div><div style="flex:1"><span class="cmt-user">@${c.name}</span>${user && user.id === c.uid ? `<button class="cmt-del" onclick="delCmt('${id}','${c.id}')"><i class="fas fa-trash"></i></button>` : ""}<p class="cmt-text">${c.text}</p><span class="cmt-time">${c.time}</span></div></div>`; });
+    s.innerHTML = `<h3>💬 ${cmts.length} Comments</h3>${inp}${list}`;
+}
+
+function shareV(id) { const u = `https://www.youtube.com/watch?v=${id}`; if (navigator.share) navigator.share({ title: "Cours Tounsi", url: u }); else { navigator.clipboard.writeText(u); alert("✅ Link copied!"); } }
+function downloadV(id) { window.open(`https://www.y2mate.com/youtube/${id}`, "_blank"); }
+
+// ====== DATA LOADER ======
+let allVideos = [], currentFilter = { cat: null, sub: null, search: "" }, currentVid = "";
+
+function initApp(raw) {
+    if (!Array.isArray(raw)) return;
+    allVideos = raw.map(v => {
+        const id = v.Video_ID || v.video_id || v.id || "";
+        return { id, title: v.Titre || v.title || "", channel: v.Chaine || v.channel || "", category: v.Categorie || v.category || "Autre", topic: v.Mawdhou3 || v.topic || "Général", thumb: `https://img.youtube.com/vi/${id}/hqdefault.jpg` };
+    }).filter(v => v.id && v.id.length === 11);
+    document.getElementById("vCount").textContent = allVideos.length + " cours";
+    buildSide(); buildChips(); render(allVideos);
+    applyGridSize();
+}
+
+fetch(`tounes_courses.json?nocache=${Date.now()}`, { cache: "no-store" })
+    .then(r => r.json())
+    .then(d => initApp(d))
+    .catch(err => { document.getElementById("grid").innerHTML = "<p style='color:red;text-align:center;grid-column:1/-1;padding:40px'>⚠️ Fichier tounes_courses.json ma l9inehch!</p>"; });
+
+function buildSide() {
+    const cats = {}, subs = {};
+    allVideos.forEach(v => { cats[v.category] = (cats[v.category] || 0) + 1; if (v.topic !== "Général") subs[v.topic] = (subs[v.topic] || 0) + 1; });
+    const icons = { Design: "🎨", Programmation: "💻", Langues: "🗣️", Marketing: "📈", Montage: "🎬", Freelance: "💼", "Bac & Etudes": "📚", Bureautique: "📊", Autre: "📦" };
+    const cl = document.getElementById("catList");
+    if (cl) { cl.innerHTML = `<button class="side-btn active" onclick="filterCat(null,this)">🌐 All <span class="side-cnt">${allVideos.length}</span></button>`; Object.entries(cats).sort((a, b) => b[1] - a[1]).forEach(([c, n]) => { cl.innerHTML += `<button class="side-btn" onclick="filterCat('${c}',this)">${icons[c] || "📦"} ${c} <span class="side-cnt">${n}</span></button>`; }); }
+    const sl = document.getElementById("subList");
+    if (sl) { sl.innerHTML = ""; Object.entries(subs).sort((a, b) => b[1] - a[1]).slice(0, 15).forEach(([s, n]) => { sl.innerHTML += `<button class="side-btn" onclick="filterSub('${s}',this)">• ${s} <span class="side-cnt">${n}</span></button>`; }); }
+}
+
+function buildChips() {
+    const fb = document.getElementById("filterBar"); if (!fb) return;
+    const cats = [...new Set(allVideos.map(v => v.category))];
+    fb.innerHTML = `<button class="f-chip active" onclick="showAll()">All</button>`;
+    cats.forEach(c => { fb.innerHTML += `<button class="f-chip" onclick="filterChip('${c}',this)">${c}</button>`; });
+}
+
+function render(list) {
+    const g = document.getElementById("grid"), e = document.getElementById("empty");
+    if (!g) return;
+    if (!list.length) { g.innerHTML = ""; if (e) e.style.display = "block"; return; }
+    if (e) e.style.display = "none";
+    g.innerHTML = list.map(v => `<div class="card" onclick="openModal('${v.id}','${esc(v.title)}','${esc(v.channel)}')"><div class="card-thumb"><img src="${v.thumb}" loading="lazy" onerror="this.src='https://img.youtube.com/vi/${v.id}/0.jpg'"><span class="card-badge">${v.topic}</span></div><div class="card-body"><div class="card-title">${v.title}</div><div class="card-ch"><i class="fas fa-user-circle"></i> ${v.channel}</div><div class="card-cat">${v.category}</div></div></div>`).join("");
+}
+function esc(s) { return (s || "").replace(/'/g, "\\'").replace(/"/g, '\\"'); }
+
+function showAll() { currentFilter = { cat: null, sub: null, search: "" }; document.getElementById("searchInput").value = ""; document.querySelectorAll(".side-btn,.f-chip").forEach(b => b.classList.remove("active")); document.querySelector(".f-chip")?.classList.add("active"); apply(); }
+function filterCat(c, btn) { currentFilter.cat = c; currentFilter.sub = null; document.querySelectorAll("#catList .side-btn").forEach(b => b.classList.remove("active")); btn?.classList.add("active"); apply(); }
+function filterSub(s, btn) { currentFilter.sub = s; document.querySelectorAll("#subList .side-btn").forEach(b => b.classList.remove("active")); btn?.classList.add("active"); apply(); }
+function filterChip(c, btn) { currentFilter.cat = c; currentFilter.sub = null; document.querySelectorAll(".f-chip").forEach(b => b.classList.remove("active")); btn?.classList.add("active"); apply(); }
+function searchVideos() { currentFilter.search = document.getElementById("searchInput").value.toLowerCase(); apply(); }
+function apply() { let r = allVideos; if (currentFilter.cat) r = r.filter(v => v.category === currentFilter.cat); if (currentFilter.sub) r = r.filter(v => v.topic === currentFilter.sub); if (currentFilter.search) r = r.filter(v => (v.title + v.channel + v.topic + v.category).toLowerCase().includes(currentFilter.search)); render(r); }
+
+function openModal(id, title, chan) {
+    currentVid = id;
+    const s = S.g("settings") || { auto: 1 };
+    const quality = s.quality && s.quality !== "auto" ? `&vq=${s.quality}` : "";
+    const p = document.getElementById("player");
+    if (p) p.innerHTML = `<iframe src="https://www.youtube.com/embed/${id}?autoplay=${s.auto ? 1 : 0}${quality}" allowfullscreen allow="autoplay"></iframe>`;
+    document.getElementById("mTitle").textContent = title;
+    document.getElementById("mChan").textContent = chan;
+    refreshActions(id); renderCmts(id);
+    document.getElementById("videoOv")?.classList.add("active");
+    document.body.style.overflow = "hidden";
+    if (S.g("settings")?.history) { let h = S.g("history") || []; if (!h.includes(id)) { h.unshift(id); S.s("history", h); } }
+}
+
+function refreshActions(id) {
+    const liked = isLiked(id), lc = getLikes(id).length, ch = document.getElementById("mChan").textContent, sub = isSub(ch);
+    document.getElementById("mActions").innerHTML = `<button class="v-act ${liked ? 'liked' : ''}" onclick="toggleLike('${id}')"><i class="fas fa-thumbs-up"></i> ${lc}</button><button class="v-act ${sub ? 'subscribed' : ''}" onclick="toggleSub('${esc(ch)}')"><i class="fas fa-bell"></i> ${sub ? 'Subscribed' : 'Subscribe'}</button><button class="v-act" onclick="downloadV('${id}')"><i class="fas fa-download"></i> Download</button><button class="v-act" onclick="shareV('${id}')"><i class="fas fa-share"></i> Share</button>`;
+}
+
+function closeModal() { document.getElementById("videoOv")?.classList.remove("active"); document.getElementById("player").innerHTML = ""; document.body.style.overflow = ""; }
+document.addEventListener("keydown", e => { if (e.key === "Escape") { closeModal(); closeAuth(); closeSettings(); closeProfile(); } });
+function toggleSidebar() { const s = document.getElementById("sidebar"), m = document.getElementById("mainContent"); s.classList.toggle("hidden"); m.style.marginLeft = s.classList.contains("hidden") ? "0" : "var(--sidebar-w)"; }
+
+// INIT
+applyTheme();
+applyFontSize();
+renderAuth();
+const initLang = (S.g("settings") || {}).lang;
+if (initLang) setLang(initLang);
+</script>
 </body>
 </html>
