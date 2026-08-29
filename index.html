@@ -85,7 +85,7 @@
     .dd-item.danger { color: #ff4d4d; }
     .dd-item.danger i { color: #ff4d4d; }
 
-    /* Auth Modal */
+    /* Modals */
     .ov { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(6px); z-index: 3000; justify-content: center; align-items: flex-start; padding-top: 50px; overflow-y: auto; }
     .ov.active { display: flex; }
     .ov-box { background: var(--surface); border-radius: var(--radius); border: 1px solid var(--border); width: 92%; max-width: 440px; margin-bottom: 30px; overflow: hidden; position: relative; box-shadow: var(--shadow-lg); }
@@ -109,7 +109,7 @@
     .avatar-upload input { position: absolute; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
 
     /* Sidebar */
-    .side { position: fixed; top: var(--header-h); left: 0; width: var(--sidebar-w); height: calc(100vh - var(--header-h)); background: var(--bg); border-right: 1px solid var(--border); overflow-y: auto; padding: 8px 6px; z-index: 999; transition: transform 0.25s; }
+    .side { position: fixed; top: var(--header-h); left: 0; width: var(--sidebar-w); height: calc(100vh - var(--header-h)); background: var(--bg); border-right: 1px solid var(--border); overflow-y: auto; padding: 8px 6px; z-index: 999; transition: transform 0.25s ease; }
     .side.hidden { transform: translateX(-100%); }
     .side h4 { font-size: 11px; color: var(--text3); padding: 10px 10px 4px; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 700; text-align: left; }
     .side-btn { display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 8px 10px; background: transparent; color: var(--text); font-size: 13px; border-radius: var(--radius-sm); margin-bottom: 2px; text-align: left; }
@@ -119,9 +119,14 @@
     .side-btn.active .side-cnt { background: var(--accent); color: #fff; }
 
     /* Main */
-    .main { margin-left: var(--sidebar-w); margin-top: var(--header-h); padding: 16px 20px; min-height: calc(100vh - var(--header-h)); transition: margin-left 0.25s; }
+    .main { margin-left: var(--sidebar-w); margin-top: var(--header-h); padding: 16px 20px; min-height: calc(100vh - var(--header-h)); transition: margin-left 0.25s ease; }
+    .filter-bar { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 14px; scrollbar-width: none; align-items: center; }
+    .filter-bar::-webkit-scrollbar { display: none; }
+    .f-chip { padding: 6px 14px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--surface2); color: var(--text); font-size: 12.5px; white-space: nowrap; font-weight: 500; }
+    .f-chip:hover { background: var(--surface3); }
+    .f-chip.active { background: var(--text); color: var(--bg); font-weight: 700; border-color: var(--text); }
 
-    /* =============== PAGES SYSTEM =============== */
+    /* ====== PAGES SYSTEM ====== */
     .page { display: none; animation: fadeIn 0.3s; }
     .page.active { display: block; }
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
@@ -134,12 +139,6 @@
     .back-btn:hover { background: var(--surface3); }
 
     /* HOME PAGE */
-    .filter-bar { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 12px; scrollbar-width: none; align-items: center; }
-    .filter-bar::-webkit-scrollbar { display: none; }
-    .f-chip { padding: 6px 14px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--surface2); color: var(--text); font-size: 12.5px; white-space: nowrap; font-weight: 500; }
-    .f-chip:hover { background: var(--surface3); }
-    .f-chip.active { background: var(--text); color: var(--bg); font-weight: 700; border-color: var(--text); }
-
     .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-top: 4px; }
     .card { border-radius: var(--radius); overflow: hidden; cursor: pointer; background: var(--surface); border: 1px solid var(--border); content-visibility: auto; contain-intrinsic-size: 280px 220px; transition: transform 0.15s; }
     .card:hover { transform: translateY(-4px); }
@@ -161,6 +160,7 @@
     .channel-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border); margin-bottom: 16px; gap: 12px; flex-wrap: wrap; }
     .channel-info { display: flex; align-items: center; gap: 12px; }
     .channel-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--gradient); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; font-size: 16px; }
+    .channel-avatar img { width: 100%; height: 100%; object-fit: cover; }
     .channel-details h3 { font-size: 15px; font-weight: 700; margin-bottom: 2px; }
     .channel-details p { font-size: 12px; color: var(--text2); }
     .video-actions-row { display: flex; gap: 8px; flex-wrap: wrap; }
@@ -397,7 +397,7 @@
 
             <div class="settings-page-content" id="set-appearance">
                 <div class="setting-row">
-                    <div class="setting-info"><div class="setting-title">🌙 Dark Mode</div><div class="setting-desc">Toggle dark theme</div></div>
+                    <div class="setting-info"><div class="setting-title">🌙 Dark Mode</div><div class="setting-desc">Toggle theme</div></div>
                     <div class="toggle" id="t-dark" onclick="toggleSet('dark')"></div>
                 </div>
                 <div class="setting-row">
@@ -433,7 +433,7 @@
                     <div class="toggle on" id="t-public" onclick="toggleSet('public')"></div>
                 </div>
                 <div class="setting-row">
-                    <div class="setting-info"><div class="setting-title">💾 Search History</div><div class="setting-desc">Remember searches</div></div>
+                    <div class="setting-info"><div class="setting-title">💾 Save Search History</div><div class="setting-desc">Remember searches</div></div>
                     <div class="toggle on" id="t-search" onclick="toggleSet('search')"></div>
                 </div>
             </div>
@@ -441,7 +441,7 @@
             <div class="settings-page-content" id="set-advanced">
                 <div class="setting-row">
                     <div class="setting-info"><div class="setting-title">🗑️ Clear Watch History</div><div class="setting-desc">Delete watched videos data</div></div>
-                    <button class="form-btn btn-outline" style="width:auto;padding:6px 14px;font-size:12px" onclick="clearHistory()">Clear</button>
+                    <button class="form-btn btn-outline" style="width:auto;padding:6px 14px;font-size:13px" onclick="clearHistory()">Clear</button>
                 </div>
                 <div class="setting-row">
                     <div class="setting-info"><div class="setting-title">💔 Clear Liked Videos</div><div class="setting-desc">Remove all likes</div></div>
@@ -521,15 +521,10 @@ const BATCH_SIZE = 24;
 // ================ ROUTER / NAVIGATION ================
 function navigate(page, data = null) {
     document.getElementById("dropdown")?.classList.remove("show");
-    
-    // Hide all pages
     document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
-    
-    // Show target page
     const target = document.getElementById("page-" + page);
     if (target) target.classList.add("active");
     
-    // Load specific data per page
     if (page === "home") { renderHome(); window.scrollTo(0, 0); }
     else if (page === "video" && data) { loadVideoPage(data); window.scrollTo(0, 0); }
     else if (page === "category" && data) { loadCategoryPage(data); window.scrollTo(0, 0); }
@@ -539,7 +534,6 @@ function navigate(page, data = null) {
     else if (page === "subscriptions") { loadSubscriptionsPage(); window.scrollTo(0, 0); }
     else if (page === "history") { loadHistoryPage(); window.scrollTo(0, 0); }
     
-    // Update URL
     const url = page === "home" ? "#" : `#/${page}${data ? '/' + encodeURIComponent(typeof data === 'string' ? data : data.id || '') : ''}`;
     if (window.location.hash !== url) history.pushState({ page, data }, "", url);
 }
@@ -549,7 +543,6 @@ window.addEventListener("popstate", (e) => {
     else navigate("home");
 });
 
-// Read URL on page load
 function initRouter() {
     const hash = window.location.hash.replace("#/", "").split("/");
     const page = hash[0] || "home";
@@ -622,7 +615,7 @@ function toggleSet(k) {
 function clearHistory() { S.r("history"); alert("✅ History cleared"); }
 function clearLikes() { S.r("likes"); alert("✅ Likes cleared"); }
 
-// ================ AUTH ================
+// AUTH
 let user = S.g("user"), isSignUp = true;
 function renderAuth() {
     const a = document.getElementById("authArea");
@@ -672,7 +665,7 @@ function handleAuth() {
 }
 function logOut() { user = null; S.r("user"); renderAuth(); document.getElementById("dropdown")?.classList.remove("show"); navigate("home"); }
 
-// ================ PROFILE PAGE ================
+// PROFILE PAGE
 function loadProfilePage() {
     if (!user) { openAuth(); navigate("home"); return; }
     document.getElementById("profileNameDisplay").textContent = user.name || "User";
@@ -693,7 +686,7 @@ function saveProfile() {
     renderAuth(); loadProfilePage(); alert("✅ Profile saved!");
 }
 
-// ================ LIKES / SUBS / CMTS ================
+// LIKES / SUBS
 function getLikes(id) { return (S.g("likes") || {})[id] || []; }
 function toggleLike(id) { if (!user) { openAuth(); return; } const l = S.g("likes") || {}; if (!l[id]) l[id] = []; const i = l[id].indexOf(user.id); if (i > -1) l[id].splice(i, 1); else l[id].push(user.id); S.s("likes", l); refreshActionsLarge(id); }
 function isLiked(id) { return user ? getLikes(id).includes(user.id) : false; }
@@ -703,6 +696,7 @@ function toggleSub(ch) { if (!user) { openAuth(); return; } const k = "subs_" + 
 function toggleSubFromPage() { const ch = document.getElementById("mChanLarge").textContent; toggleSub(ch); }
 function isSub(ch) { return getSubs().includes(ch); }
 
+// COMMENTS
 function getCmts(id) { return (S.g("comments") || {})[id] || []; }
 function postCmt(id) { if (!user) { openAuth(); return; } const inp = document.getElementById("cmtInputLarge"); if (!inp) return; const t = inp.value.trim(); if (!t) return; const c = S.g("comments") || {}; if (!c[id]) c[id] = []; c[id].unshift({ id: Date.now().toString(), uid: user.id, name: user.name, text: t, time: new Date().toLocaleString() }); S.s("comments", c); inp.value = ""; renderCmtsLarge(id); }
 function delCmt(vid, cid) { const c = S.g("comments") || {}; if (c[vid]) { c[vid] = c[vid].filter(x => x.id !== cid); S.s("comments", c); renderCmtsLarge(vid); } }
@@ -723,7 +717,119 @@ function renderCmtsLarge(id) {
 }
 
 function shareV(id) { const u = `https://www.youtube.com/watch?v=${id}`; if (navigator.share) navigator.share({ title: "Cours Tounsi", url: u }); else { navigator.clipboard.writeText(u); alert("✅ Link copied!"); } }
-function downloadV(id) { window.open(`https://www.y2mate.com/youtube/${id}`, "_blank"); }
+
+// =====================================================================
+// 📥 SEAMLESS DOWNLOAD FORWARDER (100% RELIABLE)
+// =====================================================================
+function downloadV(id) {
+    // 9xBuddy is the cleanest, ads-free redirect for seamless YouTube downloads
+    window.open(`https://9xbuddy.org/media?url=https://www.youtube.com/watch?v=${id}`, "_blank");
+}
+
+// DATA LOADING
+let allVideos = [];
+let currentFilter = { cat: null, sub: null, search: "" };
+let currentVid = "";
+let activeList = [];
+let displayedCount = 0;
+const BATCH_SIZE = 24;
+
+// ================ ROUTER / NAVIGATION ================
+function navigate(page, data = null) {
+    document.getElementById("dropdown")?.classList.remove("show");
+    document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+    const target = document.getElementById("page-" + page);
+    if (target) target.classList.add("active");
+    
+    if (page === "home") { renderHome(); window.scrollTo(0, 0); }
+    else if (page === "video" && data) { loadVideoPage(data); window.scrollTo(0, 0); }
+    else if (page === "category" && data) { loadCategoryPage(data); window.scrollTo(0, 0); }
+    else if (page === "profile") { loadProfilePage(); window.scrollTo(0, 0); }
+    else if (page === "settings") { loadToggles(); window.scrollTo(0, 0); }
+    else if (page === "liked") { loadLikedPage(); window.scrollTo(0, 0); }
+    else if (page === "subscriptions") { loadSubscriptionsPage(); window.scrollTo(0, 0); }
+    else if (page === "history") { loadHistoryPage(); window.scrollTo(0, 0); }
+    
+    const url = page === "home" ? "#" : `#/${page}${data ? '/' + encodeURIComponent(typeof data === 'string' ? data : data.id || '') : ''}`;
+    if (window.location.hash !== url) history.pushState({ page, data }, "", url);
+}
+
+window.addEventListener("popstate", (e) => {
+    if (e.state) navigate(e.state.page, e.state.data);
+    else navigate("home");
+});
+
+function initRouter() {
+    const hash = window.location.hash.replace("#/", "").split("/");
+    const page = hash[0] || "home";
+    const data = hash[1] ? decodeURIComponent(hash[1]) : null;
+    
+    if (page === "video" && data) {
+        const v = allVideos.find(x => x.id === data);
+        if (v) navigate("video", v);
+        else navigate("home");
+    } else if (page === "category" && data) {
+        navigate("category", data);
+    } else if (["profile", "settings", "liked", "subscriptions", "history"].includes(page)) {
+        navigate(page);
+    } else {
+        navigate("home");
+    }
+}
+
+// ================ THEME & APPEARANCE ================
+function applyTheme() {
+    const s = S.g("settings") || { dark: 0 };
+    document.documentElement.setAttribute("data-theme", s.dark ? "dark" : "light");
+    const btn = document.getElementById("themeBtn");
+    if (btn) btn.innerHTML = s.dark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+}
+function toggleTheme() {
+    const s = S.g("settings") || { dark: 0, auto: 1, notif: 0, history: 1, public: 1, search: 1 };
+    s.dark = s.dark ? 0 : 1;
+    S.s("settings", s); applyTheme(); loadToggles();
+}
+function applyFontSize() {
+    const s = S.g("settings") || { fontSize: "normal" };
+    document.body.classList.remove("font-small", "font-normal", "font-large");
+    document.body.classList.add("font-" + (s.fontSize || "normal"));
+}
+function setFontSize(v) { const s = S.g("settings") || {}; s.fontSize = v; S.s("settings", s); applyFontSize(); }
+function applyGridSize() {
+    const s = S.g("settings") || { gridSize: "280" };
+    document.querySelectorAll(".grid").forEach(g => g.style.gridTemplateColumns = `repeat(auto-fill, minmax(${s.gridSize || 280}px, 1fr))`);
+}
+function setGridSize(v) { const s = S.g("settings") || {}; s.gridSize = v; S.s("settings", s); applyGridSize(); }
+function setLang(v) { const s = S.g("settings") || {}; s.lang = v; S.s("settings", s); const trans = { derja: "Lawwej 3la cours...", fr: "Rechercher...", en: "Search courses..." }; document.getElementById("searchInput").placeholder = trans[v] || trans.en; }
+function setQuality(v) { const s = S.g("settings") || {}; s.quality = v; S.s("settings", s); }
+
+function switchSettingsTab(page, btn) {
+    document.querySelectorAll(".settings-tab").forEach(t => t.classList.remove("active"));
+    btn.classList.add("active");
+    document.querySelectorAll(".settings-page-content").forEach(p => p.classList.remove("active"));
+    document.getElementById("set-" + page)?.classList.add("active");
+}
+function loadToggles() {
+    const s = S.g("settings") || { dark: 0, auto: 1, notif: 0, history: 1, public: 1, search: 1, fontSize: "normal", gridSize: "280", lang: "derja", quality: "auto" };
+    ["dark", "auto", "notif", "history", "public", "search"].forEach(k => {
+        const el = document.getElementById("t-" + k);
+        if (el) { if (s[k]) el.classList.add("on"); else el.classList.remove("on"); }
+    });
+    ["langSelect", "fontSelect", "gridSelect", "qualitySelect"].forEach(id => {
+        const el = document.getElementById(id);
+        const key = id.replace("Select", "");
+        if (el && s[key === "lang" ? "lang" : key === "font" ? "fontSize" : key === "grid" ? "gridSize" : "quality"]) {
+            el.value = s[key === "lang" ? "lang" : key === "font" ? "fontSize" : key === "grid" ? "gridSize" : "quality"];
+        }
+    });
+}
+function toggleSet(k) {
+    const s = S.g("settings") || { dark: 0, auto: 1, notif: 0, history: 1, public: 1, search: 1 };
+    s[k] = s[k] ? 0 : 1; S.s("settings", s); loadToggles();
+    if (k === "dark") applyTheme();
+}
+function clearHistory() { S.r("history"); alert("✅ History cleared"); }
+function clearLikes() { S.r("likes"); alert("✅ Likes cleared"); }
 
 // ================ DATA LOADING ================
 function initApp(raw) {
