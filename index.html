@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tunisian YouTube 🇹🇳 - منصة الدروس التونسية</title>
+    
+    <!-- FAVICON (Logo mel barra) -->
+    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="apple-touch-icon" href="logo.png">
+    
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -15,7 +20,7 @@
         <div class="header-left">
             <i class="fas fa-bars menu-icon" onclick="toggleSidebar()"></i>
             <div class="logo" onclick="showAll()">
-                <i class="fab fa-youtube logo-icon"></i>
+                <img src="logo.png" alt="Logo" class="custom-logo">
                 <span class="logo-text">Tunisian<span class="logo-yt">YouTube</span></span>
             </div>
         </div>
@@ -48,7 +53,6 @@
 
         <div class="active-filters" id="activeFilters"></div>
 
-        <!-- VIDEO GRID -->
         <div class="video-grid" id="videoGrid">
             <p style="text-align:center; grid-column:1/-1; padding:50px; font-size:18px;">⏳ 9a3ed nchargi fel coursset...</p>
         </div>
@@ -72,7 +76,6 @@
         </div>
     </div>
 
-    <!-- EL APP.JS BARKA LOUTA -->
     <script src="app.js"></script>
 </body>
 </html>
