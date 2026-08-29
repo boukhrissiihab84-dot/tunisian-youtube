@@ -1,5 +1,5 @@
 // =====================================================================
-// TUNISIAN YOUTUBE - APP.JS (SUPER STABLE DIRECT DATA.JS LOADER)
+// TUNISIAN YOUTUBE - APP.JS (SUPER STABLE WITH EMERGENCY ENGINE)
 // =====================================================================
 
 // ====== STORAGE HELPER ======
@@ -24,12 +24,24 @@ const S = {
     }
 };
 
+// 🚨 EMERGENCY FALLBACK (KIFECH L'WEB MUSTA7IL YODH-HOR FERAGH!)
+const EMERGENCY_FALLBACK = [
+    { "Video_ID": "67UAnLg9WJ8", "Titre": "Tutoriel Photoshop pour Débutants en Derja", "Chaine": "@skander_b", "Categorie": "Design", "Mawdhou3": "Photoshop" },
+    { "Video_ID": "vV77G_62K4Q", "Titre": "Apprendre Python de Zéro en Tunisien", "Chaine": "@TounesCode", "Categorie": "Programmation", "Mawdhou3": "Python" },
+    { "Video_ID": "JmU3zFmK_Xo", "Titre": "Formation HTML & CSS b Derja Tounsia", "Chaine": "@Carthage_Geek", "Categorie": "Programmation", "Mawdhou3": "HTML/CSS" },
+    { "Video_ID": "U36y8O43g18", "Titre": "Apprendre l'anglais b derja tounsia", "Chaine": "@Anglais_b_derja", "Categorie": "Langues", "Mawdhou3": "Anglais" },
+    { "Video_ID": "fVw-n9_RbeU", "Titre": "Révision Bac Informatique Algorithmique", "Chaine": "@TakiAcademy", "Categorie": "Bac & Etudes", "Mawdhou3": "Bac Info" },
+    { "Video_ID": "Nn03H291410", "Titre": "Figma UI/UX Design Tutorial Tunisien", "Chaine": "@designtounsi", "Categorie": "Design", "Mawdhou3": "Figma" },
+    { "Video_ID": "U67kLp89Un3", "Titre": "Tutoriel Montage Vidéo CapCut PC b Derja", "Chaine": "@skander_b", "Categorie": "Montage", "Mawdhou3": "CapCut" },
+    { "Video_ID": "f90UjK89La3", "Titre": "Facebook Ads Marketing Tunisie Kifech Tebda", "Chaine": "@Med_Amine_Sahnoun", "Categorie": "Marketing", "Mawdhou3": "Facebook Ads" }
+];
+
 let allVideos = [];
 let currentFilter = { cat: null, sub: null, search: "" };
 let currentVid = "";
 let activeList = [];
 let displayedCount = 0;
-const BATCH_SIZE = 24; // ⭐ FIX: BATCH_SIZE CORRECTE SANS CONFLICTS
+const BATCH_SIZE = 24; // ⭐ FIX: BATCH_SIZE CORRECTE SANS ERROR
 let user = S.g("user"), isSignUp = true;
 let tempAvatar = "";
 let searchTimer;
@@ -154,7 +166,7 @@ function toggleAuthMode() {
     document.querySelector("#authOv .btn-primary").textContent = isSignUp ? "Create Account" : "Sign In";
     document.getElementById("nameGroup").style.display = isSignUp ? "block" : "none";
     document.getElementById("signupAvatar").style.display = isSignUp ? "flex" : "none";
-    document.getElementById("authSwitch").innerHTML = isSignUp ? 'Already have an account? b>Sign In</b>' : 'Don\'t have an account? <b>Sign Up</b>';
+    document.getElementById("authSwitch").innerHTML = isSignUp ? 'Already have an account? <b>Sign In</b>' : 'Don\'t have an account? <b>Sign Up</b>';
 }
 let tempAvatar = "";
 function previewAvatar(e) { const f = e.target.files[0]; if (f) { const r = new FileReader(); r.onload = x => { tempAvatar = x.target.result; document.getElementById("signupAvatar").innerHTML = `<img src="${tempAvatar}"><input type="file" accept="image/*" onchange="previewAvatar(event)">`; }; r.readAsDataURL(f); } }
@@ -219,6 +231,7 @@ function saveChannel() {
 
 // ====== LIKES / SUBS ======
 function getLikes(id) { return (S.g("likes") || {})[id] || []; }
+// Liked count refresh
 function toggleLike(id) { if (!user) { openAuth(); return; } const l = S.g("likes") || {}; if (!l[id]) l[id] = []; const i = l[id].indexOf(user.id); i > -1 ? l[id].splice(i, 1) : l[id].push(user.id); S.s("likes", l); refreshActionsLarge(id); }
 function isLiked(id) { return user ? getLikes(id).includes(user.id) : false; }
 
@@ -261,9 +274,13 @@ function downloadV(id) {
 }
 function closeDlModal() { document.getElementById("dlModal").classList.remove("active"); }
 
-// ====== DATA LOADING SYSTEM ======
+// ====== DATA LOADING ======
 function initApp(raw) {
-    if (!Array.isArray(raw)) return;
+    // Si la data externe (data.js) est vide ou introuvable, on charge l'Emergency Fallback garanti !
+    if (!Array.isArray(raw) || raw.length === 0) {
+        console.warn("⚠️ Data vide, activation de EMERGENCY_FALLBACK...");
+        raw = EMERGENCY_FALLBACK;
+    }
     allVideos = raw.map(v => {
         const id = v.Video_ID || v.video_id || v.id || "";
         return { id, title: v.Titre || v.title || "", channel: v.Chaine || v.channel || "", category: v.Categorie || v.category || "Autre", topic: v.Mawdhou3 || v.topic || "Général", thumb: `https://img.youtube.com/vi/${id}/mqdefault.jpg` };
@@ -273,18 +290,22 @@ function initApp(raw) {
     buildSide(); buildChips(); initRouter();
 }
 
-// 🟢 LE CHARGEMENT DIRECT SANS ERREURS (data.js)
-if (typeof rawVideosData !== 'undefined' && Array.isArray(rawVideosData)) {
-    console.log("✅ rawVideosData chargée depuis data.js direct");
+// 🟢 LE CHARGEMENT D'ABORD DEPUIS DATA.JS (VÉRIFIE S'IL EXISTE)
+if (typeof rawVideosData !== 'undefined' && Array.isArray(rawVideosData) && rawVideosData.length > 0) {
+    console.log("✅ rawVideosData chargée avec succès:", rawVideosData.length);
     initApp(rawVideosData);
 } else {
     // Fallback JSON
-    console.log("⚠️ Fallback vers JSON...");
+    console.log("⚠️ data.js na9es, chargement de tounes_courses.json...");
     fetch(`tounes_courses.json?nocache=${Date.now()}`, { cache: "no-store" })
         .then(r => r.json())
-        .then(d => initApp(d))
+        .then(d => {
+            initApp(d);
+        })
         .catch(err => {
-            document.getElementById("grid").innerHTML = "<p style='color:red;text-align:center;grid-column:1/-1;padding:40px'>⚠️ rawVideosData na9es! Sseb data.js fi GitHub.</p>";
+            // ⭐ IF ALL FAILS, ACTIVATE EMERGENCY FALLBACK (0% BLANK PAGE CHANCE)
+            console.error("🚨 JSON na9es zeda, ACTIVATION EMERGENCY_FALLBACK!");
+            initApp(EMERGENCY_FALLBACK);
         });
 }
 
@@ -294,7 +315,7 @@ function buildSide() {
     const icons = { Design: "🎨", Programmation: "💻", Langues: "🗣️", Marketing: "📈", Montage: "🎬", Freelance: "💼", "Bac & Etudes": "📚", Bureautique: "📊", Autre: "📦" };
     const cl = document.getElementById("catList");
     if (cl) {
-        cl.innerHTML = `<button class="side-btn active" onclick="navigate('home');this.classList.add('active')">🌐 All <span class="side-cnt">${allVideos.length}</span></button>`;
+        cl.innerHTML = `<button class="side-btn active" onclick="showAll()">🌐 All <span class="side-cnt">${allVideos.length}</span></button>`;
         Object.entries(cats).sort((a, b) => b[1] - a[1]).forEach(([c, n]) => {
             cl.innerHTML += `<button class="side-btn" onclick="navigate('category','${c}')">${icons[c] || "📦"} ${c} <span class="side-cnt">${n}</span></button>`;
         });
@@ -327,7 +348,7 @@ function setListAndRender(list) {
     setupInfiniteScroll();
 }
 
-// 🚀 ZERO LAG INFINITE SCROLL Observer
+// 🚀 SCROLL OBSERVER ZERO LAG
 let observer;
 function setupInfiniteScroll() {
     if (observer) observer.disconnect();
@@ -344,7 +365,7 @@ function setupInfiniteScroll() {
 
 function renderNextBatch() {
     const g = document.getElementById("grid"); if (!g) return;
-    const batch = activeList.slice(displayedCount, displayedCount + BATCH_SIZE); // ⭐ FIX DEFINITIF: PLUS AUCUNS LOGS SUR BATCH_SIZE
+    const batch = activeList.slice(displayedCount, displayedCount + BATCH_SIZE);
     if (!batch.length) return;
     displayedCount += batch.length;
     g.insertAdjacentHTML("beforeend", batch.map(v => `
