@@ -3,516 +3,212 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tunisian YouTube 🇹🇳</title>
+    <title>Tunisian YouTube 🇹🇳 - منصة الدروس التونسية</title>
+    
+    <!-- FAVICON (Logo mel barra) -->
     <link rel="icon" type="image/png" href="logo.png">
+    <link rel="apple-touch-icon" href="logo.png">
+    
+    <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <style>
-    :root {
-        --bg: #0f0f0f;
-        --surface: #181818;
-        --surface2: #222222;
-        --surface3: #2e2e2e;
-        --border: #2f2f2f;
-        --text: #ffffff;
-        --text2: #aaaaaa;
-        --text3: #606060;
-        --accent: #3ea6ff;
-        --red: #ff0000;
-        --radius: 12px;
-        --radius-sm: 8px;
-        --radius-full: 50px;
-        --header-h: 56px;
-        --sidebar-w: 240px;
-        --font: 'Inter', sans-serif;
-    }
-    
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: var(--font); background: var(--bg); color: var(--text); overflow-x: hidden; }
-    
-    ::-webkit-scrollbar { width: 8px; height: 8px; }
-    ::-webkit-scrollbar-track { background: var(--bg); }
-    ::-webkit-scrollbar-thumb { background: var(--surface3); border-radius: 4px; }
-    
-    button { font-family: var(--font); cursor: pointer; border: none; outline: none; background: none; color: inherit; }
-    input, textarea, select { font-family: var(--font); outline: none; border: none; }
-
-    /* ====== HEADER ====== */
-    .hdr { position: fixed; top: 0; left: 0; right: 0; height: var(--header-h); background: var(--bg); display: flex; align-items: center; justify-content: space-between; padding: 0 16px; border-bottom: 1px solid var(--border); z-index: 1000; }
-    .hdr-left { display: flex; align-items: center; gap: 16px; }
-    .menu-i { font-size: 18px; color: var(--text); cursor: pointer; padding: 8px; border-radius: 50%; transition: 0.2s; }
-    .menu-i:hover { background: var(--surface2); }
-    .logo-wrap { display: flex; align-items: center; gap: 8px; cursor: pointer; }
-    .logo-img { height: 32px; border-radius: 6px; }
-    .logo-t { font-size: 18px; font-weight: 800; letter-spacing: -0.5px; }
-    .logo-r { color: var(--red); }
-    
-    .search-wrap { flex: 1; max-width: 500px; display: flex; margin: 0 auto; position: relative; }
-    .search-wrap input { width: 100%; padding: 8px 16px; border-radius: var(--radius-full); border: 1px solid var(--border); background: var(--surface); color: var(--text); font-size: 14px; padding-right: 45px; }
-    .search-wrap input:focus { border-color: var(--accent); background: var(--bg); }
-    .search-btn { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: var(--text2); font-size: 14px; }
-
-    .hdr-right { display: flex; align-items: center; gap: 12px; }
-    .vid-count { background: rgba(255,0,0,0.15); color: var(--red); padding: 3px 10px; border-radius: 10px; font-size: 12px; font-weight: 700; border: 1px solid rgba(255,0,0,0.2); }
-    .icon-btn { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--text2); font-size: 16px; transition: 0.2s; }
-    .icon-btn:hover { background: var(--surface2); color: var(--text); }
-    
-    .avatar { width: 34px; height: 34px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; cursor: pointer; overflow: hidden; color: #fff; }
-    .avatar img { width: 100%; height: 100%; object-fit: cover; }
-    
-    .auth-cta { padding: 6px 14px; border-radius: var(--radius-full); border: 1px solid var(--accent); color: var(--accent); font-size: 13px; font-weight: 600; transition: 0.2s; }
-    .auth-cta:hover { background: rgba(62,166,255,0.1); }
-
-    /* ====== USER DROPDOWN ====== */
-    .dropdown { position: absolute; top: 52px; right: 16px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); width: 280px; z-index: 2000; display: none; box-shadow: 0 10px 30px rgba(0,0,0,0.5); overflow: hidden; }
-    .dropdown.show { display: block; }
-    .dd-header { padding: 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px; }
-    .dd-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; overflow: hidden; color: #fff; }
-    .dd-avatar img { width: 100%; height: 100%; object-fit: cover; }
-    .dd-info { flex: 1; min-width: 0; }
-    .dd-name { font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .dd-email { font-size: 12px; color: var(--text2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .dd-item { padding: 10px 16px; display: flex; align-items: center; gap: 12px; font-size: 14px; color: var(--text); transition: 0.2s; width: 100%; text-align: left; }
-    .dd-item:hover { background: var(--surface2); }
-    .dd-item i { width: 20px; text-align: center; color: var(--text2); font-size: 15px; }
-    .dd-sep { height: 1px; background: var(--border); margin: 4px 0; }
-    .dd-item.danger { color: #ff4d4d; }
-    .dd-item.danger i { color: #ff4d4d; }
-
-    /* ====== OVERLAYS ====== */
-    .ov { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); z-index: 3000; justify-content: center; align-items: flex-start; padding-top: 60px; overflow-y: auto; }
-    .ov.active { display: flex; }
-    .ov-box { background: var(--surface); border-radius: var(--radius); border: 1px solid var(--border); width: 92%; max-width: 460px; margin-bottom: 40px; overflow: hidden; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-    .ov-box.lg { max-width: 860px; }
-    .ov-head { padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
-    .ov-head h2 { font-size: 16px; font-weight: 700; }
-    .ov-close { background: none; border: none; color: var(--text2); font-size: 20px; cursor: pointer; }
-    .ov-body { padding: 20px; }
-
-    /* ====== FORM ELEMENTS ====== */
-    .form-group { margin-bottom: 16px; }
-    .form-label { font-size: 13px; color: var(--text2); margin-bottom: 6px; display: block; font-weight: 500; text-align: left; }
-    .form-input { width: 100%; padding: 10px 14px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--bg); color: var(--text); font-size: 14px; }
-    .form-input:focus { border-color: var(--accent); }
-    .form-textarea { width: 100%; padding: 10px 14px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--bg); color: var(--text); font-size: 14px; resize: vertical; min-height: 80px; }
-    .form-btn { width: 100%; padding: 10px; border-radius: var(--radius-sm); font-size: 14px; font-weight: 600; text-align: center; }
-    .btn-primary { background: var(--accent); color: #fff; }
-    .btn-primary:hover { background: #2b8fd9; }
-    .btn-danger { background: #ff4d4d; color: #fff; }
-    .btn-danger:hover { background: #e04343; }
-    .btn-outline { border: 1px solid var(--border); color: var(--text); }
-    .btn-outline:hover { background: var(--surface2); }
-    .form-error { color: #ff4d4d; font-size: 13px; margin-bottom: 12px; text-align: center; font-weight: 600; }
-    .form-switch { color: var(--accent); font-size: 13px; text-align: center; margin-top: 12px; cursor: pointer; }
-    .avatar-upload { width: 80px; height: 80px; border-radius: 50%; background: var(--surface2); display: flex; align-items: center; justify-content: center; cursor: pointer; margin: 0 auto 16px; overflow: hidden; border: 2px dashed var(--border); position: relative; }
-    .avatar-upload img { width: 100%; height: 100%; object-fit: cover; }
-    .avatar-upload i { font-size: 20px; color: var(--text3); }
-    .avatar-upload input { position: absolute; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
-
-    /* ====== SETTINGS PAGE ====== */
-    .settings-nav { display: flex; border-bottom: 1px solid var(--border); overflow-x: auto; background: var(--surface2); }
-    .settings-tab { padding: 12px 20px; font-size: 13px; font-weight: 600; color: var(--text2); border-bottom: 2px solid transparent; white-space: nowrap; transition: 0.2s; }
-    .settings-tab:hover { color: var(--text); }
-    .settings-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
-    .settings-page { display: none; padding: 20px; }
-    .settings-page.active { display: block; }
-    .setting-row { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid var(--border); }
-    .setting-info { flex: 1; padding-right: 16px; text-align: left; }
-    .setting-title { font-size: 14px; font-weight: 600; }
-    .setting-desc { font-size: 12px; color: var(--text2); margin-top: 2px; }
-    .toggle { width: 44px; height: 24px; border-radius: 12px; background: var(--surface3); position: relative; cursor: pointer; transition: 0.3s; flex-shrink: 0; }
-    .toggle.on { background: var(--accent); }
-    .toggle::after { content: ''; position: absolute; width: 18px; height: 18px; border-radius: 50%; background: #fff; top: 3px; left: 3px; transition: 0.3s; }
-    .toggle.on::after { left: 23px; }
-    .form-select { padding: 8px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--bg); color: var(--text); font-size: 13px; cursor: pointer; }
-
-    /* ====== SIDEBAR ====== */
-    .side { position: fixed; top: var(--header-h); left: 0; width: var(--sidebar-w); height: calc(100vh - var(--header-h)); background: var(--bg); border-right: 1px solid var(--border); overflow-y: auto; padding: 8px; z-index: 999; transition: transform 0.3s; }
-    .side.hidden { transform: translateX(-100%); }
-    .side h4 { font-size: 11px; color: var(--text3); padding: 12px 12px 6px; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 700; text-align: left; }
-    .side-btn { display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 8px 12px; background: transparent; border: none; color: var(--text); font-size: 13px; border-radius: var(--radius-sm); margin-bottom: 1px; transition: 0.15s; text-align: left; }
-    .side-btn:hover, .side-btn.active { background: var(--surface2); font-weight: 600; }
-    .side-cnt { background: var(--surface3); padding: 2px 7px; border-radius: 10px; font-size: 11px; color: var(--text2); }
-
-    /* ====== MAIN ====== */
-    .main { margin-left: var(--sidebar-w); margin-top: var(--header-h); padding: 16px 20px; min-height: calc(100vh - var(--header-h)); transition: margin-left 0.3s; }
-    .main.expanded { margin-left: 0; }
-
-    /* ====== FILTER BAR ====== */
-    .filter-bar { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 14px; scrollbar-width: none; align-items: center; }
-    .filter-bar::-webkit-scrollbar { display: none; }
-    .f-chip { padding: 7px 16px; border-radius: var(--radius-sm); border: none; background: var(--surface2); color: var(--text); font-size: 13px; white-space: nowrap; transition: 0.2s; }
-    .f-chip:hover { background: var(--surface3); }
-    .f-chip.active { background: var(--text); color: var(--bg); font-weight: 600; }
-
-    /* ====== GRID ====== */
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-top: 4px; }
-    .card { border-radius: var(--radius); overflow: hidden; transition: transform 0.2s; cursor: pointer; }
-    .card:hover { transform: translateY(-4px); }
-    .card-thumb { position: relative; width: 100%; aspect-ratio: 16/9; overflow: hidden; background: var(--surface2); border-radius: var(--radius); }
-    .card-thumb img { width: 100%; height: 100%; object-fit: cover; transition: 0.3s; }
-    .card:hover .card-thumb img { transform: scale(1.05); }
-    .card-badge { position: absolute; bottom: 8px; left: 8px; background: rgba(0,0,0,0.8); color: var(--accent); padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; backdrop-filter: blur(4px); }
-    .card-body { padding: 10px 2px; }
-    .card-title { font-size: 13px; font-weight: 600; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 4px; }
-    .card-ch { font-size: 12px; color: var(--text2); display: flex; align-items: center; gap: 6px; }
-    .card-cat { font-size: 11px; color: var(--accent); margin-top: 4px; font-weight: 600; }
-
-    /* ====== VIDEO PLAYER ====== */
-    .v-player { width: 100%; aspect-ratio: 16/9; background: #000; }
-    .v-player iframe { width: 100%; height: 100%; border: none; }
-    .v-details { padding: 16px 20px; text-align: left; }
-    .v-title { font-size: 16px; font-weight: 700; margin-bottom: 6px; line-height: 1.4; }
-    .v-ch { color: var(--text2); font-size: 13px; display: flex; align-items: center; gap: 6px; }
-    .v-actions { display: flex; gap: 8px; padding: 12px 20px; border-top: 1px solid var(--border); flex-wrap: wrap; justify-content: flex-start; }
-    .v-act { background: var(--surface2); border: none; color: var(--text); padding: 8px 16px; border-radius: var(--radius-full); font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 6px; transition: 0.2s; text-decoration: none; }
-    .v-act:hover { background: var(--surface3); }
-    .v-act.liked { background: rgba(62, 166, 255, 0.15); color: var(--accent); }
-    .v-act.subscribed { background: rgba(255, 0, 0, 0.12); color: var(--red); }
-
-    /* ====== COMMENTS ====== */
-    .cmt-section { padding: 20px; border-top: 1px solid var(--border); text-align: left; }
-    .cmt-section h3 { font-size: 14px; margin-bottom: 14px; font-weight: 700; }
-    .cmt-form { display: flex; gap: 12px; margin-bottom: 16px; align-items: flex-start; }
-    .cmt-avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; color: #fff; overflow: hidden; }
-    .cmt-avatar img { width: 100%; height: 100%; object-fit: cover; }
-    .cmt-input-wrap { flex: 1; }
-    .cmt-input { width: 100%; padding: 8px 0; border: none; border-bottom: 1px solid var(--border); background: transparent; color: var(--text); font-size: 14px; outline: none; transition: 0.2s; }
-    .cmt-input:focus { border-bottom-color: var(--accent); }
-    .cmt-btns { display: flex; gap: 8px; justify-content: flex-end; margin-top: 8px; }
-    .cmt-submit { padding: 6px 16px; border-radius: var(--radius-full); border: none; background: var(--accent); color: #fff; font-size: 13px; font-weight: 600; cursor: pointer; }
-    .cmt-item { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
-    .cmt-item:last-child { border: none; }
-    .cmt-user { font-size: 12px; font-weight: 700; color: var(--accent); }
-    .cmt-text { font-size: 13.5px; margin-top: 4px; line-height: 1.5; color: var(--text); }
-    .cmt-time { font-size: 11px; color: var(--text3); margin-top: 4px; }
-    .cmt-del { background: none; border: none; color: var(--text3); font-size: 11px; cursor: pointer; float: right; transition: 0.2s; }
-    .cmt-del:hover { color: #ff4d4d; }
-    .cmt-login { text-align: center; color: var(--text3); font-size: 13px; padding: 20px; }
-    .cmt-login a { color: var(--accent); cursor: pointer; text-decoration: none; font-weight: 600; }
-
-    .empty-state { text-align: center; padding: 80px 20px; color: var(--text3); }
-    .empty-state i { font-size: 40px; margin-bottom: 12px; }
-
-    /* Active Filters */
-    .active-filters { margin-bottom: 12px; display: flex; gap: 8px; flex-wrap: wrap; }
-    .filter-tag { background: rgba(62,166,255,0.12); color: var(--accent); padding: 4px 12px; border-radius: 16px; font-size: 12px; display: flex; align-items: center; gap: 6px; font-weight: 500; }
-    .filter-tag .rm { cursor: pointer; font-weight: 700; }
-
-    @media(max-width:768px){
-        .side { transform: translateX(-100%); }
-        .side.show { transform: translateX(0); }
-        .main { margin-left: 0; }
-        .search-wrap { max-width: none; margin: 0 8px; }
-        .grid { grid-template-columns: 1fr; }
-        .hdr { gap: 6px; }
-    }
-    </style>
 </head>
 <body>
 
-<!-- ====== HEADER ====== -->
-<header class="hdr">
-    <div class="hdr-left">
-        <i class="fas fa-bars menu-i" onclick="toggleSidebar()"></i>
-        <div class="logo-wrap" onclick="showAll()">
-            <img src="logo.png" alt="Logo" class="logo-img">
-            <span class="logo-t">Tunisian<span class="logo-r">YouTube</span></span>
+    <!-- HEADER -->
+    <header class="hdr">
+        <div class="hdr-left">
+            <i class="fas fa-bars menu-i" onclick="toggleSidebar()"></i>
+            <div class="logo-wrap" onclick="showAll()">
+                <img src="logo.png" alt="Logo" class="logo-img">
+                <span class="logo-t">Tunisian<span class="logo-r">YouTube</span></span>
+            </div>
         </div>
+        <div class="search-wrap">
+            <input type="text" id="searchInput" placeholder="Search courses..." oninput="searchVideos()">
+            <button class="search-btn" onclick="searchVideos()"><i class="fas fa-search"></i></button>
+        </div>
+        <div class="hdr-right">
+            <span class="vid-count" id="vCount">0</span>
+            <button class="icon-btn" onclick="openSettings()" title="Settings"><i class="fas fa-cog"></i></button>
+            <div id="authArea"></div>
+        </div>
+    </header>
+
+    <!-- USER DROPDOWN -->
+    <div class="dropdown" id="dropdown">
+        <div class="dd-header">
+            <div class="dd-avatar" id="ddAvatar">U</div>
+            <div class="dd-info">
+                <div class="dd-name" id="ddName">Username</div>
+                <div class="dd-email" id="ddEmail">email@email.com</div>
+            </div>
+        </div>
+        <div class="dd-item" onclick="openProfile()"><i class="fas fa-user-circle"></i> My Channel</div>
+        <div class="dd-item" onclick="openSettings()"><i class="fas fa-cog"></i> Settings</div>
+        <div class="dd-item" onclick="openLikedVideos()"><i class="fas fa-heart"></i> Liked Videos</div>
+        <div class="dd-item" onclick="openSubscriptions()"><i class="fas fa-bell"></i> Subscriptions</div>
+        <div class="dd-sep"></div>
+        <div class="dd-item danger" onclick="logOut()"><i class="fas fa-sign-out-alt"></i> Sign Out</div>
     </div>
-    <div class="search-wrap">
-        <input type="text" id="searchInput" placeholder="Search courses..." oninput="searchVideos()">
-        <button class="search-btn" onclick="searchVideos()"><i class="fas fa-search"></i></button>
-    </div>
-    <div class="hdr-right">
-        <span class="vid-count" id="vCount">0</span>
-        <button class="icon-btn" onclick="openSettings()" title="Settings"><i class="fas fa-cog"></i></button>
-        <div id="authArea"></div>
-    </div>
-</header>
 
-<!-- ====== USER DROPDOWN ====== -->
-<div class="dropdown" id="dropdown">
-    <div class="dd-header">
-        <div class="dd-avatar" id="ddAvatar">U</div>
-        <div class="dd-info">
-            <div class="dd-name" id="ddName">Username</div>
-            <div class="dd-email" id="ddEmail">email@email.com</div>
-        </div>
-    </div>
-    <div class="dd-item" onclick="openProfile()"><i class="fas fa-user-circle"></i> My Channel</div>
-    <div class="dd-item" onclick="openSettings()"><i class="fas fa-cog"></i> Settings</div>
-    <div class="dd-item" onclick="openLikedVideos()"><i class="fas fa-heart"></i> Liked Videos</div>
-    <div class="dd-item" onclick="openSubscriptions()"><i class="fas fa-bell"></i> Subscriptions</div>
-    <div class="dd-sep"></div>
-    <div class="dd-item danger" onclick="logOut()"><i class="fas fa-sign-out-alt"></i> Sign Out</div>
-</div>
-
-<!-- ====== AUTH MODAL ====== -->
-<div class="ov" id="authOv">
-    <div class="ov-box">
-        <div class="ov-head"><h2 id="authTitle">Create Account</h2><button class="ov-close" onclick="closeAuth()">✕</button></div>
-        <div class="ov-body">
-            <div class="avatar-upload" id="signupAvatar">
-                <i class="fas fa-camera"></i>
-                <input type="file" accept="image/*" onchange="previewAvatar(event)">
-            </div>
-            <div class="form-group" id="nameGroup">
-                <label class="form-label">Display Name</label>
-                <input class="form-input" id="authName" placeholder="Your name">
-            </div>
-            <div class="form-group">
-                <label class="form-label">Email</label>
-                <input class="form-input" id="authEmail" type="email" placeholder="email@example.com">
-            </div>
-            <div class="form-group">
-                <label class="form-label">Password</label>
-                <input class="form-input" id="authPass" type="password" placeholder="Min 6 characters">
-            </div>
-            <p class="form-error" id="authError"></p>
-            <button class="form-btn btn-primary" onclick="handleAuth()">Create Account</button>
-            <p class="form-switch" id="authSwitch" onclick="toggleAuthMode()">Already have an account? <b>Sign In</b></p>
-        </div>
-    </div>
-</div>
-
-<!-- ====== PROFILE / CHANNEL MODAL ====== -->
-<div class="ov" id="profileOv">
-    <div class="ov-box">
-        <div class="ov-head"><h2>My Channel</h2><button class="ov-close" onclick="closeProfile()">✕</button></div>
-        <div class="ov-body">
-            <div class="avatar-upload" id="profileAvatarWrap">
-                <i class="fas fa-camera"></i>
-                <input type="file" accept="image/*" onchange="changeProfilePic(event)">
-            </div>
-            <div class="form-group">
-                <label class="form-label">Channel Name</label>
-                <input class="form-input" id="profileName" placeholder="Your channel name">
-            </div>
-            <div class="form-group">
-                <label class="form-label">Email</label>
-                <input class="form-input" id="profileEmail" disabled>
-            </div>
-            <div class="form-group">
-                <label class="form-label">Bio / Description</label>
-                <textarea class="form-textarea" id="profileBio" placeholder="Tell us about yourself..."></textarea>
-            </div>
-            <button class="form-btn btn-primary" onclick="saveProfile()">Save Changes</button>
-        </div>
-    </div>
-</div>
-
-<!-- ====== SETTINGS MODAL ====== -->
-<div class="ov" id="settingsOv">
-    <div class="ov-box">
-        <div class="ov-head"><h2>Settings</h2><button class="ov-close" onclick="closeSettings()">✕</button></div>
-        <div class="settings-nav">
-            <button class="settings-tab active" onclick="switchSettingsTab('general',this)">General</button>
-            <button class="settings-tab" onclick="switchSettingsTab('playback',this)">Playback</button>
-            <button class="settings-tab" onclick="switchSettingsTab('notifications',this)">Notifications</button>
-            <button class="settings-tab" onclick="switchSettingsTab('privacy',this)">Privacy</button>
-            <button class="settings-tab" onclick="switchSettingsTab('advanced',this)">Advanced</button>
-        </div>
-
-        <!-- General -->
-        <div class="settings-page active" id="page-general">
-            <div class="setting-row">
-                <div class="setting-info"><div class="setting-title">🌙 Dark Mode</div><div class="setting-desc">Use dark theme across the app</div></div>
-                <div class="toggle on" id="t-dark" onclick="toggleSet('dark')"></div>
-            </div>
-            <div class="setting-row">
-                <div class="setting-info"><div class="setting-title">🌐 Language</div><div class="setting-desc">Display language preference</div></div>
-                <select class="form-select" onchange="saveLang(this.value)">
-                    <option value="derja">🇹🇳 Derja Tounsiya</option>
-                    <option value="fr">🇫🇷 Français</option>
-                    <option value="en">🇬🇧 English</option>
-                </select>
-            </div>
-        </div>
-
-        <!-- Playback -->
-        <div class="settings-page" id="page-playback">
-            <div class="setting-row">
-                <div class="setting-info"><div class="setting-title">▶️ Autoplay</div><div class="setting-desc">Auto-play videos when opened</div></div>
-                <div class="toggle on" id="t-auto" onclick="toggleSet('auto')"></div>
-            </div>
-        </div>
-
-        <!-- Notifications -->
-        <div class="settings-page" id="page-notifications">
-            <div class="setting-row">
-                <div class="setting-info"><div class="setting-title">🔔 Push Notifications</div><div class="setting-desc">Receive browser notifications</div></div>
-                <div class="toggle" id="t-notif" onclick="toggleSet('notif')"></div>
-            </div>
-            <div class="setting-row">
-                <div class="setting-info"><div class="setting-title">💬 Comment Replies</div><div class="setting-desc">Notify when someone replies to you</div></div>
-                <div class="toggle on" id="t-replies" onclick="toggleSet('replies')"></div>
-            </div>
-        </div>
-
-        <!-- Privacy -->
-        <div class="settings-page" id="page-privacy">
-            <div class="setting-row">
-                <div class="setting-info"><div class="setting-title">👁️ Profile Visibility</div><div class="setting-desc">Make your profile public</div></div>
-                <div class="toggle on" id="t-public" onclick="toggleSet('public')"></div>
-            </div>
-            <div class="setting-row">
-                <div class="setting-info"><div class="setting-title">📊 Watch History</div><div class="setting-desc">Save your watch history</div></div>
-                <div class="toggle on" id="t-history" onclick="toggleSet('history')"></div>
-            </div>
-        </div>
-
-        <!-- Advanced -->
-        <div class="settings-page" id="page-advanced">
-            <div class="setting-row">
-                <div class="setting-info"><div class="setting-title">🗑️ Clear Watch History</div><div class="setting-desc">Remove all watched videos data</div></div>
-                <button class="form-btn btn-outline" style="width:auto;padding:6px 16px;font-size:13px" onclick="clearHistory()">Clear</button>
-            </div>
-            <div class="setting-row">
-                <div class="setting-info"><div class="setting-title">🔄 Reset Everything</div><div class="setting-desc">Delete all local data and start fresh</div></div>
-                <button class="form-btn btn-danger" style="width:auto;padding:6px 16px;font-size:13px" onclick="resetAll()">Reset All</button>
+    <!-- AUTH MODAL -->
+    <div class="ov" id="authOv">
+        <div class="ov-box">
+            <div class="ov-head"><h2 id="authTitle">Create Account</h2><button class="ov-close" onclick="closeAuth()">✕</button></div>
+            <div class="ov-body">
+                <div class="avatar-upload" id="signupAvatar">
+                    <i class="fas fa-camera"></i>
+                    <input type="file" accept="image/*" onchange="previewAvatar(event)">
+                </div>
+                <div class="form-group" id="nameGroup">
+                    <label class="form-label">Display Name</label>
+                    <input class="form-input" id="authName" placeholder="Your name">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input class="form-input" id="authEmail" type="email" placeholder="email@example.com">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input class="form-input" id="authPass" type="password" placeholder="Min 6 characters">
+                </div>
+                <p class="form-error" id="authError"></p>
+                <button class="form-btn btn-primary" onclick="handleAuth()">Create Account</button>
+                <p class="form-switch" id="authSwitch" onclick="toggleAuthMode()">Already have an account? <b>Sign In</b></p>
             </div>
         </div>
     </div>
-</div>
 
-<!-- ====== SIDEBAR ====== -->
-<aside class="side" id="sidebar">
-    <h4>Categories</h4>
-    <div id="catList"></div>
-    <h4>Topics</h4>
-    <div id="subList"></div>
-</aside>
-
-<!-- ====== MAIN ====== -->
-<main class="main" id="mainContent">
-    <div class="filter-bar" id="filterBar"></div>
-    <div class="active-filters" id="activeFilters"></div>
-    <div class="grid" id="grid"></div>
-    <div class="empty-state" id="empty" style="display:none"><i class="fas fa-search"></i><h2>No videos found</h2><p>Try a different search term</p></div>
-</main>
-
-<!-- ====== VIDEO MODAL ====== -->
-<div class="ov" id="videoOv" onclick="closeModal()">
-    <div class="ov-box lg" onclick="event.stopPropagation()">
-        <button class="ov-close" onclick="closeModal()" style="position:absolute;top:12px;right:16px;z-index:10">✕</button>
-        <div class="v-player" id="player"></div>
-        <div class="v-details"><h2 class="v-title" id="mTitle"></h2><p class="v-ch" id="mChan"></p></div>
-        <div class="v-actions" id="mActions"></div>
-        <div class="cmt-section" id="cmtSection"></div>
+    <!-- PROFILE / CHANNEL MODAL -->
+    <div class="ov" id="profileOv">
+        <div class="ov-box">
+            <div class="ov-head"><h2>My Channel</h2><button class="ov-close" onclick="closeProfile()">✕</button></div>
+            <div class="ov-body">
+                <div class="avatar-upload" id="profileAvatarWrap">
+                    <i class="fas fa-camera"></i>
+                    <input type="file" accept="image/*" onchange="changeProfilePic(event)">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Channel Name</label>
+                    <input class="form-input" id="profileName" placeholder="Your channel name">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input class="form-input" id="profileEmail" disabled>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Bio / Description</label>
+                    <textarea class="form-textarea" id="profileBio" placeholder="Tell us about yourself..."></textarea>
+                </div>
+                <button class="form-btn btn-primary" onclick="saveProfile()">Save Changes</button>
+            </div>
+        </div>
     </div>
-</div>
 
-<script>
-// ====== STORAGE HELPER ======
-const S={
-    g(k){try{const v=localStorage.getItem(k);return v?JSON.parse(v):null}catch{return null}},
-    s(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}},
-    r(k){try{localStorage.removeItem(k)}catch(e){}}
-};
+    <!-- SETTINGS MODAL -->
+    <div class="ov" id="settingsOv">
+        <div class="ov-box">
+            <div class="ov-head"><h2>Settings</h2><button class="ov-close" onclick="closeSettings()">✕</button></div>
+            <div class="settings-nav">
+                <button class="settings-tab active" onclick="switchSettingsTab('general',this)">General</button>
+                <button class="settings-tab" onclick="switchSettingsTab('playback',this)">Playback</button>
+                <button class="settings-tab" onclick="switchSettingsTab('notifications',this)">Notifications</button>
+                <button class="settings-tab" onclick="switchSettingsTab('privacy',this)">Privacy</button>
+                <button class="settings-tab" onclick="switchSettingsTab('advanced',this)">Advanced</button>
+            </div>
 
-// ====== AUTH ======
-let user=S.g("user"),isSignUp=true;
-function renderAuth(){
-    const a=document.getElementById("authArea");
-    if(user){
-        const pic=user.avatar?`<img src="${user.avatar}">`:(user.name||"U")[0].toUpperCase();
-        a.innerHTML=`<div class="avatar" onclick="toggleDropdown()">${typeof pic==='string'&&pic.length===1?pic:`<img src="${user.avatar}">`}</div>`;
-        document.getElementById("ddName").textContent=user.name||"User";
-        document.getElementById("ddEmail").textContent=user.email;
-        const da=document.getElementById("ddAvatar");
-        da.innerHTML=user.avatar?`<img src="${user.avatar}">`:(user.name||"U")[0].toUpperCase();
-    }else{a.innerHTML=`<button class="auth-cta" onclick="openAuth()"><i class="fas fa-user-circle"></i> Sign In</button>`}
-}
-function toggleDropdown(){document.getElementById("dropdown").classList.toggle("show")}
-document.addEventListener("click",e=>{if(!e.target.closest(".avatar")&&!e.target.closest(".dropdown"))document.getElementById("dropdown").classList.remove("show")});
-function openAuth(){document.getElementById("authOv").classList.add("active")}
-function closeAuth(){document.getElementById("authOv").classList.remove("active");document.getElementById("authError").textContent=""}
-function toggleAuthMode(){
-    isSignUp=!isSignUp;
-    document.getElementById("authTitle").textContent=isSignUp?"Create Account":"Welcome Back";
-    document.querySelector("#authOv .btn-primary").textContent=isSignUp?"Create Account":"Sign In";
-    document.getElementById("nameGroup").style.display=isSignUp?"block":"none";
-    document.getElementById("signupAvatar").style.display=isSignUp?"flex":"none";
-    document.getElementById("authSwitch").innerHTML=isSignUp?'Already have an account? <b>Sign In</b>':'Don\'t have an account? <b>Sign Up</b>';
-}
-let tempAvatar="";
-function previewAvatar(e){const f=e.target.files[0];if(f){const r=new FileReader();r.onload=x=>{tempAvatar=x.target.result;document.getElementById("signupAvatar").innerHTML=`<img src="${tempAvatar}"><input type="file" accept="image/*" onchange="previewAvatar(event)">`};r.readAsDataURL(f)}}
-function handleAuth(){
-    const n=document.getElementById("authName").value.trim(),em=document.getElementById("authEmail").value.trim(),p=document.getElementById("authPass").value,err=document.getElementById("authError");
-    err.textContent="";
-    if(!em||!p){err.textContent="Fill all fields!";return}
-    if(p.length<6){err.textContent="Password must be 6+ characters";return}
-    let users=S.g("users")||[];
-    if(isSignUp){
-        if(!n){err.textContent="Enter your name!";return}
-        if(users.find(u=>u.email===em)){err.textContent="Email already exists!";return}
-        user={id:Date.now().toString(),name:n,email:em,pass:p,avatar:tempAvatar||"",bio:""};
-        users.push(user);S.s("users",users);S.s("user",user);
-    }else{
-        const found=users.find(u=>u.email===em&&u.pass===p);
-        if(!found){err.textContent="Wrong email or password!";return}
-        user=found;S.s("user",user);
-    }
-    renderAuth();closeAuth();tempAvatar="";
-}
-function logOut(){user=null;S.r("user");renderAuth();document.getElementById("dropdown").classList.remove("show")}
+            <!-- General -->
+            <div class="settings-page active" id="page-general">
+                <div class="setting-row">
+                    <div class="setting-info"><div class="setting-title">🌙 Dark Mode</div><div class="setting-desc">Use dark theme across the app</div></div>
+                    <div class="toggle on" id="t-dark" onclick="toggleSet('dark')"></div>
+                </div>
+                <div class="setting-row">
+                    <div class="setting-info"><div class="setting-title">🌐 Language</div><div class="setting-desc">Display language preference</div></div>
+                    <select class="form-select" onchange="saveLang(this.value)">
+                        <option value="derja">🇹🇳 Derja Tounsiya</option>
+                        <option value="fr">🇫🇷 Français</option>
+                        <option value="en">🇬🇧 English</option>
+                    </select>
+                </div>
+            </div>
 
-// ====== PROFILE ======
-function openProfile(){
-    document.getElementById("dropdown").classList.remove("show");
-    if(!user){openAuth();return}
-    document.getElementById("profileName").value=user.name||"";
-    document.getElementById("profileEmail").value=user.email||"";
-    document.getElementById("profileBio").value=user.bio||"";
-    const w=document.getElementById("profileAvatarWrap");
-    w.innerHTML=user.avatar?`<img src="${user.avatar}"><input type="file" accept="image/*" onchange="changeProfilePic(event)">`:`<i class="fas fa-camera"></i><input type="file" accept="image/*" onchange="changeProfilePic(event)">`;
-    document.getElementById("profileOv").classList.add("active");
-}
-function closeProfile(){document.getElementById("profileOv").classList.remove("active")}
-function changeProfilePic(e){const f=e.target.files[0];if(f){const r=new FileReader();r.onload=x=>{user.avatar=x.target.result;S.s("user",user);let users=S.g("users")||[];const idx=users.findIndex(u=>u.id===user.id);if(idx>-1){users[idx]=user;S.s("users",users)}renderAuth();openProfile()};r.readAsDataURL(f)}}
-function saveProfile(){
-    user.name=document.getElementById("profileName").value.trim();
-    user.bio=document.getElementById("profileBio").value.trim();
-    S.s("user",user);
-    let users=S.g("users")||[];const idx=users.findIndex(u=>u.id===user.id);if(idx>-1){users[idx]=user;S.s("users",users)}
-    renderAuth();closeProfile();alert("✅ Profile saved!");
-}
+            <!-- Playback -->
+            <div class="settings-page" id="page-playback">
+                <div class="setting-row">
+                    <div class="setting-info"><div class="setting-title">▶️ Autoplay</div><div class="setting-desc">Auto-play videos when opened</div></div>
+                    <div class="toggle on" id="t-auto" onclick="toggleSet('auto')"></div>
+                </div>
+            </div>
 
-// ====== SETTINGS ======
-function openSettings(){document.getElementById("dropdown").classList.remove("show");loadToggles();document.getElementById("settingsOv").classList.add("active")}
-function closeSettings(){document.getElementById("settingsOv").classList.remove("active")}
-function switchSettingsTab(page,btn){document.querySelectorAll(".settings-tab").forEach(t=>t.classList.remove("active"));btn.classList.add("active");document.querySelectorAll(".settings-page").forEach(p=>p.classList.remove("active"));document.getElementById("page-"+page).classList.add("active")}
-function loadToggles(){
-    const s=S.g("settings")||{dark:1,auto:1,notif:0,replies:1,public:1,history:1};
-    Object.keys(s).forEach(k=>{
-        const el=document.getElementById("t-"+k);
-        if(el){
-            if(s[k])el.classList.add("on");
-            else el.classList.remove("on");
-        }
-    });
-}
-function toggleSet(k){
-    const s=S.g("settings")||{dark:1,auto:1,notif:0,replies:1,public:1,history:1};
-    s[k]=s[k]?0:1;
-    S.s("settings",s);
-    loadToggles();
-}
-function saveLang(v){S.s("lang",v)}
-function saveGridSize(v){S.s("gridSize",v)}
-function clearHistory(){S.r("history");alert("✅ History cleared")}
-function resetAll(){if(confirm("T7eb tfa9as kol chay?")){localStorage.clear();location.reload()}}
+            <!-- Notifications -->
+            <div class="settings-page" id="page-notifications">
+                <div class="setting-row">
+                    <div class="setting-info"><div class="setting-title">🔔 Push Notifications</div><div class="setting-desc">Receive browser notifications</div></div>
+                    <div class="toggle" id="t-notif" onclick="toggleSet('notif')"></div>
+                </div>
+                <div class="setting-row">
+                    <div class="setting-info"><div class="setting-title">💬 Comment Replies</div><div class="setting-desc">Notify when someone replies to you</div></div>
+                    <div class="toggle on" id="t-replies" onclick="toggleSet('replies')"></div>
+                </div>
+            </div>
 
-// ====== VIEWS ======
-function openLikedVideos(){document.getElementById("dropdown").classList.remove("show");if(!user)return;const likes=S.g("likes")||{};const likedIds=Object.keys(likes).filter(k=>likes[k].includes(user.id));const filtered=allVideos.filter(v=>likedIds.includes(v.id));render(filtered);document.querySelectorAll(".f-chip").forEach(c=>c.classList.remove("active"))}
-function openSubscriptions(){document.getElementById("dropdown").classList.remove("show");if(!user)return;const subs=S.g("subs_"+user.id)||[];const filtered=allVideos.filter(v=>subs.some(s=>v.channel.includes(s)));render(filtered);document.querySelectorAll(".f-chip").forEach(c=>c.classList.remove("active"))}
+            <!-- Privacy -->
+            <div class="settings-page" id="page-privacy">
+                <div class="setting-row">
+                    <div class="setting-info"><div class="setting-title">👁️ Profile Visibility</div><div class="setting-desc">Make your profile public</div></div>
+                    <div class="toggle on" id="t-public" onclick="toggleSet('public')"></div>
+                </div>
+                <div class="setting-row">
+                    <div class="setting-info"><div class="setting-title">📊 Watch History</div><div class="setting-desc">Save your watch history</div></div>
+                    <div class="toggle on" id="t-history" onclick="toggleSet('history')"></div>
+                </div>
+            </div>
 
-// ====== LIKES ======
-function getLikes(id){return(S.g("likes")||{})[id]||[]}
-function toggleLike(id){if(!user){openAuth();return}const l=S.g("likes")||{};if(!l[id])l[id]=[];const i=l[id].indexOf(user.id);if(i>-1)l[id].splice(i,1);else l[id].push(user.id);S.s("likes",l);refreshActions(id)}
-function isLiked(id){return user?getLikes(id).includes(user.id):false}
+            <!-- Advanced -->
+            <div class="settings-page" id="page-advanced">
+                <div class="setting-row">
+                    <div class="setting-info"><div class="setting-title">🗑️ Clear Watch History</div><div class="setting-desc">Remove all watched videos data</div></div>
+                    <button class="form-btn btn-outline" style="width:auto;padding:6px 16px;font-size:13px" onclick="clearHistory()">Clear</button>
+                </div>
+                <div class="setting-row">
+                    <div class="setting-info"><div class="setting-title">🔄 Reset Everything</div><div class="setting-desc">Delete all local data and start fresh</div></div>
+                    <button class="form-btn btn-danger" style="width:auto;padding:6px 16px;font-size:13px" onclick="resetAll()">Reset All</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-// ====== SUBSCRIBE ======
-function getSubs(){return user?S.g("subs_"+user.id)||[]:[]}
-function toggleSub(ch){if(!user){openAuth();return}const k="subs_"+user.id;let s=S.g(k)||[];const 
+    <!-- ====== SIDEBAR ====== -->
+    <aside class="side" id="sidebar">
+        <h4>Categories</h4>
+        <div id="catList"></div>
+        <h4>Topics</h4>
+        <div id="subList"></div>
+    </aside>
+
+    <!-- ====== MAIN ====== -->
+    <main class="main" id="mainContent">
+        <div class="filter-bar" id="filterBar"></div>
+        <div class="active-filters" id="activeFilters"></div>
+        <div class="grid" id="grid"></div>
+        <div class="empty-state" id="empty" style="display:none"><i class="fas fa-search"></i><h2>No videos found</h2><p>Try a different search term</p></div>
+    </main>
+
+    <!-- ====== VIDEO MODAL ====== -->
+    <div class="ov" id="videoOv" onclick="closeModal()">
+        <div class="ov-box lg" onclick="event.stopPropagation()">
+            <button class="ov-close" onclick="closeModal()" style="position:absolute;top:12px;right:16px;z-index:10">✕</button>
+            <div class="v-player" id="player"></div>
+            <div class="v-details"><h2 class="v-title" id="mTitle"></h2><p class="v-ch" id="mChan"></p></div>
+            <div class="v-actions" id="mActions"></div>
+            <div class="cmt-section" id="cmtSection"></div>
+        </div>
+    </div>
+
+    <!-- EL SCRIPTS LOUTA BEL TARTIB EL S7I7 -->
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
