@@ -29,12 +29,12 @@ let currentFilter = { cat: null, sub: null, search: "" };
 let currentVid = "";
 let activeList = [];
 let displayedCount = 0;
-const BATCH = 24;
+const BATCH_SIZE = 24; // ⭐ FIX DEFINITIF DE LA VARIABLE BATCH_SIZE
 let user = S.g("user"), isSignUp = true;
 let tempAvatar = "";
 let searchTimer;
 
-// ====== ROUTER / NAVIGATION ======
+// ================ ROUTER / NAVIGATION ================
 function navigate(page, data = null) {
     document.getElementById("dropdown")?.classList.remove("show");
     document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
@@ -217,7 +217,7 @@ function saveChannel() {
     S.s("channel_" + user.id, ch); loadChannelPage(); alert("✅ Channel saved!");
 }
 
-// ====== LIKES / SUBS / COMMENTS ======
+// ====== LIKES / SUBS ======
 function getLikes(id) { return (S.g("likes") || {})[id] || []; }
 function toggleLike(id) { if (!user) { openAuth(); return; } const l = S.g("likes") || {}; if (!l[id]) l[id] = []; const i = l[id].indexOf(user.id); i > -1 ? l[id].splice(i, 1) : l[id].push(user.id); S.s("likes", l); refreshActionsLarge(id); }
 function isLiked(id) { return user ? getLikes(id).includes(user.id) : false; }
@@ -227,19 +227,30 @@ function toggleSub(ch) { if (!user) { openAuth(); return; } const k = "subs_" + 
 function toggleSubFromPage() { toggleSub(document.getElementById("mChanLarge").textContent); }
 function isSub(ch) { return getSubs().includes(ch); }
 
+// ====== COMMENTS ======
 function getCmts(id) { return (S.g("comments") || {})[id] || []; }
-function postCmt(id) { if (!user) { openAuth(); return; } const i = document.getElementById("cmtInputLarge"); if (!i) return; const t = i.value.trim(); if (!t) return; const c = S.g("comments") || {}; if (!c[id]) c[id] = []; c[id].unshift({ id: Date.now().toString(), uid: user.id, name: user.name, text: t, time: new Date().toLocaleString() }); S.s("comments", c); i.value = ""; renderCmtsLarge(id); }
-function delCmt(v, c) { const x = S.g("comments") || {}; if (x[v]) { x[v] = x[v].filter(y => y.id !== c); S.s("comments", x); renderCmtsLarge(v); } }
+function postCmt(id) { if (!user) { openAuth(); return; } const inp = document.getElementById("cmtInputLarge"); if (!inp) return; const t = inp.value.trim(); if (!t) return; const c = S.g("comments") || {}; if (!c[id]) c[id] = []; c[id].unshift({ id: Date.now().toString(), uid: user.id, name: user.name, text: t, time: new Date().toLocaleString() }); S.s("comments", c); inp.value = ""; renderCmtsLarge(id); }
+function delCmt(vid, cid) { const c = S.g("comments") || {}; if (c[vid]) { c[vid] = c[vid].filter(x => x.id !== cid); S.s("comments", c); renderCmtsLarge(vid); } }
 function renderCmtsLarge(id) {
-    const s = document.getElementById("cmtSectionLarge"), c = getCmts(id); if (!s) return;
-    let inp = user ? `<div class="cmt-form"><div class="cmt-avatar">${user.avatar ? `<img src="${user.avatar}">` : user.name[0].toUpperCase()}</div><div class="cmt-input-wrap"><input class="cmt-input" id="cmtInputLarge" placeholder="Add a comment..." onkeypress="if(event.key==='Enter')postCmt('${id}')"><div class="cmt-btns"><button class="cmt-submit" onclick="postCmt('${id}')">Comment</button></div></div></div>` : `<p class="cmt-login"><a onclick="openAuth()">Sign in</a> to comment</p>`;
-    let list = c.length ? c.map(x => `<div class="cmt-item"><div class="cmt-avatar" style="width:32px;height:32px;font-size:12px">${x.name ? x.name[0].toUpperCase() : "U"}</div><div style="flex:1"><span class="cmt-user">@${x.name}</span>${user && user.id === x.uid ? `<button class="cmt-del" onclick="delCmt('${id}','${x.id}')"><i class="fas fa-trash"></i></button>` : ""}<p class="cmt-text">${x.text}</p><span class="cmt-time">${x.time}</span></div></div>`).join("") : `<p style="color:var(--text3);font-size:13px;padding:8px 0">No comments yet. Be the first! 💬</p>`;
-    s.innerHTML = `<h3>💬 ${c.length} Comments</h3>${inp}${list}`;
+    const s = document.getElementById("cmtSectionLarge"), cmts = getCmts(id);
+    if (!s) return;
+    let inp = "";
+    if (user) {
+        const av = user.avatar ? `<img src="${user.avatar}">` : user.name[0].toUpperCase();
+        inp = `<div class="cmt-form"><div class="cmt-avatar">${av}</div><div class="cmt-input-wrap"><input class="cmt-input" id="cmtInputLarge" placeholder="Add a comment..." onkeypress="if(event.key==='Enter')postCmt('${id}')"><div class="cmt-btns"><button class="cmt-submit" onclick="postCmt('${id}')">Comment</button></div></div></div>`;
+    } else {
+        inp = `<p class="cmt-login"><a onclick="openAuth()">Sign in</a> to comment</p>`;
+    }
+    let list = "";
+    if (!cmts.length) list = `<p style="color:var(--text3);font-size:13px;padding:8px 0">No comments yet. Be the first! 💬</p>`;
+    else cmts.forEach(c => { list += `<div class="cmt-item"><div class="cmt-avatar" style="width:32px;height:32px;font-size:12px">${c.name ? c.name[0].toUpperCase() : "U"}</div><div style="flex:1"><span class="cmt-user">@${c.name}</span>${user && user.id === c.uid ? `<button class="cmt-del" onclick="delCmt('${id}','${c.id}')"><i class="fas fa-trash"></i></button>` : ""}<p class="cmt-text">${c.text}</p><span class="cmt-time">${c.time}</span></div></div>`; });
+    s.innerHTML = `<h3>💬 ${cmts.length} Comments</h3>${inp}${list}`;
 }
 
 function shareV(id) { const u = `https://www.youtube.com/watch?v=${id}`; if (navigator.share) navigator.share({ title: "Cours Tounsi", url: u }); else { navigator.clipboard.writeText(u); alert("✅ Link copied!"); } }
+function watchYT(id) { window.open(`https://www.youtube.com/watch?v=${id}`, "_blank"); }
 
-// ====== DOWNLOAD SYSTEM ======
+// ====== DOWNLOAD ======
 function downloadV(id) {
     const url = `https://www.youtube.com/watch?v=${id}`;
     const encoded = encodeURIComponent(url);
@@ -263,7 +274,7 @@ function initApp(raw) {
     buildSide(); buildChips(); initRouter();
 }
 
-// 🟢 LE CHARGEMENT DIRECT SANS ERREURS NI CRASHS (D'abord data.js)
+// 🟢 LE CHARGEMENT DIRECT SANS ERREURS (data.js)
 if (typeof rawVideosData !== 'undefined' && Array.isArray(rawVideosData)) {
     console.log("✅ rawVideosData chargée depuis data.js direct");
     initApp(rawVideosData);
@@ -313,11 +324,28 @@ function setListAndRender(list) {
     if (g) g.innerHTML = "";
     if (!activeList.length) { if (e) e.style.display = "block"; return; }
     if (e) e.style.display = "none";
-    renderNextBatch();
+    
+    setupInfiniteScroll();
 }
+
+// 🚀 ZERO LAG INFINITE SCROLL Observer
+let observer;
+function setupInfiniteScroll() {
+    if (observer) observer.disconnect();
+    const sentinel = document.getElementById("sentinel");
+    if (!sentinel) return;
+
+    observer = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting) {
+            renderNextBatch();
+        }
+    }, { rootMargin: "300px" });
+    observer.observe(sentinel);
+}
+
 function renderNextBatch() {
     const g = document.getElementById("grid"); if (!g) return;
-    const batch = activeList.slice(displayedCount, displayedCount + BATCH);
+    const batch = activeList.slice(displayedCount, displayedCount + BATCH_SIZE); // ⭐ FIX DEFINITIF: PLUS AUCUNS LOGS SUR BATCH_SIZE
     if (!batch.length) return;
     displayedCount += batch.length;
     g.insertAdjacentHTML("beforeend", batch.map(v => `
@@ -327,15 +355,20 @@ function renderNextBatch() {
         </div>
     `).join(""));
 }
-window.addEventListener("scroll", () => {
-    if (document.getElementById("page-home").classList.contains("active") && (window.innerHeight + window.scrollY) >= document.body.offsetHeight - 600) renderNextBatch();
-}, { passive: true });
 
 function esc(s) { return (s || "").replace(/'/g, "\\'").replace(/"/g, '\\"'); }
 function showAll() { currentFilter = { cat: null, sub: null, search: "" }; document.getElementById("searchInput").value = ""; document.querySelectorAll(".side-btn,.f-chip").forEach(b => b.classList.remove("active")); document.querySelector(".f-chip")?.classList.add("active"); document.querySelectorAll("#catList .side-btn")[0]?.classList.add("active"); navigate("home"); }
 function filterChipHome(c) { currentFilter.cat = c; currentFilter.sub = null; document.querySelectorAll(".f-chip").forEach(b => b.classList.remove("active")); event?.target?.classList.add("active"); navigate("home"); }
 function filterSubHome(s) { currentFilter.sub = s; document.querySelectorAll("#subList .side-btn").forEach(b => b.classList.remove("active")); event?.target?.classList.add("active"); navigate("home"); }
-function onSearchInput() { clearTimeout(searchTimer); searchTimer = setTimeout(() => { currentFilter.search = document.getElementById("searchInput").value.toLowerCase(); navigate("home"); }, 200); }
+
+function onSearchInput() {
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(() => {
+        currentFilter.search = document.getElementById("searchInput").value.toLowerCase();
+        navigate("home");
+    }, 300);
+}
+
 function apply() {
     let r = allVideos;
     if (currentFilter.cat) r = r.filter(v => v.category === currentFilter.cat);
@@ -378,11 +411,7 @@ function renderRelatedVideos(cat, cid) {
     const final = [...same.slice(0, 12), ...other.slice(0, 8)];
     if (!final.length) { list.innerHTML = `<p style="color:var(--text3);font-size:13px;padding:12px">Ma fammach videos similaires</p>`; return; }
     list.innerHTML = final.map(v => `
-        <div class="related-item" onclick="navigate('video',{id:'${v.id}'})">
-            <div class="related-thumb"><img src="${v.thumb}" loading="lazy" onerror="this.src='https://img.youtube.com/vi/${v.id}/0.jpg'"></div>
-            <div class="related-info"><div class="related-title">${v.title}</div><div class="related-ch"><i class="fas fa-user-circle"></i> ${v.channel}</div><div class="related-cat">${v.topic}</div></div>
-        </div>
-    `).join("");
+        <div class="related-item" onclick="navigate('video',{id:'${v.id}'})"><div class="related-thumb"><img src="${v.thumb}" loading="lazy" onerror="this.src='https://img.youtube.com/vi/${v.id}/0.jpg'"></div><div class="related-info"><div class="related-title">${v.title}</div><div class="related-ch"><i class="fas fa-user-circle"></i> ${v.channel}</div><div class="related-cat">${v.topic}</div></div></div>`).join("");
 }
 
 function loadCategoryPage(cat) {
@@ -391,11 +420,7 @@ function loadCategoryPage(cat) {
     document.getElementById("catTitle").textContent = cat;
     const f = allVideos.filter(v => v.category === cat);
     document.getElementById("categoryGrid").innerHTML = f.map(v => `
-        <div class="card" onclick="navigate('video',{id:'${v.id}'})">
-            <div class="card-thumb"><img src="${v.thumb}" loading="lazy" onerror="this.src='https://img.youtube.com/vi/${v.id}/0.jpg'"><span class="card-badge">${v.topic}</span></div>
-            <div class="card-body"><div class="card-title">${v.title}</div><div class="card-ch"><i class="fas fa-user-circle"></i> ${v.channel}</div><div class="card-cat">${v.category}</div></div>
-        </div>
-    `).join("");
+        <div class="card" onclick="navigate('video',{id:'${v.id}'})"><div class="card-thumb"><img src="${v.thumb}" loading="lazy" onerror="this.src='https://img.youtube.com/vi/${v.id}/0.jpg'"><span class="card-badge">${v.topic}</span></div><div class="card-body"><div class="card-title">${v.title}</div><div class="card-ch"><i class="fas fa-user-circle"></i> ${v.channel}</div><div class="card-cat">${v.category}</div></div></div>`).join("");
     applyGridSize();
 }
 
@@ -431,5 +456,3 @@ renderAuth();
 const il = (S.g("settings") || {}).lang;
 if (il) setLang(il);
 </script>
-</body>
-</html>
