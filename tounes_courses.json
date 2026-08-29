@@ -40070,5 +40070,21 @@
     "Chaine": "Simplilearn",
     "Categorie": "Programmation",
     "Mawdhou3": "Angular"
+  },
+  {
+    "Video_ID": "xRlLQwkbQEY",
+    "Titre": "GRAFCET : Les equations تعلم معنا بالتونسي و خوذ شهادتك ببلاش",
+    "Lien": "https://www.youtube.com/watch?v=xRlLQwkbQEY",
+    "Chaine": "Tunichnology تونكنولوجي",
+    "Categorie": "Autre",
+    "Mawdhou3": "Général"
+  },
+  {
+    "Video_ID": "mOIexubZni0",
+    "Titre": "Algorithme : Les boucles 1 تعلم معنا الخوارزميات بالتونسي و خوذ شهادتك ببلاش",
+    "Lien": "https://www.youtube.com/watch?v=mOIexubZni0",
+    "Chaine": "Tunichnology تونكنولوجي",
+    "Categorie": "Programmation",
+    "Mawdhou3": "Général"
   }
 ]
