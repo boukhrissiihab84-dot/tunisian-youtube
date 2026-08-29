@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tunisian YouTube 🇹🇳</title>
+    <title>Tunisian YouTube 🇹🇳 - منصة الدروس التونسية</title>
     
     <!-- FAVICON -->
     <link rel="icon" type="image/png" href="logo.png">
@@ -23,12 +23,11 @@
                 <span class="logo-t">Tunisian<span class="logo-r">YouTube</span></span>
             </div>
         </div>
-        <div class="search-wrap">
+        <div class="search-bar">
             <input type="text" id="searchInput" placeholder="Search courses..." oninput="searchVideos()">
-            <button class="search-btn" onclick="searchVideos()"><i class="fas fa-search"></i></button>
         </div>
         <div class="hdr-right">
-            <span class="vid-count" id="vCount">0</span>
+            <span class="vid-count" id="vCount">0 cours</span>
             <button class="icon-btn" onclick="openSettings()" title="Settings"><i class="fas fa-cog"></i></button>
             <div id="authArea"></div>
         </div>
@@ -206,8 +205,7 @@
         </div>
     </div>
 
-    <!-- EL RABT EL S7I7 EL MATHMOUN 1000% -->
-    <script src="data.js"></script>
+    <!-- DIRECT APP.JS SANS APPEL DATA.JS DANS HTML -->
     <script src="app.js"></script>
 </body>
 </html>
