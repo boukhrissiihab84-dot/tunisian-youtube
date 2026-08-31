@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TunisianTube 🇹🇳</title>
     
-    <!-- Favicon -->
+    <!-- FAVICON -->
     <link rel="icon" type="image/png" href="logo.png">
     <link rel="apple-touch-icon" href="logo.png">
     
@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
     <style>
-    /* ============ THEMES ============ */
+    /* ============ DESIGN ULTRA PRO + LIGHT/DARK THEMES ============ */
     :root, [data-theme="light"] {
         --bg: #ffffff; --surface: #f8f9fa; --surface2: #f0f2f5; --surface3: #e4e6eb;
         --border: #dcdfe3; --border2: #c8ccd1;
@@ -41,23 +41,20 @@
     :root {
         --radius: 12px; --radius-sm: 8px; --radius-full: 50px;
         --header-h: 58px; --sidebar-w: 240px;
-        --font: 'Inter', 'Cairo', sans-serif; --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        --font: 'Inter', 'Cairo', sans-serif; --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: var(--font); background: var(--bg); color: var(--text); overflow-x: hidden; -webkit-font-smoothing: antialiased; }
-    
     ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-thumb { background: var(--surface3); border-radius: 3px; }
     ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
-
-    button { font-family: var(--font); cursor: pointer; border: none; outline: none; background: none; color: inherit; transition: all 0.25s var(--transition); }
+    button { font-family: var(--font); cursor: pointer; border: none; outline: none; background: none; color: inherit; }
     input, textarea, select { font-family: var(--font); outline: none; border: none; }
-    
     body.font-small { font-size: 13px; }
     body.font-normal { font-size: 14px; }
     body.font-large { font-size: 16px; }
 
-    /* ====== ANIMATIONS ====== */
+    /* Animations Pro */
     @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
     @keyframes slideDown { from { opacity: 0; transform: translateY(-15px); } to { opacity: 1; transform: translateY(0); } }
     @keyframes scaleIn { from { opacity: 0; transform: scale(0.92); } to { opacity: 1; transform: scale(1); } }
@@ -138,7 +135,7 @@
     /* Settings Nav */
     .settings-nav { display: flex; border-bottom: 1px solid var(--border); overflow-x: auto; background: var(--surface2); scrollbar-width: none; }
     .settings-nav::-webkit-scrollbar { display: none; }
-    .settings-tab { padding: 12px 20px; font-size: 13px; font-weight: 600; color: var(--text2); border-bottom: 2px solid transparent; white-space: nowrap; cursor: pointer; }
+    .settings-tab { padding: 12px 20px; font-size: 13px; font-weight: 600; color: var(--text2); border-bottom: 2px solid transparent; white-space: nowrap; cursor: pointer; transition: 0.3s; }
     .settings-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
     .settings-page-content { display: none; }
     .settings-page-content.active { display: block; }
@@ -168,357 +165,387 @@
     /* Main Container */
     .main { margin-left: var(--sidebar-w); margin-top: var(--header-h); padding: 18px 24px; min-height: calc(100vh - var(--header-h)); transition: margin-left 0.3s var(--transition); animation: fadeIn 0.4s var(--transition); }
 
-    /* Pages System */
-    .page { display: none; animation: fadeIn 0.3s; }
-    .page.active { display: block; }
+    /* Filter Bar */
+    .filter-bar { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 16px; scrollbar-width: none; align-items: center; margin-bottom: 4px; }
+    .filter-bar::-webkit-scrollbar { display: none; }
+    .f-chip { padding: 8px 18px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--surface2); color: var(--text); font-size: 13px; white-space: nowrap; transition: all 0.3s var(--transition); font-weight: 500; }
+    .f-chip:hover { background: var(--surface3); border-color: var(--border2); transform: translateY(-2px); }
+    .f-chip.active { background: var(--text); color: var(--bg); font-weight: 700; border-color: var(--text); box-shadow: 0 4px 12px rgba(255,255,255,0.15); }
 
-    /* Category & Grid Page Headers */
-    .page-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; padding-bottom: 14px; border-bottom: 1px solid var(--border); }
-    .page-header h1 { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; }
-    .page-header .page-icon { width: 44px; height: 44px; border-radius: 12px; background: var(--gradient); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 20px; }
-    
-    .back-btn { display: flex; align-items: center; gap: 8px; padding: 8px 14px; background: var(--surface2); border-radius: var(--radius-full); color: var(--text); font-size: 13px; font-weight: 600; margin-bottom: 12px; cursor: pointer; border: 1px solid var(--border); transition: 0.2s; }
-    .back-btn:hover { background: var(--surface3); }
+    .active-filters { margin-bottom: 14px; display: flex; gap: 8px; flex-wrap: wrap; }
+    .filter-tag { background: rgba(62,166,255,0.12); color: var(--accent); padding: 5px 14px; border-radius: 16px; font-size: 12px; display: flex; align-items: center; gap: 8px; font-weight: 600; border: 1px solid rgba(62,166,255,0.25); animation: scaleIn 0.3s; }
+    .filter-tag .rm { cursor: pointer; font-weight: 700; background: rgba(62,166,255,0.2); width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; transition: 0.3s; }
+    .filter-tag .rm:hover { background: var(--accent); color: #fff; transform: rotate(90deg); }
 
-    /* High Performance Grid */
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-top: 4px; }
-    .card { border-radius: var(--radius); overflow: hidden; cursor: pointer; background: var(--surface); border: 1px solid var(--border); transition: transform 0.15s; }
-    .card:hover { transform: translateY(-4px); }
-    .card-thumb { position: relative; width: 100%; aspect-ratio: 16/9; overflow: hidden; background: var(--surface2); }
-    .card-thumb img { width: 100%; height: 100%; object-fit: cover; }
-    .card-thumb::after { content: '▶'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0); color: #fff; font-size: 22px; z-index: 2; background: rgba(255,0,51,0.9); width: 52px; height: 52px; border-radius: 50%; display: flex; align-items: center; justify-content: center; padding-left: 4px; transition: transform 0.35s; box-shadow: 0 6px 20px rgba(255,0,51,0.5); }
+    /* ====== GRID ====== */
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; margin-top: 8px; }
+    .card { border-radius: var(--radius); overflow: hidden; transition: all 0.4s var(--transition); cursor: pointer; animation: fadeIn 0.5s var(--transition) both; }
+    .card:hover { transform: translateY(-8px); }
+
+    .card-thumb { position: relative; width: 100%; aspect-ratio: 16/9; overflow: hidden; background: var(--surface2); border-radius: var(--radius); box-shadow: var(--shadow-sm); transition: 0.4s; }
+    .card:hover .card-thumb { box-shadow: var(--shadow-md); }
+    .card-thumb::before { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 50%, rgba(0,0,0,0.7) 100%); z-index: 1; opacity: 0; transition: 0.4s; }
+    .card:hover .card-thumb::before { opacity: 1; }
+    .card-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s var(--transition); }
+    .card:hover .card-thumb img { transform: scale(1.1); }
+
+    .card-thumb::after { content: '▶'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0); color: #fff; font-size: 24px; z-index: 2; background: rgba(255,0,51,0.9); width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; padding-left: 4px; transition: transform 0.4s var(--transition); box-shadow: 0 8px 24px rgba(255,0,51,0.5); }
     .card:hover .card-thumb::after { transform: translate(-50%, -50%) scale(1); }
-    .card-badge { position: absolute; bottom: 8px; left: 8px; background: rgba(0,0,0,0.85); color: #fff; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; z-index: 1; }
-    
-    .card-body { padding: 10px; }
-    .card-title { font-size: 13px; font-weight: 600; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 4px; transition: 0.2s; }
+    .card-badge { position: absolute; bottom: 10px; left: 10px; background: rgba(0,0,0,0.9); color: var(--accent); padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; backdrop-filter: blur(6px); z-index: 2; border: 1px solid rgba(255,255,255,0.1); }
+
+    .card-body { padding: 12px 4px; }
+    .card-title { font-size: 14px; font-weight: 600; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 6px; transition: 0.3s; }
     .card:hover .card-title { color: var(--accent); }
-    .card-ch { font-size: 11.5px; color: var(--text2); display: flex; align-items: center; gap: 4px; }
-    .card-cat { display: inline-block; font-size: 10.5px; color: var(--accent); margin-top: 4px; font-weight: 700; background: rgba(62,166,255,0.1); padding: 2px 6px; border-radius: 4px; }
 
-    /* ====== 🎬 YOUTUBE-STYLE FULL VIDEO PAGE ====== */
-    .video-page { display: none; position: fixed; top: var(--header-h); left: 0; right: 0; bottom: 0; background: var(--bg); z-index: 800; overflow-y: auto; }
-    .video-page.active { display: block; }
-    .video-page-container { max-width: 1400px; margin: 0 auto; padding: 24px; display: grid; grid-template-columns: 1fr 400px; gap: 24px; }
+    .card-ch { font-size: 12px; color: var(--text2); display: flex; align-items: center; gap: 6px; }
+    .card-cat { display: inline-block; font-size: 11px; color: var(--accent); margin-top: 6px; font-weight: 700; background: rgba(62,166,255,0.1); padding: 3px 8px; border-radius: 4px; }
 
-    .video-main { min-width: 0; }
-    .video-player-large { width: 100%; aspect-ratio: 16/9; background: #000; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow-md); }
-    .video-player-large iframe { width: 100%; height: 100%; border: none; }
-    
-    .video-info-large { padding: 16px 0; }
-    .video-title-large { font-size: 20px; font-weight: 700; line-height: 1.3; margin-bottom: 12px; }
+    /* ====== VIDEO PLAYER ====== */
+    .v-player { width: 100%; aspect-ratio: 16/9; background: #000; }
+    .v-player iframe { width: 100%; height: 100%; border: none; }
 
-    /* Channel Row */
-    .channel-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border); margin-bottom: 16px; gap: 12px; flex-wrap: wrap; }
-    .channel-info { display: flex; align-items: center; gap: 12px; }
-    .channel-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--gradient); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; font-size: 16px; overflow: hidden; flex-shrink: 0; }
-    .channel-avatar img { width: 100%; height: 100%; object-fit: cover; }
-    .channel-details h3 { font-size: 15px; font-weight: 700; margin-bottom: 2px; }
-    .channel-details p { font-size: 12px; color: var(--text2); }
+    .v-details { padding: 20px 24px; text-align: left; }
+    .v-title { font-size: 18px; font-weight: 700; margin-bottom: 6px; line-height: 1.4; }
+    .v-ch { color: var(--text2); font-size: 13px; }
 
-    .video-actions-row { display: flex; gap: 8px; flex-wrap: wrap; }
-    .action-btn { display: flex; align-items: center; gap: 6px; padding: 8px 14px; background: var(--surface2); border-radius: var(--radius-full); border: none; color: var(--text); font-size: 13px; font-weight: 600; cursor: pointer; transition: 0.2s; }
-    .action-btn:hover { background: var(--surface3); }
-    .action-btn.liked { background: rgba(62,166,255,0.15); color: var(--accent); }
-    .action-btn.download-btn { background: linear-gradient(135deg, #22c55e, #16a34a); color: #fff; }
-    .action-btn.download-btn:hover { background: linear-gradient(135deg, #16a34a, #15803d); }
-    .subscribe-btn { padding: 8px 18px; background: var(--text); color: var(--bg); border-radius: var(--radius-full); font-weight: 700; font-size: 13px; cursor: pointer; border: none; }
-    .subscribe-btn.subscribed { background: var(--surface3); color: var(--text); }
+    .v-actions { display: flex; gap: 10px; padding: 14px 24px; border-top: 1px solid var(--border); flex-wrap: wrap; background: var(--surface2); }
+    .v-act { background: var(--surface3); color: var(--text); padding: 10px 18px; border-radius: var(--radius-full); font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 8px; transition: all 0.3s var(--transition); text-decoration: none; cursor: pointer; }
+    .v-act:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm); }
+    .v-act:active { transform: scale(0.95); }
+    .v-act i { font-size: 15px; }
 
-    /* Description */
-    .video-description { background: var(--surface2); border-radius: var(--radius); padding: 14px 16px; margin-bottom: 20px; font-size: 13px; color: var(--text); }
-    .video-description .tag { display: inline-block; margin-right: 8px; color: var(--accent); font-weight: 600; }
+    .v-act.liked { background: rgba(62, 166, 255, 0.15); color: var(--accent); box-shadow: 0 4px 14px rgba(62,166,255,0.2); }
+    .v-act.liked i { animation: bounce 0.5s; }
+    .v-act.subscribed { background: rgba(255, 0, 51, 0.12); color: var(--red); box-shadow: 0 4px 14px rgba(255,0,51,0.2); }
 
-    /* Comments */
-    .comments-large { margin-top: 20px; }
-    .comments-large h3 { font-size: 16px; margin-bottom: 16px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
-    .cmt-form-large { display: flex; gap: 12px; margin-bottom: 20px; align-items: flex-start; }
-    .cmt-avatar-large { width: 38px; height: 38px; border-radius: 50%; background: var(--gradient); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 14px; font-weight: 700; overflow: hidden; flex-shrink: 0; }
-    .cmt-avatar-large img { width: 100%; height: 100%; object-fit: cover; }
-    .cmt-input-wrap-large { flex: 1; }
-    .cmt-input-large { width: 100%; padding: 8px 0; border: none; border-bottom: 1px solid var(--border); background: transparent; color: var(--text); font-size: 14px; outline: none; }
-    .cmt-input-large:focus { border-bottom-color: var(--accent); }
-    .cmt-btns-large { display: flex; gap: 8px; justify-content: flex-end; margin-top: 8px; }
-    .cmt-submit-large { padding: 8px 16px; border-radius: var(--radius-full); background: var(--gradient); color: #fff; font-size: 13px; font-weight: 600; cursor: pointer; }
-    
-    .cmt-list-large .cmt-item-large { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); }
-    .cmt-list-large .cmt-item-large:last-child { border: none; }
-    .cmt-user-large { font-size: 13px; font-weight: 700; color: var(--accent); }
-    .cmt-text-large { font-size: 13.5px; margin-top: 4px; line-height: 1.5; }
-    .cmt-time-large { font-size: 11px; color: var(--text3); margin-top: 3px; }
-    .cmt-del-large { background: none; color: var(--text3); font-size: 11px; cursor: pointer; float: right; }
-    .cmt-del-large:hover { color: #ff4d4d; }
-    .cmt-login-large { text-align: center; color: var(--text3); font-size: 13px; padding: 20px; background: var(--surface2); border-radius: var(--radius); }
-    .cmt-login-large a { color: var(--accent); cursor: pointer; font-weight: 600; }
+    /* ====== COMMENTS ====== */
+    .cmt-section { padding: 24px; border-top: 1px solid var(--border); text-align: left; }
+    .cmt-section h3 { font-size: 15px; margin-bottom: 18px; font-weight: 700; }
+    .cmt-form { display: flex; gap: 14px; margin-bottom: 20px; align-items: flex-start; }
+    .cmt-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--gradient); display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 700; flex-shrink: 0; color: #fff; overflow: hidden; box-shadow: 0 4px 12px rgba(62,166,255,0.25); }
+    .cmt-avatar img { width: 100%; height: 100%; object-fit: cover; }
 
-    /* Related Videos Sidebar */
-    .related-videos { border-left: 1px solid var(--border); padding-left: 20px; }
-    .related-videos h3 { font-size: 15px; margin-bottom: 12px; font-weight: 700; }
-    .related-item { display: flex; gap: 10px; padding: 8px 0; cursor: pointer; transition: 0.2s; border-radius: var(--radius-sm); }
-    .related-item:hover { background: var(--surface2); padding: 8px; }
-    .related-thumb { width: 168px; aspect-ratio: 16/9; border-radius: 8px; overflow: hidden; flex-shrink: 0; background: var(--surface2); }
-    .related-thumb img { width: 100%; height: 100%; object-fit: cover; }
-    .related-info { flex: 1; min-width: 0; }
-    .related-title { font-size: 13px; font-weight: 600; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 4px; }
-    .related-ch { font-size: 11.5px; color: var(--text2); }
-    .related-cat { font-size: 10.5px; color: var(--accent); font-weight: 600; margin-top: 2px; }
+    .cmt-input-wrap { flex: 1; }
+    .cmt-input { width: 100%; padding: 10px 0; border-bottom: 1.5px solid var(--border); background: transparent; color: var(--text); font-size: 14px; transition: 0.3s; }
+    .cmt-input:focus { border-bottom-color: var(--accent); border-bottom-width: 2px; }
+    .cmt-btns { display: flex; gap: 8px; justify-content: flex-end; margin-top: 10px; }
+    .cmt-submit { padding: 8px 20px; border-radius: var(--radius-full); background: var(--gradient); color: #fff; font-size: 13px; font-weight: 600; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 12px rgba(62,166,255,0.3); }
+    .cmt-submit:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(62,166,255,0.4); }
 
-    /* DOWNLOAD MODAL */
-    .dl-modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.75); z-index: 4000; justify-content: center; align-items: center; padding: 20px; }
-    .dl-modal.active { display: flex; }
-    .dl-box { background: var(--surface); border-radius: var(--radius); width: 100%; max-width: 420px; padding: 24px; box-shadow: var(--shadow-lg); text-align: center; position: relative; }
-    .dl-icon { width: 64px; height: 64px; margin: 0 auto 14px; background: linear-gradient(135deg, #22c55e, #16a34a); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 26px; }
-    .dl-title { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
-    .dl-desc { font-size: 13px; color: var(--text2); margin-bottom: 20px; line-height: 1.5; }
-    .dl-options { display: flex; flex-direction: column; gap: 8px; }
-    .dl-btn { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text); font-size: 13px; font-weight: 600; cursor: pointer; text-decoration: none; transition: 0.2s; text-align: left; }
-    .dl-btn:hover { background: var(--surface3); border-color: var(--accent); transform: translateY(-1px); }
-    .dl-btn i { color: var(--accent); font-size: 16px; }
-    .dl-btn .dl-arrow { color: var(--text3); }
-    .dl-btn.best { background: linear-gradient(135deg, #22c55e, #16a34a); color: #fff; border: none; }
-    .dl-btn.best i, .dl-btn.best .dl-arrow { color: #fff; }
-    .dl-btn.best:hover { background: linear-gradient(135deg, #16a34a, #15803d); }
-    .dl-close { position: absolute; top: 12px; right: 12px; background: var(--surface3); border: none; width: 28px; height: 28px; border-radius: 50%; color: var(--text2); cursor: pointer; font-size: 13px; }
-    .dl-close:hover { background: #ff4d4d; color: #fff; }
+    .cmt-item { display: flex; gap: 14px; padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.03); animation: fadeIn 0.4s; }
+    .cmt-item:last-child { border: none; }
+    .cmt-user { font-size: 13px; font-weight: 700; color: var(--accent); }
+    .cmt-text { font-size: 14px; margin-top: 5px; line-height: 1.5; }
+    .cmt-time { font-size: 11px; color: var(--text3); margin-top: 4px; }
+    .cmt-del { background: none; color: var(--text3); font-size: 12px; cursor: pointer; float: right; padding: 4px 8px; border-radius: 6px; transition: 0.3s; }
+    .cmt-del:hover { color: #ff4d4d; background: rgba(255,77,77,0.1); }
 
-    .empty-state { text-align: center; padding: 70px 20px; color: var(--text3); }
-    .empty-state i { font-size: 44px; margin-bottom: 12px; }
-    .empty-state h2 { font-size: 18px; margin-bottom: 6px; color: var(--text); }
-    .empty-state p { font-size: 13px; }
+    .cmt-login { text-align: center; color: var(--text3); font-size: 14px; padding: 24px; background: var(--surface2); border-radius: var(--radius); }
+    .cmt-login a { color: var(--accent); cursor: pointer; text-decoration: none; font-weight: 600; }
+    .cmt-login a:hover { text-decoration: underline; }
 
-    @media(max-width: 1024px) { .video-container { grid-template-columns: 1fr; } .related-thumb { width: 140px; } }
-    @media(max-width:768px){ .side { transform: translateX(-100%); } .side.show { transform: translateX(0); } .main { margin-left: 0; padding: 14px; } .search-wrap { max-width: none; margin: 0 6px; } .grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; } .hdr { padding: 0 12px; } .video-title-large { font-size: 16px; } .related-thumb { width: 120px; } }
+    .empty-state { text-align: center; padding: 100px 20px; color: var(--text3); animation: fadeIn 0.5s; }
+    .empty-state i { font-size: 48px; margin-bottom: 16px; animation: bounce 2s infinite; }
+    .empty-state h2 { font-size: 18px; margin-bottom: 6px; color: var(--text2); }
+
+    /* ====== RESPONSIVE ====== */
+    @media(max-width:768px){
+        .side { transform: translateX(-100%); }
+        .side.show { transform: translateX(0); }
+        .main { margin-left: 0; padding: 16px; }
+        .search-wrap { max-width: none; margin: 0 6px; }
+        .grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; }
+        .hdr { padding: 0 12px; gap: 6px; }
+        .logo-t { font-size: 15px; }
+        .logo-img { height: 30px; }
+        .vid-count { padding: 3px 8px; font-size: 11px; }
+        .ov-box { max-width: 100%; margin: 20px; }
+        .card-title { font-size: 12px; }
+        .card-ch { font-size: 11px; }
+        .v-act { padding: 8px 12px; font-size: 12px; }
+    }
     </style>
 </head>
 <body>
 
-<header class="hdr">
-    <div class="hdr-left">
-        <i class="fas fa-bars menu-i" onclick="toggleSidebar()"></i>
-        <div class="logo-wrap" onclick="navigate('home')">
-            <img src="logo.png" alt="Logo" class="logo-img" onerror="this.style.display='none'">
-            <span class="logo-t">Tunisian<span class="logo-r">Tube</span></span>
+    <!-- ====== HEADER ====== -->
+    <header class="hdr">
+        <div class="hdr-left">
+            <i class="fas fa-bars menu-i" onclick="toggleSidebar()"></i>
+            <div class="logo-wrap" onclick="navigate('home')">
+                <img src="logo.png" alt="Logo" class="logo-img" onerror="this.style.display='none'">
+                <span class="logo-t">Tunisian<span class="logo-r">Tube</span></span>
+            </div>
+        </div>
+        <div class="search-wrap">
+            <input type="text" id="searchInput" placeholder="Search courses..." oninput="onSearchInput()">
+            <button class="search-btn"><i class="fas fa-search"></i></button>
+        </div>
+        <div class="hdr-right">
+            <span class="vid-count" id="vCount">0 cours</span>
+            <button class="icon-btn" onclick="toggleTheme()" id="themeBtn"><i class="fas fa-moon"></i></button>
+            <button class="icon-btn" onclick="navigate('settings')" title="Settings"><i class="fas fa-cog"></i></button>
+            <div id="authArea"></div>
+        </div>
+    </header>
+
+    <!-- ====== USER DROPDOWN ====== -->
+    <div class="dropdown" id="dropdown">
+        <div class="dd-header">
+            <div class="dd-avatar" id="ddAvatar">U</div>
+            <div class="dd-info">
+                <div class="dd-name" id="ddName">Username</div>
+                <div class="dd-email" id="ddEmail">email</div>
+            </div>
+        </div>
+        <div class="dd-item" onclick="navigate('channel')"><i class="fas fa-tv"></i> My Channel</div>
+        <div class="dd-item" onclick="navigate('account')"><i class="fas fa-user-cog"></i> Account Settings</div>
+        <div class="dd-item" onclick="navigate('settings')"><i class="fas fa-cog"></i> App Settings</div>
+        <div class="dd-sep"></div>
+        <div class="dd-item" onclick="navigate('liked')"><i class="fas fa-heart"></i> Liked Videos</div>
+        <div class="dd-item" onclick="navigate('subscriptions')"><i class="fas fa-bell"></i> Subscriptions</div>
+        <div class="dd-item" onclick="navigate('history')"><i class="fas fa-history"></i> Watch History</div>
+        <div class="dd-sep"></div>
+        <div class="dd-item danger" onclick="logOut()"><i class="fas fa-sign-out-alt"></i> Sign Out</div>
+    </div>
+
+    <!-- ====== AUTH MODAL ====== -->
+    <div class="ov" id="authOv">
+        <div class="ov-box">
+            <div class="ov-head"><h2 id="authTitle">Create Account</h2><button class="ov-close" onclick="closeAuth()">✕</button></div>
+            <div class="ov-body">
+                <div class="avatar-upload" id="signupAvatar"><i class="fas fa-camera"></i><input type="file" accept="image/*" onchange="previewAvatar(event)"></div>
+                <div class="form-group" id="nameGroup"><label class="form-label">Display Name</label><input class="form-input" id="authName" placeholder="Your name"></div>
+                <div class="form-group"><label class="form-label">Email</label><input class="form-input" id="authEmail" type="email" placeholder="email@example.com"></div>
+                <div class="form-group"><label class="form-label">Password</label><input class="form-input" id="authPass" type="password" placeholder="Min 6 characters"></div>
+                <p class="form-error" id="authError"></p>
+                <button class="form-btn btn-primary" onclick="handleAuth()">Create Account</button>
+                <p class="form-switch" id="authSwitch" onclick="toggleAuthMode()">Already have an account? <b>Sign In</b></p>
+            </div>
         </div>
     </div>
-    <div class="search-wrap">
-        <input type="text" id="searchInput" placeholder="Search courses..." oninput="onSearchInput()">
-        <button class="search-btn"><i class="fas fa-search"></i></button>
-    </div>
-    <div class="hdr-right">
-        <span class="vid-count" id="vCount">0 cours</span>
-        <button class="icon-btn" onclick="toggleTheme()" id="themeBtn"><i class="fas fa-moon"></i></button>
-        <button class="icon-btn" onclick="navigate('settings')" title="Settings"><i class="fas fa-cog"></i></button>
-        <div id="authArea"></div>
-    </div>
-</header>
 
-<div class="dropdown" id="dropdown">
-    <div class="dd-header">
-        <div class="dd-avatar" id="ddAvatar">U</div>
-        <div class="dd-info"><div class="dd-name" id="ddName">Username</div><div class="dd-email" id="ddEmail">email</div></div>
-    </div>
-    <div class="dd-item" onclick="navigate('channel')"><i class="fas fa-tv"></i> My Channel</div>
-    <div class="dd-item" onclick="navigate('account')"><i class="fas fa-user-cog"></i> Account Settings</div>
-    <div class="dd-item" onclick="navigate('settings')"><i class="fas fa-cog"></i> App Settings</div>
-    <div class="dd-sep"></div>
-    <div class="dd-item" onclick="navigate('liked')"><i class="fas fa-heart"></i> Liked Videos</div>
-    <div class="dd-item" onclick="navigate('subscriptions')"><i class="fas fa-bell"></i> Subscriptions</div>
-    <div class="dd-item" onclick="navigate('history')"><i class="fas fa-history"></i> Watch History</div>
-    <div class="dd-sep"></div>
-    <div class="dd-item danger" onclick="logOut()"><i class="fas fa-sign-out-alt"></i> Sign Out</div>
-</div>
-
-<div class="ov" id="authOv">
-    <div class="ov-box">
-        <div class="ov-head"><h2 id="authTitle">Create Account</h2><button class="ov-close" onclick="closeAuth()">✕</button></div>
-        <div class="ov-body">
-            <div class="form-group" id="nameGroup"><label class="form-label">Display Name</label><input class="form-input" id="authName" placeholder="Your name"></div>
-            <div class="form-group"><label class="form-label">Email</label><input class="form-input" id="authEmail" type="email" placeholder="email@example.com"></div>
-            <div class="form-group"><label class="form-label">Password</label><input class="form-input" id="authPass" type="password" placeholder="Min 6 characters"></div>
-            <p class="form-error" id="authError"></p>
-            <button class="form-btn btn-primary" onclick="handleAuth()">Create Account</button>
-            <p class="form-switch" id="authSwitch" onclick="toggleAuthMode()">Already have an account? <b>Sign In</b></p>
+    <!-- ====== DOWNLOAD MODAL ====== -->
+    <div class="dl-modal" id="dlModal" onclick="if(event.target===this)closeDlModal()">
+        <div class="dl-box">
+            <button class="dl-close" onclick="closeDlModal()">✕</button>
+            <div class="dl-icon"><i class="fas fa-download"></i></div>
+            <h2 class="dl-title">Download Video</h2>
+            <p class="dl-desc">Cobalt has 0 ads and is very fast.</p>
+            <div class="dl-options">
+                <a class="dl-btn best" id="dlCobalt" href="#" target="_blank"><span><i class="fas fa-bolt"></i> Cobalt (Best - No Ads)</span><i class="fas fa-arrow-right"></i></a>
+                <a class="dl-btn" id="dlSSYT" href="#" target="_blank"><span><i class="fas fa-download"></i> SSYouTube (Simple)</span><i class="fas fa-arrow-right"></i></a>
+                <a class="dl-btn" id="dlY2Mate" href="#" target="_blank"><span><i class="fas fa-video"></i> Y2Mate (MP4/MP3)</span><i class="fas fa-arrow-right"></i></a>
+            </div>
         </div>
     </div>
-</div>
 
-<!-- DOWNLOAD MODAL -->
-<div class="dl-modal" id="dlModal" onclick="if(event.target===this)closeDlModal()">
-    <div class="dl-box">
-        <button class="dl-close" onclick="closeDlModal()">✕</button>
-        <div class="dl-icon"><i class="fas fa-download"></i></div>
-        <h2 class="dl-title">Download Video</h2>
-        <p class="dl-desc">Choose your preferred download service.</p>
-        <div class="dl-options">
-            <a class="dl-btn best" id="dlCobalt" href="#" target="_blank"><span><i class="fas fa-bolt"></i> Cobalt (Best - No Ads)</span><i class="fas fa-arrow-right"></i></a>
-            <a class="dl-btn" id="dlSSYT" href="#" target="_blank"><span><i class="fas fa-download"></i> SSYouTube</span><i class="fas fa-arrow-right"></i></a>
-            <a class="dl-btn" id="dlY2Mate" href="#" target="_blank"><span><i class="fas fa-video"></i> Y2Mate</span><i class="fas fa-arrow-right"></i></a>
+    <!-- ====== SIDEBAR ====== -->
+    <aside class="side" id="sidebar">
+        <h4>Categories</h4><div id="catList"></div>
+        <h4>Topics</h4><div id="subList"></div>
+    </aside>
+
+    <!-- ====== MAIN ====== -->
+    <main class="main" id="mainContent">
+
+        <!-- ============ HOME PAGE ============ -->
+        <div class="page active" id="page-home">
+            <div class="filter-bar" id="filterBar"></div>
+            <div class="grid" id="grid"></div>
+            <!-- Sentinel Div for Observer -->
+            <div id="sentinel"></div>
+            <div class="empty-state" id="empty" style="display:none"><i class="fas fa-search"></i><h2>No videos found</h2></div>
         </div>
-    </div>
-</div>
 
-<aside class="side" id="sidebar">
-    <h4>Categories</h4><div id="catList"></div>
-    <h4>Topics</h4><div id="subList"></div>
-</aside>
-
-<main class="main" id="mainContent">
-
-    <div class="page active" id="page-home">
-        <div class="filter-bar" id="filterBar"></div>
-        <div class="grid" id="grid"></div>
-        <div class="empty-state" id="empty" style="display:none"><i class="fas fa-search"></i><h2>No videos found</h2></div>
-    </div>
-
-    <div class="page" id="page-video">
-        <div class="video-container">
-            <div>
-                <button class="back-btn" onclick="navigate('home')"><i class="fas fa-arrow-left"></i> Back</button>
-                <div class="video-player-large" id="playerLarge"></div>
-                <div class="video-info-large">
-                    <h1 class="video-title-large" id="mTitleLarge"></h1>
-                    <div class="channel-row">
-                        <div class="channel-info">
-                            <div class="channel-avatar" id="mChanAvatar">C</div>
-                            <div class="channel-details">
-                                <h3 id="mChanLarge">Channel</h3>
-                                <p id="mCatLarge">Category</p>
+        <!-- ============ VIDEO PAGE (YOUTUBE-STYLE FULL PAGE) ============ -->
+        <div class="page" id="page-video">
+            <div class="video-page-container">
+                <div class="video-main">
+                    <button class="back-btn" onclick="navigate('home')"><i class="fas fa-arrow-left"></i> Back</button>
+                    <div class="video-player-large" id="playerLarge"></div>
+                    <div class="video-info-large">
+                        <h1 class="video-title-large" id="mTitleLarge"></h1>
+                        <div class="channel-row">
+                            <div class="channel-info">
+                                <div class="channel-avatar" id="mChanAvatar">C</div>
+                                <div class="channel-details">
+                                    <h3 id="mChanLarge">Channel</h3>
+                                    <p id="mCatLarge">Category</p>
+                                </div>
+                                <button class="subscribe-btn" id="subscribeBtn" onclick="toggleSubFromPage()"><i class="fas fa-bell"></i> Subscribe</button>
                             </div>
-                            <button class="subscribe-btn" id="subscribeBtn" onclick="toggleSubFromPage()"><i class="fas fa-bell"></i> Subscribe</button>
+                            <div class="video-actions-row" id="mActionsLarge"></div>
                         </div>
-                        <div class="video-actions-row" id="mActionsLarge"></div>
+                        <div class="video-description" id="mDescLarge"></div>
+                        <div class="comments-large" id="cmtSectionLarge"></div>
                     </div>
-                    <div class="video-description" id="mDescLarge"></div>
-                    <div class="comments-section" id="cmtSectionLarge"></div>
+                </div>
+                <div class="related-videos" id="relatedVideos">
+                    <h3>📺 Videos Similaires</h3>
+                    <div id="relatedList"></div>
                 </div>
             </div>
-            <div class="related-videos">
-                <h3>📺 Videos Similaires</h3>
-                <div id="relatedList"></div>
+        </div>
+
+        <!-- ============ CATEGORY PAGE ============ -->
+        <div class="page" id="page-category">
+            <button class="back-btn" onclick="navigate('home')"><i class="fas fa-arrow-left"></i> Home</button>
+            <div class="page-header"><div class="page-icon" id="catIcon">📁</div><h1 id="catTitle">Category</h1></div>
+            <div class="grid" id="categoryGrid"></div>
+        </div>
+
+        <!-- ============ SETTINGS PAGE ============ -->
+        <div class="page" id="page-settings">
+            <button class="back-btn" onclick="navigate('home')"><i class="fas fa-arrow-left"></i> Back</button>
+            <div class="settings-container">
+                <div class="page-header"><div class="page-icon"><i class="fas fa-cog"></i></div><h1>App Settings</h1></div>
+                <div class="settings-nav">
+                    <button class="settings-tab active" onclick="switchSettingsTab('general',this)">General</button>
+                    <button class="settings-tab" onclick="switchSettingsTab('appearance',this)">Appearance</button>
+                    <button class="settings-tab" onclick="switchSettingsTab('playback',this)">Playback</button>
+                    <button class="settings-tab" onclick="switchSettingsTab('privacy',this)">Privacy</button>
+                    <button class="settings-tab" onclick="switchSettingsTab('advanced',this)">Advanced</button>
+                </div>
+                <div class="settings-page-content active" id="set-general">
+                    <div class="setting-row"><div class="setting-info"><div class="setting-title">🌐 Language</div><div class="setting-desc">Choose display language</div></div><select class="form-select" id="langSelect" onchange="setLang(this.value)"><option value="derja">🇹🇳 Derja</option><option value="fr">🇫🇷 Français</option><option value="en">🇬🇧 English</option></select></div>
+                    <div class="setting-row"><div class="setting-info"><div class="setting-title">🔔 Notifications</div><div class="setting-desc">Browser notifications</div></div><div class="toggle" id="t-notif" onclick="toggleSet('notif')"></div></div>
+                    <div class="setting-row"><div class="setting-info"><div class="setting-title">📊 Watch History</div><div class="setting-desc">Track videos you watch</div></div><div class="toggle on" id="t-history" onclick="toggleSet('history')"></div></div>
+                </div>
+                <div class="settings-page-content" id="set-appearance">
+                    <div class="setting-row"><div class="setting-info"><div class="setting-title">🌙 Dark Mode</div><div class="setting-desc">Toggle theme</div></div><div class="toggle" id="t-dark" onclick="toggleSet('dark')"></div></div>
+                    <div class="setting-row"><div class="setting-info"><div class="setting-title">🔤 Font Size</div><div class="setting-desc">Adjust text size</div></div><select class="form-select" id="fontSelect" onchange="setFontSize(this.value)"><option value="small">Small</option><option value="normal" selected>Normal</option><option value="large">Large</option></select></div>
+                    <div class="setting-row"><div class="setting-info"><div class="setting-title">📐 Grid Layout</div><div class="setting-desc">Column width</div></div><select class="form-select" id="gridSelect" onchange="setGridSize(this.value)"><option value="250">Compact</option><option value="280" selected>Normal</option><option value="340">Large</option></select></div>
+                </div>
+                <div class="settings-page-content" id="set-playback">
+                    <div class="setting-row"><div class="setting-info"><div class="setting-title">▶️ Autoplay</div><div class="setting-desc">Auto-play videos</div></div><div class="toggle on" id="t-auto" onclick="toggleSet('auto')"></div></div>
+                    <div class="setting-row"><div class="setting-info"><div class="setting-title">📺 Video Quality</div><div class="setting-desc">Preferred quality</div></div><select class="form-select" id="qualitySelect" onchange="setQuality(this.value)"><option value="auto">Auto</option><option value="hd1080">1080p</option><option value="hd720">720p</option></select></div>
+                </div>
+                <div class="settings-page-content" id="set-privacy">
+                    <div class="setting-row"><div class="setting-info"><div class="setting-title">👁️ Public Profile</div><div class="setting-desc">Others see your profile</div></div><div class="toggle on" id="t-public" onclick="toggleSet('public')"></div></div>
+                    <div class="setting-row"><div class="setting-info"><div class="setting-title">💾 Save Search History</div><div class="setting-desc">Remember searches</div></div><div class="toggle on" id="t-search" onclick="toggleSet('search')"></div></div>
+                </div>
+                <div class="settings-page-content" id="set-advanced">
+                    <div class="setting-row"><div class="setting-info"><div class="setting-title">🗑️ Clear Watch History</div><div class="setting-desc">Delete watched videos data</div></div><button class="form-btn btn-outline" style="width:auto;padding:6px 14px;font-size:12px" onclick="clearHistory()">Clear</button></div>
+                    <div class="setting-row"><div class="setting-info"><div class="setting-title">💔 Clear Liked Videos</div><div class="setting-desc">Remove all likes</div></div><button class="form-btn btn-outline" style="width:auto;padding:6px 14px;font-size:12px" onclick="clearLikes()">Clear</button></div>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="page" id="page-category">
-        <button class="back-btn" onclick="navigate('home')"><i class="fas fa-arrow-left"></i> Home</button>
-        <div class="page-header"><div class="page-icon" id="catIcon">📁</div><h1 id="catTitle">Category</h1></div>
-        <div class="grid" id="categoryGrid"></div>
-    </div>
-
-    <div class="page" id="page-settings">
-        <button class="back-btn" onclick="navigate('home')"><i class="fas fa-arrow-left"></i> Back</button>
-        <div class="settings-container">
-            <div class="page-header"><div class="page-icon"><i class="fas fa-cog"></i></div><h1>App Settings</h1></div>
-            <div class="settings-nav">
-                <button class="settings-tab active" onclick="switchSettingsTab('general',this)">General</button>
-                <button class="settings-tab" onclick="switchSettingsTab('appearance',this)">Appearance</button>
-                <button class="settings-tab" onclick="switchSettingsTab('playback',this)">Playback</button>
-            </div>
-            <div class="settings-page-content active" id="set-general">
-                <div class="setting-row"><div class="setting-info"><div class="setting-title">🌐 Language</div><div class="setting-desc">Choose display language</div></div><select class="form-select" id="langSelect" onchange="setLang(this.value)"><option value="derja">🇹🇳 Derja</option><option value="fr">🇫🇷 Français</option><option value="en">🇬🇧 English</option></select></div>
-            </div>
-            <div class="settings-page-content" id="set-appearance">
-                <div class="setting-row"><div class="setting-info"><div class="setting-title">🌙 Dark Mode</div><div class="setting-desc">Toggle theme</div></div><div class="toggle" id="t-dark" onclick="toggleSet('dark')"></div></div>
-            </div>
-            <div class="settings-page-content" id="set-playback">
-                <div class="setting-row"><div class="setting-info"><div class="setting-title">▶️ Autoplay</div><div class="setting-desc">Auto-play videos</div></div><div class="toggle on" id="t-auto" onclick="toggleSet('auto')"></div></div>
+        <!-- ============ ACCOUNT PAGE ============ -->
+        <div class="page" id="page-account">
+            <button class="back-btn" onclick="navigate('home')"><i class="fas fa-arrow-left"></i> Back</button>
+            <div class="settings-container">
+                <div class="page-header"><div class="page-icon" style="background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%)"><i class="fas fa-user-cog"></i></div><h1>Account Settings</h1></div>
+                <div style="max-width:500px">
+                    <div class="form-group"><label class="form-label">Profile Picture</label><div class="avatar-upload" id="accAvatarWrap"><i class="fas fa-camera"></i><input type="file" accept="image/*" onchange="changeAccPic(event)"></div></div>
+                    <div class="form-group"><label class="form-label">Display Name</label><input class="form-input" id="accName" placeholder="Your name"></div>
+                    <div class="form-group"><label class="form-label">Email</label><input class="form-input" id="accEmail" disabled></div>
+                    <div class="form-group"><label class="form-label">Current Password</label><input class="form-input" id="accOldPass" type="password" placeholder="Enter current password to save changes"></div>
+                    <div class="form-group"><label class="form-label">New Password</label><input class="form-input" id="accNewPass" type="password" placeholder="Min 6 characters"></div>
+                    <p class="form-error" id="accError"></p>
+                    <button class="form-btn btn-primary" onclick="saveAccount()">Save Account</button>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="page" id="page-account">
-        <button class="back-btn" onclick="navigate('home')"><i class="fas fa-arrow-left"></i> Back</button>
-        <div class="settings-container">
-            <div class="page-header"><div class="page-icon"><i class="fas fa-user-cog"></i></div><h1>Account Settings</h1></div>
-            <div style="max-width:500px">
-                <div class="form-group"><label class="form-label">Display Name</label><input class="form-input" id="accName" placeholder="Your name"></div>
-                <div class="form-group"><label class="form-label">Email</label><input class="form-input" id="accEmail" disabled></div>
-                <button class="form-btn btn-primary" onclick="saveAccount()">Save Account</button>
+        <!-- ============ CHANNEL PAGE ============ -->
+        <div class="page" id="page-channel">
+            <button class="back-btn" onclick="navigate('home')"><i class="fas fa-arrow-left"></i> Back</button>
+            <div class="profile-container">
+                <div class="profile-banner"><div class="profile-big-avatar" id="channelBigAvatar">U</div></div>
+                <h1 class="profile-name" id="channelNameDisplay">Loading...</h1>
+                <p style="font-size:14px;color:var(--text2);margin-bottom:24px;white-space:pre-wrap" id="channelBioDisplay"></p>
+                <div class="page-header" style="margin-top:20px"><div class="page-icon"><i class="fas fa-tv"></i></div><h1 style="font-size:18px">Edit Channel</h1></div>
+                <div class="form-group"><label class="form-label">Channel Name</label><input class="form-input" id="channelName" placeholder="Your channel name"></div>
+                <div class="form-group"><label class="form-label">Description</label><textarea class="form-textarea" id="channelBio" placeholder="Tell viewers about your channel..."></textarea></div>
+                <div class="form-group"><label class="form-label">Category</label><select class="form-select" id="channelCat" style="width:100%"><option value="">Select</option><option value="Education">Education</option><option value="Design">Design</option><option value="Programming">Programming</option><option value="Languages">Languages</option><option value="Marketing">Marketing</option><option value="Other">Other</option></select></div>
+                <div class="form-group"><label class="form-label">Website</label><input class="form-input" id="channelLink" placeholder="https://your-site.com"></div>
+                <div class="form-group"><label class="form-label">Social Media</label><input class="form-input" id="channelSocial" placeholder="@your_instagram"></div>
+                <button class="form-btn btn-primary" onclick="saveChannel()">Save Channel</button>
             </div>
         </div>
-    </div>
 
-    <div class="page" id="page-channel">
-        <button class="back-btn" onclick="navigate('home')"><i class="fas fa-arrow-left"></i> Back</button>
-        <div class="profile-container">
-            <div class="profile-banner"><div class="profile-big-avatar" id="channelBigAvatar">U</div></div>
-            <h1 class="profile-name" id="channelNameDisplay">Loading...</h1>
-            <p style="font-size:14px;color:var(--text2);margin-bottom:24px;" id="channelBioDisplay"></p>
-            <div class="form-group"><label class="form-label">Channel Name</label><input class="form-input" id="channelName" placeholder="Your channel name"></div>
-            <div class="form-group"><label class="form-label">Description</label><textarea class="form-textarea" id="channelBio" placeholder="Tell viewers about your channel..."></textarea></div>
-            <button class="form-btn btn-primary" onclick="saveChannel()">Save Channel</button>
+        <div class="page" id="page-liked">
+            <button class="back-btn" onclick="navigate('home')"><i class="fas fa-arrow-left"></i> Back</button>
+            <div class="page-header"><div class="page-icon" style="background: linear-gradient(135deg, #ff0033 0%, #ff6b35 100%)"><i class="fas fa-heart"></i></div><h1>Liked Videos</h1></div>
+            <div class="grid" id="likedGrid"></div>
         </div>
-    </div>
 
-    <div class="page" id="page-liked">
-        <button class="back-btn" onclick="navigate('home')"><i class="fas fa-arrow-left"></i> Back</button>
-        <div class="page-header"><div class="page-icon" style="background:linear-gradient(135deg,#ff0033,#ff6b35)"><i class="fas fa-heart"></i></div><h1>Liked Videos</h1></div>
-        <div class="grid" id="likedGrid"></div>
-    </div>
+        <div class="page" id="page-subscriptions">
+            <button class="back-btn" onclick="navigate('home')"><i class="fas fa-arrow-left"></i> Back</button>
+            <div class="page-header"><div class="page-icon" style="background: linear-gradient(135deg, #ff0033 0%, #ff6b35 100%)"><i class="fas fa-bell"></i></div><h1>Subscriptions</h1></div>
+            <div class="grid" id="subsGrid"></div>
+        </div>
 
-    <div class="page" id="page-subscriptions">
-        <button class="back-btn" onclick="navigate('home')"><i class="fas fa-arrow-left"></i> Back</button>
-        <div class="page-header"><div class="page-icon"><i class="fas fa-bell"></i></div><h1>Subscriptions</h1></div>
-        <div class="grid" id="subsGrid"></div>
-    </div>
-
-    <div class="page" id="page-history">
-        <button class="back-btn" onclick="navigate('home')"><i class="fas fa-arrow-left"></i> Back</button>
-        <div class="page-header"><div class="page-icon"><i class="fas fa-history"></i></div><h1>Watch History</h1></div>
-        <div class="grid" id="historyGrid"></div>
-    </div>
+        <div class="page" id="page-history">
+            <button class="back-btn" onclick="navigate('home')"><i class="fas fa-arrow-left"></i> Back</button>
+            <div class="page-header"><div class="page-icon"><i class="fas fa-history"></i></div><h1>Watch History</h1></div>
+            <div class="grid" id="historyGrid"></div>
+        </div>
 
 </main>
 
+<script src="data.js"></script>
 <script>
 // =====================================================================
-// 🚀 ALL-IN-ONE ROBUST ENGINE (0% CHANCE DE PAGE BLANCHE)
+// TUNISIAN YOUTUBE - APP.JS (SUPER STABLE DIRECT DATA.JS LOADER)
 // =====================================================================
 
-// 🚨 40+ COURSSET TOUNSIYA S7A7 DIRECT F'CODE (EMERGENCY ENGINE)
+// ====== STORAGE HELPER ======
+const S = {
+    g(k) {
+        try {
+            const v = localStorage.getItem(k);
+            return v ? JSON.parse(v) : null;
+        } catch (e) {
+            return null;
+        }
+    },
+    s(k, v) {
+        try {
+            localStorage.setItem(k, JSON.stringify(v));
+        } catch (e) {}
+    },
+    r(k) {
+        try {
+            localStorage.removeItem(k);
+        } catch (e) {}
+    }
+};
+
+// 🚨 EMERGENCY FALLBACK
 const GUARANTEED_TOUNES_COURSES = [
     { "Video_ID": "67UAnLg9WJ8", "Titre": "Tutoriel Photoshop pour Débutants en Derja", "Chaine": "@skander_b", "Categorie": "Design", "Mawdhou3": "Photoshop" },
     { "Video_ID": "vV77G_62K4Q", "Titre": "Apprendre Python de Zéro en Tunisien", "Chaine": "@TounesCode", "Categorie": "Programmation", "Mawdhou3": "Python" },
     { "Video_ID": "JmU3zFmK_Xo", "Titre": "Formation HTML & CSS b Derja Tounsia", "Chaine": "@Carthage_Geek", "Categorie": "Programmation", "Mawdhou3": "HTML/CSS" },
-    { "Video_ID": "U36y8O43g18", "Titre": "Apprendre l'anglais b derja tounsia (Lesson 1)", "Chaine": "@Anglais_b_derja", "Categorie": "Langues", "Mawdhou3": "Anglais" },
+    { "Video_ID": "U36y8O43g18", "Titre": "Apprendre l'anglais b derja tounsia", "Chaine": "@Anglais_b_derja", "Categorie": "Langues", "Mawdhou3": "Anglais" },
     { "Video_ID": "fVw-n9_RbeU", "Titre": "Révision Bac Informatique Algorithmique", "Chaine": "@TakiAcademy", "Categorie": "Bac & Etudes", "Mawdhou3": "Bac Info" },
     { "Video_ID": "Nn03H291410", "Titre": "Figma UI/UX Design Tutorial Tunisien", "Chaine": "@designtounsi", "Categorie": "Design", "Mawdhou3": "Figma" },
     { "Video_ID": "U67kLp89Un3", "Titre": "Tutoriel Montage Vidéo CapCut PC b Derja", "Chaine": "@skander_b", "Categorie": "Montage", "Mawdhou3": "CapCut" },
-    { "Video_ID": "f90UjK89La3", "Titre": "Facebook Ads Marketing Tunisie Kifech Tebda", "Chaine": "@Med_Amine_Sahnoun", "Categorie": "Marketing", "Mawdhou3": "Facebook Ads" },
-    { "Video_ID": "67UAnLg9WJ8", "Titre": "Photoshop Kifech Ta3mel Affiche Pro", "Chaine": "@Anis_Mrad", "Categorie": "Design", "Mawdhou3": "Photoshop" },
-    { "Video_ID": "vV77G_62K4Q", "Titre": "Javascript pour Débutants en Tunisien", "Chaine": "@wildemnas", "Categorie": "Programmation", "Mawdhou3": "JavaScript" },
-    { "Video_ID": "JmU3zFmK_Xo", "Titre": "React JS Formation Complète b Derja", "Chaine": "@chakirdev", "Categorie": "Programmation", "Mawdhou3": "React" },
-    { "Video_ID": "U36y8O43g18", "Titre": "Allemand A1 b Derja Tounsia", "Chaine": "@Allemand_Tounes", "Categorie": "Langues", "Mawdhou3": "Allemand" },
-    { "Video_ID": "fVw-n9_RbeU", "Titre": "Math Bac Technique Tunisie Nombres Complexes", "Chaine": "@TakiAcademy", "Categorie": "Bac & Etudes", "Mawdhou3": "Bac Math" },
-    { "Video_ID": "Nn03H291410", "Titre": "Illustrator Débutants Logo Design Tounsi", "Chaine": "@TunisianDesign", "Categorie": "Design", "Mawdhou3": "Illustrator" },
-    { "Video_ID": "U67kLp89Un3", "Titre": "Premiere Pro Montage Vidéo Professionnel", "Chaine": "@Firas_Graphic", "Categorie": "Montage", "Mawdhou3": "Premiere Pro" },
-    { "Video_ID": "f90UjK89La3", "Titre": "E-commerce Tunisie Kifech Tbi3 Online", "Chaine": "@Yahya_Ecom", "Categorie": "Marketing", "Mawdhou3": "E-commerce" }
+    { "Video_ID": "f90UjK89La3", "Titre": "Facebook Ads Marketing Tunisie Kifech Tebda", "Chaine": "@Med_Amine_Sahnoun", "Categorie": "Marketing", "Mawdhou3": "Facebook Ads" }
 ];
-
-const S = {
-    g(k){try{const v=localStorage.getItem(k);return v?JSON.parse(v):null}catch(e){return null}},
-    s(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}},
-    r(k){try{localStorage.removeItem(k)}catch(e){}}
-};
 
 let allVideos = [];
 let currentFilter = { cat: null, sub: null, search: "" };
 let currentVid = "";
+let activeList = [];
+let displayedCount = 0;
+const BATCH_SIZE = 24; 
 let user = S.g("user"), isSignUp = true;
+let tempAvatar = "";
 let searchTimer;
 
-// ====== EXTRACT ID PARFAIT (ACCEPTE LES LIENS YOUTUBE ET LES IDS) ======
+// ====== ID EXTRACTOR ======
 function extractCleanId(raw) {
     if (!raw) return "";
-    let str = String(raw).trim();
-    if (str.length === 11 && !str.includes("/") && !str.includes("?") && !str.includes("=")) {
-        return str;
-    }
-    let m = str.match(/(?:v=|\/|youtu\.be\/)([0-9A-Za-z_-]{11})/);
-    return m ? m[1] : (str.length >= 11 ? str.substring(0, 11) : "");
+    let s = String(raw).trim();
+    if (s.length === 11 && !s.includes("/") && !s.includes("?")) return s;
+    let m = s.match(/(?:v=|\/|youtu\.be\/)([0-9A-Za-z_-]{11})/);
+    return m ? m[1] : (s.length >= 11 ? s.substring(0, 11) : "");
 }
 
-// ====== NAVIGATION ======
+// ====== ROUTER / NAVIGATION ======
 function navigate(page, data = null) {
     document.getElementById("dropdown")?.classList.remove("show");
     document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
@@ -536,9 +563,33 @@ function navigate(page, data = null) {
     else if (page === "history") { loadHistoryPage(); }
     
     window.scrollTo(0, 0);
+    const url = page === "home" ? "#" : `#/${page}${data ? '/' + encodeURIComponent(typeof data === 'string' ? data : data.id || '') : ''}`;
+    if (window.location.hash !== url) history.pushState({ page, data }, "", url);
 }
 
-// ====== THEME ======
+window.addEventListener("popstate", (e) => {
+    if (e.state) navigate(e.state.page, e.state.data);
+    else navigate("home");
+});
+
+function initRouter() {
+    const hash = window.location.hash.replace("#/", "").split("/");
+    const page = hash[0] || "home";
+    const data = hash[1] ? decodeURIComponent(hash[1]) : null;
+    
+    if (page === "video" && data) {
+        const v = allVideos.find(x => x.id === data);
+        v ? navigate("video", v) : navigate("home");
+    } else if (page === "category" && data) {
+        navigate("category", data);
+    } else if (["account", "channel", "settings", "liked", "subscriptions", "history"].includes(page)) {
+        navigate(page);
+    } else {
+        navigate("home");
+    }
+}
+
+// ====== THEME & APPEARANCE ======
 function applyTheme() {
     const s = S.g("settings") || { dark: 0 };
     document.documentElement.setAttribute("data-theme", s.dark ? "dark" : "light");
@@ -546,10 +597,23 @@ function applyTheme() {
     if (btn) btn.innerHTML = s.dark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
 }
 function toggleTheme() {
-    const s = S.g("settings") || { dark: 0 };
+    const s = S.g("settings") || { dark: 0, auto: 1, notif: 0, history: 1, public: 1, search: 1 };
     s.dark = s.dark ? 0 : 1;
     S.s("settings", s); applyTheme(); loadToggles();
 }
+function applyFontSize() {
+    const s = S.g("settings") || { fontSize: "normal" };
+    document.body.classList.remove("font-small", "font-normal", "font-large");
+    document.body.classList.add("font-" + (s.fontSize || "normal"));
+}
+function setFontSize(v) { const s = S.g("settings") || {}; s.fontSize = v; S.s("settings", s); applyFontSize(); }
+function applyGridSize() {
+    const s = S.g("settings") || { gridSize: "280" };
+    document.querySelectorAll(".grid").forEach(g => g.style.gridTemplateColumns = `repeat(auto-fill, minmax(${s.gridSize || 280}px, 1fr))`);
+}
+function setGridSize(v) { const s = S.g("settings") || {}; s.gridSize = v; S.s("settings", s); applyGridSize(); }
+function setLang(v) { const s = S.g("settings") || {}; s.lang = v; S.s("settings", s); const trans = { derja: "Lawwej 3la cours...", fr: "Rechercher...", en: "Search courses..." }; document.getElementById("searchInput").placeholder = trans[v] || trans.en; }
+function setQuality(v) { const s = S.g("settings") || {}; s.quality = v; S.s("settings", s); }
 
 function switchSettingsTab(page, btn) {
     document.querySelectorAll(".settings-tab").forEach(t => t.classList.remove("active"));
@@ -557,29 +621,38 @@ function switchSettingsTab(page, btn) {
     document.querySelectorAll(".settings-page-content").forEach(p => p.classList.remove("active"));
     document.getElementById("set-" + page)?.classList.add("active");
 }
+
 function loadToggles() {
-    const s = S.g("settings") || { dark: 0, auto: 1 };
-    const tDark = document.getElementById("t-dark");
-    if (tDark) { if(s.dark) tDark.classList.add("on"); else tDark.classList.remove("on"); }
-    const tAuto = document.getElementById("t-auto");
-    if (tAuto) { if(s.auto) tAuto.classList.add("on"); else tAuto.classList.remove("on"); }
+    const s = S.g("settings") || { dark: 0, auto: 1, notif: 0, history: 1, public: 1, search: 1, fontSize: "normal", gridSize: "280", lang: "derja", quality: "auto" };
+    ["dark", "auto", "notif", "history", "public", "search"].forEach(k => {
+        const el = document.getElementById("t-" + k);
+        if (el) { if (s[k]) el.classList.add("on"); else el.classList.remove("on"); }
+    });
+    const langSel = document.getElementById("langSelect"); if (langSel && s.lang) langSel.value = s.lang;
+    const fontSel = document.getElementById("fontSelect"); if (fontSel) fontSel.value = s.fontSize || "normal";
+    const gridSel = document.getElementById("gridSelect"); if (gridSel) gridSel.value = s.gridSize || "280";
+    const qSel = document.getElementById("qualitySelect"); if (qSel) qSel.value = s.quality || "auto";
 }
+
 function toggleSet(k) {
-    const s = S.g("settings") || { dark: 0, auto: 1 };
+    const s = S.g("settings") || { dark: 0, auto: 1, notif: 0, history: 1, public: 1, search: 1 };
     s[k] = s[k] ? 0 : 1; S.s("settings", s); loadToggles();
     if (k === "dark") applyTheme();
 }
+function clearHistory() { S.r("history"); alert("✅ History cleared"); }
+function clearLikes() { S.r("likes"); alert("✅ Likes cleared"); }
 
 // ====== AUTH ======
 function renderAuth() {
     const a = document.getElementById("authArea");
     if (!a) return;
     if (user) {
-        const pic = (user.name || "U")[0].toUpperCase();
-        a.innerHTML = `<div class="avatar" onclick="toggleDropdown()">${pic}</div>`;
-        const ddN = document.getElementById("ddName"), ddE = document.getElementById("ddEmail");
+        const pic = user.avatar ? `<img src="${user.avatar}">` : (user.name || "U")[0].toUpperCase();
+        a.innerHTML = `<div class="avatar" onclick="toggleDropdown()">${typeof pic === 'string' && pic.length === 1 ? pic : `<img src="${user.avatar}">`}</div>`;
+        const ddN = document.getElementById("ddName"), ddE = document.getElementById("ddEmail"), da = document.getElementById("ddAvatar");
         if (ddN) ddN.textContent = user.name || "User";
-        if (ddE) ddE.textContent = user.email || "";
+        if (ddE) ddE.textContent = user.email;
+        if (da) da.innerHTML = user.avatar ? `<img src="${user.avatar}">` : (user.name || "U")[0].toUpperCase();
     } else {
         a.innerHTML = `<button class="auth-cta" onclick="openAuth()"><i class="fas fa-user-circle"></i> Sign In</button>`;
     }
@@ -587,141 +660,222 @@ function renderAuth() {
 function toggleDropdown() { document.getElementById("dropdown")?.classList.toggle("show"); }
 document.addEventListener("click", e => { const dd = document.getElementById("dropdown"); if (dd && !e.target.closest(".avatar") && !e.target.closest(".dropdown")) dd.classList.remove("show"); });
 function openAuth() { document.getElementById("authOv")?.classList.add("active"); }
-function closeAuth() { document.getElementById("authOv")?.classList.remove("active"); }
+function closeAuth() { document.getElementById("authOv")?.classList.remove("active"); document.getElementById("authError").textContent = ""; }
 function toggleAuthMode() {
     isSignUp = !isSignUp;
     document.getElementById("authTitle").textContent = isSignUp ? "Create Account" : "Welcome Back";
     document.querySelector("#authOv .btn-primary").textContent = isSignUp ? "Create Account" : "Sign In";
     document.getElementById("nameGroup").style.display = isSignUp ? "block" : "none";
+    document.getElementById("signupAvatar").style.display = isSignUp ? "flex" : "none";
     document.getElementById("authSwitch").innerHTML = isSignUp ? 'Already have an account? <b>Sign In</b>' : 'Don\'t have an account? <b>Sign Up</b>';
 }
+let tempAvatar = "";
+function previewAvatar(e) { const f = e.target.files[0]; if (f) { const r = new FileReader(); r.onload = x => { tempAvatar = x.target.result; document.getElementById("signupAvatar").innerHTML = `<img src="${tempAvatar}"><input type="file" accept="image/*" onchange="previewAvatar(event)">`; }; r.readAsDataURL(f); } }
 function handleAuth() {
-    const n = document.getElementById("authName")?.value.trim() || "User";
-    const em = document.getElementById("authEmail")?.value.trim() || "user@email.com";
-    user = { id: Date.now().toString(), name: n, email: em };
-    S.s("user", user);
-    renderAuth(); closeAuth();
+    const n = document.getElementById("authName").value.trim(), em = document.getElementById("authEmail").value.trim(), p = document.getElementById("authPass").value, err = document.getElementById("authError");
+    err.textContent = "";
+    if (!em || !p) { err.textContent = "Fill all fields!"; return; }
+    if (p.length < 6) { err.textContent = "Password must be 6+ characters"; return; }
+    let users = S.g("users") || [];
+    if (isSignUp) {
+        if (!n) { err.textContent = "Enter your name!"; return; }
+        if (users.find(u => u.email === em)) { err.textContent = "Email already exists!"; return; }
+        user = { id: Date.now().toString(), name: n, email: em, pass: p, avatar: tempAvatar || "", bio: "" };
+        users.push(user); S.s("users", users); S.s("user", user);
+    } else {
+        const found = users.find(u => u.email === em && u.pass === p);
+        if (!found) { err.textContent = "Wrong email or password!"; return; }
+        user = found; S.s("user", user);
+    }
+    renderAuth(); closeAuth(); tempAvatar = "";
 }
 function logOut() { user = null; S.r("user"); renderAuth(); document.getElementById("dropdown")?.classList.remove("show"); navigate("home"); }
 
+// ====== ACCOUNT SETTINGS (PRO) ======
 function loadAccountPage() {
-    if (!user) { openAuth(); navigate("home"); return; }
+    if (!user) { openAuth(); navigate('home'); return; }
     document.getElementById("accName").value = user.name || "";
     document.getElementById("accEmail").value = user.email || "";
-}
-function saveAccount() {
-    user.name = document.getElementById("accName").value.trim();
-    S.s("user", user); renderAuth(); alert("✅ Saved!");
+    document.getElementById("accOldPass").value = "";
+    document.getElementById("accNewPass").value = "";
+    document.getElementById("accConfirmPass").value = "";
+    document.getElementById("accError").textContent = "";
+    
+    var wrap = document.getElementById("accAvatarWrap");
+    if (wrap) {
+        wrap.innerHTML = user.avatar 
+            ? '<img src="' + user.avatar + '"><input type="file" accept="image/*" onchange="changeAccPic(event)">' 
+            : '<i class="fas fa-camera"></i><input type="file" accept="image/*" onchange="changeAccPic(event)">';
+    }
 }
 
+function changeAccPic(e) {
+    var f = e.target.files[0];
+    if (f) {
+        var r = new FileReader();
+        r.onload = function(x) {
+            user.avatar = x.target.result;
+            S.s("user", user);
+            var us = S.g("users") || [];
+            var idx = us.findIndex(function(u) { return u.id === user.id; });
+            if (idx > -1) { us[idx] = user; S.s("users", us); }
+            renderAuth();
+            loadAccountPage();
+        };
+        r.readAsDataURL(f);
+    }
+}
+
+function saveAccount() {
+    var err = document.getElementById("accError");
+    if (err) err.textContent = "";
+    var n = document.getElementById("accName").value.trim();
+    var o = document.getElementById("accOldPass").value;
+    var np = document.getElementById("accNewPass").value;
+    var cp = document.getElementById("accConfirmPass").value;
+    
+    if (n) user.name = n;
+    
+    if (o || np || cp) {
+        if (o !== user.pass) { if(err) err.textContent = "Current password is wrong!"; return; }
+        if (np.length < 6) { if(err) err.textContent = "New password must be 6+ characters!"; return; }
+        if (np !== cp) { if(err) err.textContent = "New passwords don't match!"; return; }
+        user.pass = np;
+    }
+    
+    S.s("user", user);
+    var us = S.g("users") || [];
+    var idx = us.findIndex(function(u) { return u.id === user.id; });
+    if (idx > -1) { us[idx] = user; S.s("users", us); }
+    renderAuth();
+    loadAccountPage();
+    alert("✅ Account settings saved successfully!");
+}
+
+// ====== CHANNEL SETTINGS (PRO) ======
 function loadChannelPage() {
-    if (!user) { openAuth(); navigate("home"); return; }
-    const ch = S.g("channel_" + user.id) || { name: user.name, bio: "" };
+    if (!user) { openAuth(); navigate('home'); return; }
+    var ch = S.g("channel_" + user.id) || { name: user.name, bio: "", category: "", link: "", insta: "", twitter: "", yt: "" };
+    
     document.getElementById("channelNameDisplay").textContent = ch.name || user.name;
-    document.getElementById("channelBioDisplay").textContent = ch.bio || "No bio yet";
+    document.getElementById("channelBioDisplay").textContent = ch.bio || "No description yet";
+    document.getElementById("channelBigAvatar").innerHTML = user.avatar 
+        ? '<img src="' + user.avatar + '">' 
+        : (user.name || "U")[0].toUpperCase();
+    
     document.getElementById("channelName").value = ch.name || "";
     document.getElementById("channelBio").value = ch.bio || "";
-}
-function saveChannel() {
-    const ch = { name: document.getElementById("channelName").value.trim(), bio: document.getElementById("channelBio").value.trim() };
-    S.s("channel_" + user.id, ch); loadChannelPage(); alert("✅ Saved!");
+    document.getElementById("channelCat").value = ch.category || "";
+    document.getElementById("channelLink").value = ch.link || "";
+    document.getElementById("channelInsta").value = ch.insta || "";
+    document.getElementById("channelTwitter").value = ch.twitter || "";
+    document.getElementById("channelYT").value = ch.yt || "";
 }
 
-// ====== LIKES / SUBS / COMMENTS ======
-function getLikes(id) { return (S.g("likes") || {})[id] || []; }
-function toggleLike(id) {
-    if (!user) { openAuth(); return; }
-    const l = S.g("likes") || {};
-    if (!l[id]) l[id] = [];
-    const i = l[id].indexOf(user.id);
-    i > -1 ? l[id].splice(i, 1) : l[id].push(user.id);
-    S.s("likes", l); refreshActionsLarge(id);
+function saveChannel() {
+    var ch = {
+        name: document.getElementById("channelName").value.trim(),
+        bio: document.getElementById("channelBio").value.trim(),
+        category: document.getElementById("channelCat").value,
+        link: document.getElementById("channelLink").value.trim(),
+        insta: document.getElementById("channelInsta").value.trim(),
+        twitter: document.getElementById("channelTwitter").value.trim(),
+        yt: document.getElementById("channelYT").value.trim()
+    };
+    S.s("channel_" + user.id, ch);
+    loadChannelPage();
+    alert("✅ Channel settings saved successfully!");
 }
+
+// ====== LIKES / SUBS ======
+function getLikes(id) { return (S.g("likes") || {})[id] || []; }
+function toggleLike(id) { if (!user) { openAuth(); return; } const l = S.g("likes") || {}; if (!l[id]) l[id] = []; const i = l[id].indexOf(user.id); i > -1 ? l[id].splice(i, 1) : l[id].push(user.id); S.s("likes", l); refreshActionsLarge(id); }
 function isLiked(id) { return user ? getLikes(id).includes(user.id) : false; }
 
 function getSubs() { return user ? S.g("subs_" + user.id) || [] : []; }
-function toggleSub(ch) {
-    if (!user) { openAuth(); return; }
-    const k = "subs_" + user.id; let s = S.g(k) || [];
-    const i = s.indexOf(ch);
-    i > -1 ? s.splice(i, 1) : s.push(ch);
-    S.s(k, s); refreshActionsLarge(currentVid);
-}
+function toggleSub(ch) { if (!user) { openAuth(); return; } const k = "subs_" + user.id; let s = S.g(k) || []; const i = s.indexOf(ch); i > -1 ? s.splice(i, 1) : s.push(ch); S.s(k, s); refreshActionsLarge(currentVid); }
 function toggleSubFromPage() { toggleSub(document.getElementById("mChanLarge").textContent); }
 function isSub(ch) { return getSubs().includes(ch); }
 
+// ====== COMMENTS ======
 function getCmts(id) { return (S.g("comments") || {})[id] || []; }
-function postCmt(id) {
-    if (!user) { openAuth(); return; }
-    const inp = document.getElementById("cmtInputLarge"); if (!inp) return;
-    const t = inp.value.trim(); if (!t) return;
-    const c = S.g("comments") || {};
-    if (!c[id]) c[id] = [];
-    c[id].unshift({ id: Date.now().toString(), name: user.name, text: t, time: new Date().toLocaleTimeString() });
-    S.s("comments", c); inp.value = ""; renderCmtsLarge(id);
-}
+function postCmt(id) { if (!user) { openAuth(); return; } const inp = document.getElementById("cmtInputLarge"); if (!inp) return; const t = inp.value.trim(); if (!t) return; const c = S.g("comments") || {}; if (!c[id]) c[id] = []; c[id].unshift({ id: Date.now().toString(), uid: user.id, name: user.name, text: t, time: new Date().toLocaleString() }); S.s("comments", c); inp.value = ""; renderCmtsLarge(id); }
+function delCmt(vid, cid) { const c = S.g("comments") || {}; if (c[vid]) { c[vid] = c[vid].filter(x => x.id !== cid); S.s("comments", c); renderCmtsLarge(vid); } }
 function renderCmtsLarge(id) {
     const s = document.getElementById("cmtSectionLarge"), cmts = getCmts(id);
     if (!s) return;
-    let inp = user ? `<div class="cmt-form"><div class="cmt-avatar">${user.name[0].toUpperCase()}</div><div class="cmt-input-wrap"><input class="cmt-input" id="cmtInputLarge" placeholder="Add a comment..."><div class="cmt-btns"><button class="cmt-submit" onclick="postCmt('${id}')">Comment</button></div></div></div>` : `<p class="cmt-login"><a onclick="openAuth()">Sign in</a> to comment</p>`;
-    let list = cmts.length ? cmts.map(x => `<div class="cmt-item"><div class="cmt-avatar" style="width:32px;height:32px;font-size:12px">${x.name[0].toUpperCase()}</div><div style="flex:1"><span class="cmt-user">@${x.name}</span><p class="cmt-text">${x.text}</p><span class="cmt-time">${x.time}</span></div></div>`).join("") : `<p style="color:var(--text3);font-size:13px;padding:8px 0">No comments yet. 💬</p>`;
+    let inp = "";
+    if (user) {
+        const av = user.avatar ? `<img src="${user.avatar}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">` : user.name[0].toUpperCase();
+        inp = `<div class="cmt-form-large"><div class="cmt-avatar-large">${av}</div><div class="cmt-input-wrap-large"><input class="cmt-input-large" id="cmtInputLarge" placeholder="Add a comment..." onkeypress="if(event.key==='Enter')postCmt('${id}')"><div class="cmt-btns-large"><button class="cmt-submit-large" onclick="postCmt('${id}')">Comment</button></div></div></div>`;
+    } else {
+        inp = `<p class="cmt-login-large"><a onclick="openAuth()">Sign in</a> to comment</p>`;
+    }
+    let list = `<div class="cmt-list-large">`;
+    if (!cmts.length) list += `<p style="color:var(--text3);font-size:13px;padding:8px 0">No comments yet. Be the first! 💬</p>`;
+    else cmts.forEach(c => { list += `<div class="cmt-item-large"><div class="cmt-avatar-large" style="width:32px;height:32px;font-size:12px">${c.name ? c.name[0].toUpperCase() : "U"}</div><div style="flex:1"><span class="cmt-user-large">@${c.name}</span>${user && user.id === c.uid ? `<button class="cmt-del-large" onclick="delCmt('${id}','${c.id}')"><i class="fas fa-trash"></i></button>` : ""}<p class="cmt-text-large">${c.text}</p><span class="cmt-time-large">${c.time}</span></div></div>`; });
+    list += `</div>`;
     s.innerHTML = `<h3>💬 ${cmts.length} Comments</h3>${inp}${list}`;
 }
 
+function shareV(id) { const u = `https://www.youtube.com/watch?v=${id}`; if (navigator.share) navigator.share({ title: "Cours Tounsi", url: u }); else { navigator.clipboard.writeText(u); alert("✅ Link copied!"); } }
+
 // ====== DOWNLOAD ======
 function downloadV(id) {
-    const encoded = encodeURIComponent(`https://www.youtube.com/watch?v=${id}`);
-    document.getElementById("dlCobalt").href = `https://cobalt.tools/?u=${encoded}`;
-    document.getElementById("dlSSYT").href = `https://ssyoutube.com/watch?v=${id}`;
-    document.getElementById("dlY2Mate").href = `https://www.y2mate.com/youtube/${id}`;
-    document.getElementById("dlModal").classList.add("active");
+    const url = `https://www.youtube.com/watch?v=${id}`;
+    const encoded = encodeURIComponent(url);
+    const cobalt = document.getElementById("dlCobalt");
+    const ssyt = document.getElementById("dlSSYT");
+    const y2m = document.getElementById("dlY2Mate");
+    const sf = document.getElementById("dlSaveFrom");
+    if (cobalt) cobalt.href = `https://cobalt.tools/?u=${encoded}`;
+    if (ssyt) ssyt.href = `https://ssyoutube.com/watch?v=${id}`;
+    if (y2m) y2m.href = `https://www.y2mate.com/youtube/${id}`;
+    if (sf) sf.href = `https://en.savefrom.net/#url=${encoded}`;
+    document.getElementById("dlModal")?.classList.add("active");
 }
-function closeDlModal() { document.getElementById("dlModal").classList.remove("active"); }
+function closeDlModal() { document.getElementById("dlModal")?.classList.remove("active"); }
 
-// ====== CORE DATA RENDERER ======
+// ====== DATA LOADING ======
 function initApp(raw) {
     if (!Array.isArray(raw) || raw.length === 0) raw = GUARANTEED_TOUNES_COURSES;
-    
     allVideos = raw.map(v => {
         const id = extractCleanId(v.Video_ID || v.video_id || v.id || v.Lien || v.url || "");
-        return { 
-            id: id, 
-            title: v.Titre || v.title || "Cours Tounsi", 
-            channel: v.Chaine || v.channel || "Créateur Tunisien", 
-            category: v.Categorie || v.category || "Autre", 
-            topic: v.Mawdhou3 || v.topic || "Général", 
-            thumb: `https://img.youtube.com/vi/${id}/mqdefault.jpg` 
-        };
-    }).filter(v => v.id && v.id.length >= 11);
+        return { id, title: v.Titre || v.title || "", channel: v.Chaine || v.channel || "", category: v.Categorie || v.category || "Autre", topic: v.Mawdhou3 || v.topic || "Général", thumb: `https://img.youtube.com/vi/${id}/mqdefault.jpg` };
+    }).filter(v => v.id && v.id.length === 11);
     
     document.getElementById("vCount").textContent = allVideos.length + " cours";
-    buildSide(); 
-    buildChips(); 
-    renderHome();
+    buildSide(); buildChips(); initRouter();
 }
 
-// 🟢 1. CHARGEMENT INSTANTANÉ (FIRST GUARANTEED, THEN UPGRADED BY JSON)
-initApp(GUARANTEED_TOUNES_COURSES);
-
-// 🔵 2. ENRICHISSEMENT AUTO AVEC LE JSON S'IL EXISTE
-fetch(`tounes_courses.json?v=${Date.now()}`)
-    .then(r => r.json())
-    .then(d => { 
-        if (Array.isArray(d) && d.length > 0) {
-            initApp(d);
-        }
-    })
-    .catch(e => console.log("Embedded base active"));
+// 🟢 CARGEMENT DIRECT PAR DATA.JS VARIABLLE
+if (typeof rawVideosData !== 'undefined' && Array.isArray(rawVideosData)) {
+    console.log("✅ rawVideosData chargée");
+    initApp(rawVideosData);
+} else {
+    initApp(GUARANTEED_TOUNES_COURSES);
+    fetch(`tounes_courses.json?nocache=${Date.now()}`, { cache: "no-store" })
+        .then(r => r.json())
+        .then(d => { if(Array.isArray(d) && d.length > 0) initApp(d); })
+        .catch(e => console.log("Fallback direct actif"));
+}
 
 function buildSide() {
-    const cats = {};
-    allVideos.forEach(v => { cats[v.category] = (cats[v.category] || 0) + 1; });
+    const cats = {}, subs = {};
+    allVideos.forEach(v => { cats[v.category] = (cats[v.category] || 0) + 1; if (v.topic !== "Général") subs[v.topic] = (subs[v.topic] || 0) + 1; });
     const icons = { Design: "🎨", Programmation: "💻", Langues: "🗣️", Marketing: "📈", Montage: "🎬", Freelance: "💼", "Bac & Etudes": "📚", Bureautique: "📊", Autre: "📦" };
     const cl = document.getElementById("catList");
     if (cl) {
         cl.innerHTML = `<button class="side-btn active" onclick="showAll()">🌐 All <span class="side-cnt">${allVideos.length}</span></button>`;
-        Object.entries(cats).forEach(([c, n]) => {
+        Object.entries(cats).sort((a,b)=>b[1]-a[1]).forEach(([c, n]) => {
             cl.innerHTML += `<button class="side-btn" onclick="navigate('category','${c}')">${icons[c] || "📦"} ${c} <span class="side-cnt">${n}</span></button>`;
+        });
+    }
+    const sl = document.getElementById("subList");
+    if (sl) {
+        sl.innerHTML = "";
+        Object.entries(subs).sort((a, b) => b[1] - a[1]).slice(0, 15).forEach(([s, n]) => {
+            sl.innerHTML += `<button class="side-btn" onclick="filterSubHome('${s}')">• ${s} <span class="side-cnt">${n}</span></button>`;
         });
     }
 }
@@ -735,103 +889,143 @@ function buildChips() {
 
 function renderHome() { apply(); }
 
-function renderGrid(list, targetId = "grid") {
-    const g = document.getElementById(targetId);
-    if (!g) return;
-    if (!list.length) {
-        g.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><i class="fas fa-inbox"></i><h2>No videos found</h2></div>`;
-        return;
-    }
-    g.innerHTML = list.map(v => `
-        <div class="card" onclick="navigate('video', '${v.id}')">
+function setListAndRender(list) {
+    activeList = list; displayedCount = 0;
+    const g = document.getElementById("grid"); const e = document.getElementById("empty");
+    if (g) g.innerHTML = "";
+    if (!activeList.length) { if (e) e.style.display = "block"; return; }
+    if (e) e.style.display = "none";
+    
+    setupInfiniteScroll();
+    renderNextBatch();
+}
+
+// 🚀 ZERO LAG INFINITE SCROLL Observer
+let observer;
+function setupInfiniteScroll() {
+    if (observer) observer.disconnect();
+    const sentinel = document.getElementById("sentinel");
+    if (!sentinel) return;
+
+    observer = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting) {
+            renderNextBatch();
+        }
+    }, { rootMargin: "300px" });
+    observer.observe(sentinel);
+}
+
+function renderNextBatch() {
+    const g = document.getElementById("grid"); if (!g) return;
+    const batch = activeList.slice(displayedCount, displayedCount + BATCH_SIZE);
+    if (!batch.length) return;
+    displayedCount += batch.length;
+    g.insertAdjacentHTML("beforeend", batch.map(v => `
+        <div class="card" onclick="navigate('video', {id:'${v.id}'})">
             <div class="card-thumb"><img src="${v.thumb}" loading="lazy" onerror="this.src='https://img.youtube.com/vi/${v.id}/0.jpg'"><span class="card-badge">${v.topic}</span></div>
             <div class="card-body"><div class="card-title">${v.title}</div><div class="card-ch"><i class="fas fa-user-circle"></i> ${v.channel}</div><div class="card-cat">${v.category}</div></div>
         </div>
-    `).join("");
+    `).join(""));
 }
 
-function showAll() {
-    currentFilter = { cat: null, sub: null, search: "" };
-    document.getElementById("searchInput").value = "";
-    document.querySelectorAll(".side-btn,.f-chip").forEach(b => b.classList.remove("active"));
-    document.querySelector(".f-chip")?.classList.add("active");
-    navigate("home");
-}
-function filterChipHome(c) { currentFilter.cat = c; navigate("home"); }
+function esc(s) { return (s || "").replace(/'/g, "\\'").replace(/"/g, '\\"'); }
+function showAll() { currentFilter = { cat: null, sub: null, search: "" }; document.getElementById("searchInput").value = ""; document.querySelectorAll(".side-btn,.f-chip").forEach(b => b.classList.remove("active")); document.querySelector(".f-chip")?.classList.add("active"); document.querySelectorAll("#catList .side-btn")[0]?.classList.add("active"); navigate("home"); }
+function filterChipHome(c) { currentFilter.cat = c; currentFilter.sub = null; document.querySelectorAll(".f-chip").forEach(b => b.classList.remove("active")); event?.target?.classList.add("active"); navigate("home"); }
+function filterSubHome(s) { currentFilter.sub = s; document.querySelectorAll("#subList .side-btn").forEach(b => b.classList.remove("active")); event?.target?.classList.add("active"); navigate("home"); }
 
 function onSearchInput() {
     clearTimeout(searchTimer);
     searchTimer = setTimeout(() => {
         currentFilter.search = document.getElementById("searchInput").value.toLowerCase();
         navigate("home");
-    }, 250);
+    }, 300);
 }
 
 function apply() {
     let r = allVideos;
     if (currentFilter.cat) r = r.filter(v => v.category === currentFilter.cat);
+    if (currentFilter.sub) r = r.filter(v => v.topic === currentFilter.sub);
     if (currentFilter.search) r = r.filter(v => (v.title + v.channel + v.topic + v.category).toLowerCase().includes(currentFilter.search));
-    renderGrid(r, "grid");
+    setListAndRender(r);
 }
 
-// ====== VIDEO PAGE ======
+// ================ VIDEO PAGE ================
 function loadVideoPage(v) {
     if (typeof v === 'string') v = allVideos.find(x => x.id === v);
     if (!v) return;
     currentVid = v.id;
-    
-    document.getElementById("playerLarge").innerHTML = `<iframe src="https://www.youtube.com/embed/${v.id}?autoplay=1" allowfullscreen allow="autoplay"></iframe>`;
+    const s = S.g("settings") || { auto: 1 };
+    const q = s.quality && s.quality !== "auto" ? `&vq=${s.quality}` : "";
+    document.getElementById("playerLarge").innerHTML = `<iframe src="https://www.youtube.com/embed/${v.id}?autoplay=${s.auto ? 1 : 0}${q}" allowfullscreen allow="autoplay"></iframe>`;
     document.getElementById("mTitleLarge").textContent = v.title;
     document.getElementById("mChanLarge").textContent = v.channel;
     document.getElementById("mCatLarge").textContent = `${v.category} • ${v.topic}`;
     document.getElementById("mChanAvatar").textContent = (v.channel || "C")[0].toUpperCase();
     document.getElementById("mDescLarge").innerHTML = `<span class="tag">#${v.category}</span><span class="tag">#${v.topic}</span><br><br>${v.title}`;
-    
-    refreshActionsLarge(v.id);
-    renderCmtsLarge(v.id);
-    
-    // Related Videos
-    const rel = allVideos.filter(x => x.category === v.category && x.id !== v.id);
-    const rl = document.getElementById("relatedList");
-    if (rl) {
-        rl.innerHTML = rel.map(x => `
-            <div class="related-item" onclick="navigate('video','${x.id}')">
-                <div class="related-thumb"><img src="${x.thumb}"></div>
-                <div class="related-info"><div class="related-title">${x.title}</div><div class="related-ch">${x.channel}</div></div>
-            </div>
-        `).join("");
-    }
+    refreshActionsLarge(v.id); renderCmtsLarge(v.id); renderRelatedVideos(v.category, v.id);
+    if (S.g("settings")?.history) { let h = S.g("history") || []; if (!h.includes(v.id)) { h.unshift(v.id); S.s("history", h); } }
 }
-
 function refreshActionsLarge(id) {
     const l = isLiked(id), lc = getLikes(id).length, ch = document.getElementById("mChanLarge").textContent, s = isSub(ch);
     document.getElementById("mActionsLarge").innerHTML = `
         <button class="action-btn ${l ? 'liked' : ''}" onclick="toggleLike('${id}')"><i class="fas fa-thumbs-up"></i> ${lc}</button>
+        <button class="action-btn" onclick="shareV('${id}')"><i class="fas fa-share"></i> Share</button>
         <button class="action-btn download-btn" onclick="downloadV('${id}')"><i class="fas fa-download"></i> Download</button>
     `;
     const b = document.getElementById("subscribeBtn");
     if (b) { b.className = "subscribe-btn" + (s ? " subscribed" : ""); b.innerHTML = s ? '<i class="fas fa-check"></i> Subscribed' : '<i class="fas fa-bell"></i> Subscribe'; }
 }
+function renderRelatedVideos(cat, cid) {
+    const list = document.getElementById("relatedList"); if (!list) return;
+    let rel = allVideos.filter(v => v.id !== cid);
+    const same = rel.filter(v => v.category === cat);
+    const other = rel.filter(v => v.category !== cat);
+    const final = [...same.slice(0, 12), ...other.slice(0, 8)];
+    if (!final.length) { list.innerHTML = `<p style="color:var(--text3);font-size:13px;padding:12px">Ma fammach videos similaires</p>`; return; }
+    list.innerHTML = final.map(v => `
+        <div class="related-item" onclick="navigate('video',{id:'${v.id}'})"><div class="related-thumb"><img src="${v.thumb}" loading="lazy" onerror="this.src='https://img.youtube.com/vi/${v.id}/0.jpg'"></div><div class="related-info"><div class="related-title">${v.title}</div><div class="related-ch"><i class="fas fa-user-circle"></i> ${v.channel}</div><div class="related-cat">${v.topic}</div></div></div>`).join("");
+}
 
 function loadCategoryPage(cat) {
+    const ic = { Design: "🎨", Programmation: "💻", Langues: "🗣️", Marketing: "📈", Montage: "🎬", Freelance: "💼", "Bac & Etudes": "📚", Bureautique: "📊", Autre: "📦" };
+    document.getElementById("catIcon").textContent = ic[cat] || "📁";
     document.getElementById("catTitle").textContent = cat;
-    renderGrid(allVideos.filter(v => v.category === cat), "categoryGrid");
+    const f = allVideos.filter(v => v.category === cat);
+    document.getElementById("categoryGrid").innerHTML = f.map(v => `
+        <div class="card" onclick="navigate('video',{id:'${v.id}'})"><div class="card-thumb"><img src="${v.thumb}" loading="lazy" onerror="this.src='https://img.youtube.com/vi/${v.id}/0.jpg'"><span class="card-badge">${v.topic}</span></div><div class="card-body"><div class="card-title">${v.title}</div><div class="card-ch"><i class="fas fa-user-circle"></i> ${v.channel}</div><div class="card-cat">${v.category}</div></div></div>`).join("");
+    applyGridSize();
 }
+
 function loadLikedPage() {
     if (!user) { openAuth(); navigate("home"); return; }
-    const ids = Object.keys(S.g("likes") || {}).filter(k => (S.g("likes")[k] || []).includes(user.id));
-    renderGrid(allVideos.filter(v => ids.includes(v.id)), "likedGrid");
+    const l = S.g("likes") || {};
+    const ids = Object.keys(l).filter(k => l[k].includes(user.id));
+    renderGridPage("likedGrid", allVideos.filter(v => ids.includes(v.id)), "No liked videos yet");
 }
 function loadSubscriptionsPage() {
     if (!user) { openAuth(); navigate("home"); return; }
-    const subs = S.g("subs_" + user.id) || [];
-    renderGrid(allVideos.filter(v => subs.includes(v.channel)), "subsGrid");
+    const s = S.g("subs_"+user.id)||[];
+    renderGridPage("subsGrid", allVideos.filter(v => s.some(x => v.channel.includes(x))), "No subscriptions yet");
 }
-function loadHistoryPage() { renderGrid(allVideos.slice(0, 10), "historyGrid"); }
+function loadHistoryPage() {
+    const h = S.g("history") || [];
+    renderGridPage("historyGrid", h.map(id => allVideos.find(v => v.id === id)).filter(Boolean), "No watch history");
+}
+function renderGridPage(gid, list, msg) {
+    const g = document.getElementById(gid);
+    if (!list.length) { g.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><i class="fas fa-inbox"></i><h2>${msg}</h2></div>`; return; }
+    g.innerHTML = list.map(v => `
+        <div class="card" onclick="navigate('video',{id:'${v.id}'})"><div class="card-thumb"><img src="${v.thumb}" loading="lazy" onerror="this.src='https://img.youtube.com/vi/${v.id}/0.jpg'"><span class="card-badge">${v.topic}</span></div><div class="card-body"><div class="card-title">${v.title}</div><div class="card-ch"><i class="fas fa-user-circle"></i> ${v.channel}</div><div class="card-cat">${v.category}</div></div></div>`).join("");
+    applyGridSize();
+}
 
-// Init
+document.addEventListener("keydown", e => { if (e.key === "Escape") { closeAuth(); closeDlModal(); } });
+function toggleSidebar() { const s = document.getElementById("sidebar"), m = document.getElementById("mainContent"); s.classList.toggle("hidden"); m.style.marginLeft = s.classList.contains("hidden") ? "0" : "var(--sidebar-w)"; }
+
+// START
 applyTheme();
+applyFontSize();
 renderAuth();
+const il = (S.g("settings") || {}).lang;
+if (il) setLang(il);
 </script>
-</body>
-</html>
