@@ -132,24 +132,229 @@
     .avatar-upload i { font-size: 20px; color: var(--text3); }
     .avatar-upload input { position: absolute; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
 
-    /* Settings Nav */
-    .settings-nav { display: flex; border-bottom: 1px solid var(--border); overflow-x: auto; background: var(--surface2); scrollbar-width: none; }
-    .settings-nav::-webkit-scrollbar { display: none; }
-    .settings-tab { padding: 12px 20px; font-size: 13px; font-weight: 600; color: var(--text2); border-bottom: 2px solid transparent; white-space: nowrap; cursor: pointer; transition: 0.3s; }
-    .settings-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
-    .settings-page-content { display: none; }
-    .settings-page-content.active { display: block; }
-    .setting-row { display: flex; align-items: center; justify-content: space-between; padding: 16px 0; border-bottom: 1px solid var(--border); }
-    .setting-row:last-child { border: none; }
-    .setting-info { flex: 1; padding-right: 12px; text-align: left; }
-    .setting-title { font-size: 14px; font-weight: 600; }
-    .setting-desc { font-size: 12px; color: var(--text2); margin-top: 3px; }
-    
-    .toggle { width: 44px; height: 24px; border-radius: 12px; background: var(--surface3); position: relative; cursor: pointer; flex-shrink: 0; transition: 0.3s; }
-    .toggle.on { background: var(--accent); }
-    .toggle::after { content: ''; position: absolute; width: 18px; height: 18px; border-radius: 50%; background: #fff; top: 3px; left: 3px; transition: 0.2s; }
-    .toggle.on::after { left: 23px; }
-    .form-select { padding: 8px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--bg); color: var(--text); font-size: 13px; cursor: pointer; }
+    /* UNIFIED SETTINGS PRO STYLES */
+    .settings-container-pro {
+        max-width: 950px;
+        margin: 10px auto;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        overflow: hidden;
+        box-shadow: var(--shadow-md);
+        animation: fadeIn 0.3s var(--transition);
+    }
+    .settings-header-pro {
+        padding: 20px;
+        background: var(--surface2);
+        border-bottom: 1px solid var(--border);
+    }
+    .settings-header-pro h2 {
+        font-size: 1.4rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .settings-header-pro p {
+        font-size: 0.85rem;
+        color: var(--text2);
+        margin-top: 4px;
+    }
+    .settings-layout-pro {
+        display: grid;
+        grid-template-columns: 220px 1fr;
+        min-height: 500px;
+    }
+    .settings-sidebar-pro {
+        background: var(--surface2);
+        border-right: 1px solid var(--border);
+        padding: 15px 10px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+    .tab-btn-pro {
+        background: transparent;
+        color: var(--text2);
+        border: none;
+        text-align: left;
+        padding: 11px 14px;
+        border-radius: var(--radius-sm);
+        font-size: 0.9rem;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        transition: var(--transition);
+    }
+    .tab-btn-pro:hover {
+        background: var(--surface3);
+        color: var(--text);
+    }
+    .tab-btn-pro.active {
+        background: var(--accent);
+        color: #fff;
+    }
+    .tab-btn-pro.danger.active {
+        background: var(--red);
+    }
+    .settings-content-pro {
+        padding: 24px;
+        background: var(--surface);
+    }
+    .settings-pane-pro {
+        display: none;
+        animation: fadeIn 0.25s var(--transition);
+    }
+    .settings-pane-pro.active {
+        display: block;
+    }
+    .settings-pane-pro h3 {
+        font-size: 1.15rem;
+        font-weight: 700;
+        margin-bottom: 20px;
+        padding-bottom: 8px;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .avatar-upload-box-pro {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 24px;
+        padding: 15px;
+        background: var(--surface2);
+        border-radius: var(--radius-sm);
+        border: 1px solid var(--border);
+    }
+    .avatar-preview-wrapper-pro {
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        background: var(--surface3);
+        border: 2px solid var(--accent);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        position: relative;
+    }
+    .avatar-preview-wrapper-pro img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    .avatar-preview-wrapper-pro i {
+        font-size: 1.5rem;
+        color: var(--text3);
+    }
+    .avatar-actions-pro {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+    .btn-secondary-pro {
+        background: var(--surface3);
+        color: var(--text);
+        padding: 7px 12px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        border-radius: var(--radius-sm);
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        border: 1px solid var(--border);
+    }
+    .btn-secondary-pro:hover {
+        background: var(--border2);
+    }
+    .btn-text-pro {
+        font-size: 0.78rem;
+        color: var(--text2);
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        align-self: flex-start;
+    }
+    .btn-text-pro:hover {
+        color: var(--text);
+        text-decoration: underline;
+    }
+    .setting-row-pro {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 14px 0;
+        border-bottom: 1px solid var(--border);
+    }
+    .setting-row-pro:last-child {
+        border-bottom: none;
+    }
+    .setting-info-pro {
+        flex: 1;
+        padding-right: 12px;
+        text-align: left;
+    }
+    .setting-title-pro {
+        font-size: 0.95rem;
+        font-weight: 600;
+    }
+    .setting-desc-pro {
+        font-size: 0.78rem;
+        color: var(--text2);
+        margin-top: 2px;
+    }
+    .danger-box-pro {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px;
+        background: rgba(255, 0, 51, 0.04);
+        border: 1px solid rgba(255, 0, 51, 0.15);
+        border-radius: var(--radius-sm);
+        margin-bottom: 15px;
+    }
+    .danger-box-pro h4 {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--text);
+    }
+    .danger-box-pro p {
+        font-size: 0.75rem;
+        color: var(--text2);
+        margin-top: 2px;
+    }
+    .btn-danger-pro {
+        background: var(--red);
+        color: #fff;
+        font-size: 0.8rem;
+        font-weight: 600;
+        padding: 8px 14px;
+        border-radius: var(--radius-sm);
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(255, 0, 51, 0.15);
+    }
+    .btn-danger-pro:hover {
+        opacity: 0.9;
+        transform: translateY(-1px);
+    }
+    .btn-danger-extreme-pro {
+        background: #7f1d1d;
+        color: #fca5a5;
+        font-size: 0.8rem;
+        font-weight: 600;
+        padding: 8px 14px;
+        border-radius: var(--radius-sm);
+        cursor: pointer;
+        border: 1px solid #dc2626;
+    }
+    .btn-danger-extreme-pro:hover {
+        background: #991b1b;
+    }
 
     /* Sidebar */
     .side { position: fixed; top: var(--header-h); left: 0; width: var(--sidebar-w); height: calc(100vh - var(--header-h)); background: var(--bg); border-right: 1px solid var(--border); overflow-y: auto; padding: 10px 8px; z-index: 999; transition: transform 0.3s var(--transition); }
@@ -171,11 +376,6 @@
     .f-chip { padding: 8px 18px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--surface2); color: var(--text); font-size: 13px; white-space: nowrap; transition: all 0.3s var(--transition); font-weight: 500; }
     .f-chip:hover { background: var(--surface3); border-color: var(--border2); transform: translateY(-2px); }
     .f-chip.active { background: var(--text); color: var(--bg); font-weight: 700; border-color: var(--text); box-shadow: 0 4px 12px rgba(255,255,255,0.15); }
-
-    .active-filters { margin-bottom: 14px; display: flex; gap: 8px; flex-wrap: wrap; }
-    .filter-tag { background: rgba(62,166,255,0.12); color: var(--accent); padding: 5px 14px; border-radius: 16px; font-size: 12px; display: flex; align-items: center; gap: 8px; font-weight: 600; border: 1px solid rgba(62,166,255,0.25); animation: scaleIn 0.3s; }
-    .filter-tag .rm { cursor: pointer; font-weight: 700; background: rgba(62,166,255,0.2); width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; transition: 0.3s; }
-    .filter-tag .rm:hover { background: var(--accent); color: #fff; transform: rotate(90deg); }
 
     /* ====== GRID ====== */
     .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; margin-top: 8px; }
@@ -200,55 +400,82 @@
     .card-ch { font-size: 12px; color: var(--text2); display: flex; align-items: center; gap: 6px; }
     .card-cat { display: inline-block; font-size: 11px; color: var(--accent); margin-top: 6px; font-weight: 700; background: rgba(62,166,255,0.1); padding: 3px 8px; border-radius: 4px; }
 
-    /* ====== VIDEO PLAYER ====== */
-    .v-player { width: 100%; aspect-ratio: 16/9; background: #000; }
-    .v-player iframe { width: 100%; height: 100%; border: none; }
-
-    .v-details { padding: 20px 24px; text-align: left; }
-    .v-title { font-size: 18px; font-weight: 700; margin-bottom: 6px; line-height: 1.4; }
-    .v-ch { color: var(--text2); font-size: 13px; }
-
-    .v-actions { display: flex; gap: 10px; padding: 14px 24px; border-top: 1px solid var(--border); flex-wrap: wrap; background: var(--surface2); }
-    .v-act { background: var(--surface3); color: var(--text); padding: 10px 18px; border-radius: var(--radius-full); font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 8px; transition: all 0.3s var(--transition); text-decoration: none; cursor: pointer; }
-    .v-act:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm); }
-    .v-act:active { transform: scale(0.95); }
-    .v-act i { font-size: 15px; }
-
-    .v-act.liked { background: rgba(62, 166, 255, 0.15); color: var(--accent); box-shadow: 0 4px 14px rgba(62,166,255,0.2); }
-    .v-act.liked i { animation: bounce 0.5s; }
-    .v-act.subscribed { background: rgba(255, 0, 51, 0.12); color: var(--red); box-shadow: 0 4px 14px rgba(255,0,51,0.2); }
+    /* ====== VIDEO PAGE ====== */
+    .video-page-container { display: grid; grid-template-columns: 1fr 350px; gap: 24px; }
+    .video-main { background: var(--surface); border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); }
+    .back-btn { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; margin: 15px; font-size: 13.5px; font-weight: 600; border-radius: var(--radius-sm); background: var(--surface2); color: var(--text); border: 1px solid var(--border); transition: 0.3s; }
+    .back-btn:hover { background: var(--surface3); }
+    .video-player-large { width: 100%; aspect-ratio: 16/9; background: #000; }
+    .video-player-large iframe { width: 100%; height: 100%; border: none; }
+    .video-info-large { padding: 24px; }
+    .video-title-large { font-size: 20px; font-weight: 800; margin-bottom: 15px; }
+    .channel-row { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
+    .channel-info { display: flex; align-items: center; gap: 12px; }
+    .channel-avatar { width: 44px; height: 44px; border-radius: 50%; background: var(--gradient); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; font-size: 16px; }
+    .channel-details h3 { font-size: 15px; font-weight: 700; }
+    .channel-details p { font-size: 12px; color: var(--text2); }
+    .subscribe-btn { padding: 9px 18px; border-radius: var(--radius-full); background: var(--gradient2); color: #fff; font-size: 13px; font-weight: 700; box-shadow: 0 4px 12px rgba(255,0,51,0.2); transition: 0.3s; }
+    .subscribe-btn.subscribed { background: var(--surface3); color: var(--text); box-shadow: none; }
+    .video-actions-row { display: flex; gap: 8px; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: var(--radius-full); background: var(--surface2); border: 1px solid var(--border); color: var(--text); font-size: 13px; font-weight: 600; transition: 0.3s; }
+    .action-btn:hover { background: var(--surface3); }
+    .action-btn.liked { color: var(--accent); border-color: var(--accent); background: rgba(62,166,255,0.08); }
+    .video-description { background: var(--surface2); padding: 15px; border-radius: var(--radius-sm); margin-top: 20px; font-size: 13.5px; line-height: 1.6; border-left: 3px solid var(--accent); }
+    .video-description .tag { color: var(--accent); font-weight: 700; margin-right: 10px; }
+    .related-videos { background: var(--surface); padding: 20px; border-radius: var(--radius); border: 1px solid var(--border); }
+    .related-videos h3 { font-size: 15px; font-weight: 700; margin-bottom: 15px; }
+    .related-item { display: flex; gap: 10px; margin-bottom: 15px; cursor: pointer; transition: 0.3s; }
+    .related-item:hover { transform: translateY(-2px); }
+    .related-thumb { width: 120px; aspect-ratio: 16/9; border-radius: var(--radius-sm); overflow: hidden; flex-shrink: 0; background: #000; }
+    .related-thumb img { width: 100%; height: 100%; object-fit: cover; }
+    .related-info { flex: 1; min-width: 0; }
+    .related-title { font-size: 12.5px; font-weight: 600; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .related-ch { font-size: 11px; color: var(--text2); margin-top: 4px; }
+    .related-cat { font-size: 10px; color: var(--accent); font-weight: 700; margin-top: 2px; }
 
     /* ====== COMMENTS ====== */
-    .cmt-section { padding: 24px; border-top: 1px solid var(--border); text-align: left; }
-    .cmt-section h3 { font-size: 15px; margin-bottom: 18px; font-weight: 700; }
-    .cmt-form { display: flex; gap: 14px; margin-bottom: 20px; align-items: flex-start; }
-    .cmt-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--gradient); display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 700; flex-shrink: 0; color: #fff; overflow: hidden; box-shadow: 0 4px 12px rgba(62,166,255,0.25); }
-    .cmt-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .comments-large { margin-top: 30px; border-top: 1px solid var(--border); padding-top: 24px; }
+    .cmt-form-large { display: flex; gap: 14px; margin-bottom: 24px; }
+    .cmt-avatar-large { width: 38px; height: 38px; border-radius: 50%; background: var(--gradient); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; flex-shrink: 0; overflow: hidden; }
+    .cmt-input-wrap-large { flex: 1; }
+    .cmt-input-large { width: 100%; padding: 10px 0; border-bottom: 1.5px solid var(--border); background: transparent; color: var(--text); font-size: 13.5px; }
+    .cmt-input-large:focus { border-bottom-color: var(--accent); }
+    .cmt-btns-large { display: flex; justify-content: flex-end; margin-top: 10px; }
+    .cmt-submit-large { padding: 8px 18px; border-radius: var(--radius-full); background: var(--gradient); color: #fff; font-size: 12.5px; font-weight: 600; box-shadow: 0 4px 12px rgba(62,166,255,0.2); }
+    .cmt-list-large { display: flex; flex-direction: column; gap: 15px; }
+    .cmt-item-large { display: flex; gap: 12px; padding-bottom: 15px; border-bottom: 1px solid var(--surface2); position: relative; }
+    .cmt-user-large { font-weight: 700; font-size: 12.5px; color: var(--text); }
+    .cmt-text-large { font-size: 13.5px; margin-top: 4px; color: var(--text); line-height: 1.4; }
+    .cmt-time-large { font-size: 11px; color: var(--text3); margin-top: 4px; display: block; }
+    .cmt-del-large { position: absolute; right: 0; top: 0; color: var(--text3); font-size: 12px; padding: 4px; transition: 0.3s; }
+    .cmt-del-large:hover { color: var(--red); }
+    .cmt-login-large { font-size: 13px; color: var(--text3); }
+    .cmt-login-large a { color: var(--accent); cursor: pointer; font-weight: 700; }
 
-    .cmt-input-wrap { flex: 1; }
-    .cmt-input { width: 100%; padding: 10px 0; border-bottom: 1.5px solid var(--border); background: transparent; color: var(--text); font-size: 14px; transition: 0.3s; }
-    .cmt-input:focus { border-bottom-color: var(--accent); border-bottom-width: 2px; }
-    .cmt-btns { display: flex; gap: 8px; justify-content: flex-end; margin-top: 10px; }
-    .cmt-submit { padding: 8px 20px; border-radius: var(--radius-full); background: var(--gradient); color: #fff; font-size: 13px; font-weight: 600; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 12px rgba(62,166,255,0.3); }
-    .cmt-submit:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(62,166,255,0.4); }
-
-    .cmt-item { display: flex; gap: 14px; padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.03); animation: fadeIn 0.4s; }
-    .cmt-item:last-child { border: none; }
-    .cmt-user { font-size: 13px; font-weight: 700; color: var(--accent); }
-    .cmt-text { font-size: 14px; margin-top: 5px; line-height: 1.5; }
-    .cmt-time { font-size: 11px; color: var(--text3); margin-top: 4px; }
-    .cmt-del { background: none; color: var(--text3); font-size: 12px; cursor: pointer; float: right; padding: 4px 8px; border-radius: 6px; transition: 0.3s; }
-    .cmt-del:hover { color: #ff4d4d; background: rgba(255,77,77,0.1); }
-
-    .cmt-login { text-align: center; color: var(--text3); font-size: 14px; padding: 24px; background: var(--surface2); border-radius: var(--radius); }
-    .cmt-login a { color: var(--accent); cursor: pointer; text-decoration: none; font-weight: 600; }
-    .cmt-login a:hover { text-decoration: underline; }
+    /* ====== DOWNLOAD MODAL ====== */
+    .dl-modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 3000; justify-content: center; align-items: center; }
+    .dl-modal.active { display: flex; }
+    .dl-box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; width: 90%; max-width: 400px; text-align: center; position: relative; box-shadow: var(--shadow-lg); animation: scaleIn 0.3s var(--transition); }
+    .dl-close { position: absolute; right: 15px; top: 15px; font-size: 16px; color: var(--text2); }
+    .dl-icon { font-size: 40px; color: var(--accent); margin-bottom: 15px; }
+    .dl-title { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+    .dl-desc { font-size: 13px; color: var(--text2); margin-bottom: 20px; }
+    .dl-options { display: flex; flex-direction: column; gap: 10px; }
+    .dl-btn { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-radius: var(--radius-sm); border: 1px solid var(--border); color: var(--text); text-decoration: none; font-size: 13.5px; font-weight: 600; background: var(--surface2); transition: 0.3s; }
+    .dl-btn:hover { background: var(--surface3); }
+    .dl-btn.best { background: var(--gradient); color: #fff; border: none; box-shadow: 0 4px 14px rgba(62,166,255,0.3); }
 
     .empty-state { text-align: center; padding: 100px 20px; color: var(--text3); animation: fadeIn 0.5s; }
     .empty-state i { font-size: 48px; margin-bottom: 16px; animation: bounce 2s infinite; }
     .empty-state h2 { font-size: 18px; margin-bottom: 6px; color: var(--text2); }
 
+    .page-header { display: flex; align-items: center; gap: 14px; margin-bottom: 24px; }
+    .page-icon { width: 44px; height: 44px; border-radius: 50%; background: var(--surface2); display: flex; align-items: center; justify-content: center; font-size: 18px; }
+
     /* ====== RESPONSIVE ====== */
+    @media(max-width:992px){
+        .video-page-container { grid-template-columns: 1fr; }
+    }
     @media(max-width:768px){
         .side { transform: translateX(-100%); }
         .side.show { transform: translateX(0); }
@@ -262,7 +489,7 @@
         .ov-box { max-width: 100%; margin: 20px; }
         .card-title { font-size: 12px; }
         .card-ch { font-size: 11px; }
-        .v-act { padding: 8px 12px; font-size: 12px; }
+        .action-btn { padding: 8px 12px; font-size: 12px; }
     }
     </style>
 </head>
@@ -353,7 +580,6 @@
         <div class="page active" id="page-home">
             <div class="filter-bar" id="filterBar"></div>
             <div class="grid" id="grid"></div>
-            <!-- Sentinel Div for Observer -->
             <div id="sentinel"></div>
             <div class="empty-state" id="empty" style="display:none"><i class="fas fa-search"></i><h2>No videos found</h2></div>
         </div>
@@ -395,74 +621,187 @@
             <div class="grid" id="categoryGrid"></div>
         </div>
 
-        <!-- ============ SETTINGS PAGE ============ -->
+        <!-- ============ UNIFIED SETTINGS PAGE PRO (TABS) ============ -->
         <div class="page" id="page-settings">
             <button class="back-btn" onclick="navigate('home')"><i class="fas fa-arrow-left"></i> Back</button>
-            <div class="settings-container">
-                <div class="page-header"><div class="page-icon"><i class="fas fa-cog"></i></div><h1>App Settings</h1></div>
-                <div class="settings-nav">
-                    <button class="settings-tab active" onclick="switchSettingsTab('general',this)">General</button>
-                    <button class="settings-tab" onclick="switchSettingsTab('appearance',this)">Appearance</button>
-                    <button class="settings-tab" onclick="switchSettingsTab('playback',this)">Playback</button>
-                    <button class="settings-tab" onclick="switchSettingsTab('privacy',this)">Privacy</button>
-                    <button class="settings-tab" onclick="switchSettingsTab('advanced',this)">Advanced</button>
+            <div class="settings-container-pro">
+                <div class="settings-header-pro">
+                    <h2><i class="fa-solid fa-gear"></i> Paramètres - الإعدادات</h2>
+                    <p>Gérez votre compte, votre chaîne et vos préférences sur TunisianTube.</p>
                 </div>
-                <div class="settings-page-content active" id="set-general">
-                    <div class="setting-row"><div class="setting-info"><div class="setting-title">🌐 Language</div><div class="setting-desc">Choose display language</div></div><select class="form-select" id="langSelect" onchange="setLang(this.value)"><option value="derja">🇹🇳 Derja</option><option value="fr">🇫🇷 Français</option><option value="en">🇬🇧 English</option></select></div>
-                    <div class="setting-row"><div class="setting-info"><div class="setting-title">🔔 Notifications</div><div class="setting-desc">Browser notifications</div></div><div class="toggle" id="t-notif" onclick="toggleSet('notif')"></div></div>
-                    <div class="setting-row"><div class="setting-info"><div class="setting-title">📊 Watch History</div><div class="setting-desc">Track videos you watch</div></div><div class="toggle on" id="t-history" onclick="toggleSet('history')"></div></div>
-                </div>
-                <div class="settings-page-content" id="set-appearance">
-                    <div class="setting-row"><div class="setting-info"><div class="setting-title">🌙 Dark Mode</div><div class="setting-desc">Toggle theme</div></div><div class="toggle" id="t-dark" onclick="toggleSet('dark')"></div></div>
-                    <div class="setting-row"><div class="setting-info"><div class="setting-title">🔤 Font Size</div><div class="setting-desc">Adjust text size</div></div><select class="form-select" id="fontSelect" onchange="setFontSize(this.value)"><option value="small">Small</option><option value="normal" selected>Normal</option><option value="large">Large</option></select></div>
-                    <div class="setting-row"><div class="setting-info"><div class="setting-title">📐 Grid Layout</div><div class="setting-desc">Column width</div></div><select class="form-select" id="gridSelect" onchange="setGridSize(this.value)"><option value="250">Compact</option><option value="280" selected>Normal</option><option value="340">Large</option></select></div>
-                </div>
-                <div class="settings-page-content" id="set-playback">
-                    <div class="setting-row"><div class="setting-info"><div class="setting-title">▶️ Autoplay</div><div class="setting-desc">Auto-play videos</div></div><div class="toggle on" id="t-auto" onclick="toggleSet('auto')"></div></div>
-                    <div class="setting-row"><div class="setting-info"><div class="setting-title">📺 Video Quality</div><div class="setting-desc">Preferred quality</div></div><select class="form-select" id="qualitySelect" onchange="setQuality(this.value)"><option value="auto">Auto</option><option value="hd1080">1080p</option><option value="hd720">720p</option></select></div>
-                </div>
-                <div class="settings-page-content" id="set-privacy">
-                    <div class="setting-row"><div class="setting-info"><div class="setting-title">👁️ Public Profile</div><div class="setting-desc">Others see your profile</div></div><div class="toggle on" id="t-public" onclick="toggleSet('public')"></div></div>
-                    <div class="setting-row"><div class="setting-info"><div class="setting-title">💾 Save Search History</div><div class="setting-desc">Remember searches</div></div><div class="toggle on" id="t-search" onclick="toggleSet('search')"></div></div>
-                </div>
-                <div class="settings-page-content" id="set-advanced">
-                    <div class="setting-row"><div class="setting-info"><div class="setting-title">🗑️ Clear Watch History</div><div class="setting-desc">Delete watched videos data</div></div><button class="form-btn btn-outline" style="width:auto;padding:6px 14px;font-size:12px" onclick="clearHistory()">Clear</button></div>
-                    <div class="setting-row"><div class="setting-info"><div class="setting-title">💔 Clear Liked Videos</div><div class="setting-desc">Remove all likes</div></div><button class="form-btn btn-outline" style="width:auto;padding:6px 14px;font-size:12px" onclick="clearLikes()">Clear</button></div>
-                </div>
-            </div>
-        </div>
 
-        <!-- ============ ACCOUNT PAGE ============ -->
-        <div class="page" id="page-account">
-            <button class="back-btn" onclick="navigate('home')"><i class="fas fa-arrow-left"></i> Back</button>
-            <div class="settings-container">
-                <div class="page-header"><div class="page-icon" style="background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%)"><i class="fas fa-user-cog"></i></div><h1>Account Settings</h1></div>
-                <div style="max-width:500px">
-                    <div class="form-group"><label class="form-label">Profile Picture</label><div class="avatar-upload" id="accAvatarWrap"><i class="fas fa-camera"></i><input type="file" accept="image/*" onchange="changeAccPic(event)"></div></div>
-                    <div class="form-group"><label class="form-label">Display Name</label><input class="form-input" id="accName" placeholder="Your name"></div>
-                    <div class="form-group"><label class="form-label">Email</label><input class="form-input" id="accEmail" disabled></div>
-                    <div class="form-group"><label class="form-label">Current Password</label><input class="form-input" id="accOldPass" type="password" placeholder="Enter current password to save changes"></div>
-                    <div class="form-group"><label class="form-label">New Password</label><input class="form-input" id="accNewPass" type="password" placeholder="Min 6 characters"></div>
-                    <p class="form-error" id="accError"></p>
-                    <button class="form-btn btn-primary" onclick="saveAccount()">Save Account</button>
-                </div>
-            </div>
-        </div>
+                <div class="settings-layout-pro">
+                    <!-- Sidebar Tabs -->
+                    <aside class="settings-sidebar-pro">
+                        <button class="tab-btn-pro active" onclick="openSettingsTab('account', this)">
+                            <i class="fa-solid fa-user"></i> Mon Compte
+                        </button>
+                        <button class="tab-btn-pro" onclick="openSettingsTab('channel', this)">
+                            <i class="fa-solid fa-tv"></i> Ma Chaîne
+                        </button>
+                        <button class="tab-btn-pro" onclick="openSettingsTab('preferences', this)">
+                            <i class="fa-solid fa-sliders"></i> Préférences
+                        </button>
+                        <button class="tab-btn-pro danger" onclick="openSettingsTab('privacy', this)">
+                            <i class="fa-solid fa-shield-halved"></i> Données & Sécurité
+                        </button>
+                    </aside>
 
-        <!-- ============ CHANNEL PAGE ============ -->
-        <div class="page" id="page-channel">
-            <button class="back-btn" onclick="navigate('home')"><i class="fas fa-arrow-left"></i> Back</button>
-            <div class="profile-container">
-                <div class="profile-banner"><div class="profile-big-avatar" id="channelBigAvatar">U</div></div>
-                <h1 class="profile-name" id="channelNameDisplay">Loading...</h1>
-                <p style="font-size:14px;color:var(--text2);margin-bottom:24px;white-space:pre-wrap" id="channelBioDisplay"></p>
-                <div class="page-header" style="margin-top:20px"><div class="page-icon"><i class="fas fa-tv"></i></div><h1 style="font-size:18px">Edit Channel</h1></div>
-                <div class="form-group"><label class="form-label">Channel Name</label><input class="form-input" id="channelName" placeholder="Your channel name"></div>
-                <div class="form-group"><label class="form-label">Description</label><textarea class="form-textarea" id="channelBio" placeholder="Tell viewers about your channel..."></textarea></div>
-                <div class="form-group"><label class="form-label">Category</label><select class="form-select" id="channelCat" style="width:100%"><option value="">Select</option><option value="Education">Education</option><option value="Design">Design</option><option value="Programming">Programming</option><option value="Languages">Languages</option><option value="Marketing">Marketing</option><option value="Other">Other</option></select></div>
-                <div class="form-group"><label class="form-label">Website</label><input class="form-input" id="channelLink" placeholder="https://your-site.com"></div>
-                <div class="form-group"><label class="form-label">Social Media</label><input class="form-input" id="channelSocial" placeholder="@your_instagram"></div>
-                <button class="form-btn btn-primary" onclick="saveChannel()">Save Channel</button>
+                    <!-- Content Area -->
+                    <main class="settings-content-pro">
+                        
+                        <!-- TAB 1: Mon Compte -->
+                        <div id="set-pro-account" class="settings-pane-pro active">
+                            <h3><i class="fa-solid fa-user-pen"></i> Informations Personnelles</h3>
+                            <div class="avatar-upload-box-pro">
+                                <div class="avatar-preview-wrapper-pro" id="accAvatarWrapPro">
+                                    <i class="fas fa-camera"></i>
+                                </div>
+                                <div class="avatar-actions-pro">
+                                    <label class="btn-secondary-pro">
+                                        <i class="fa-solid fa-upload"></i> Charger une Image
+                                        <input type="file" accept="image/*" style="display:none" onchange="changeAccPicPro(event)">
+                                    </label>
+                                    <button class="btn-text-pro" onclick="randomizeAvatarPro()"><i class="fa-solid fa-shuffle"></i> Aléatoire</button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Display Name / الاسم</label>
+                                <input class="form-input" id="accNamePro" placeholder="Votre nom complet">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Email</label>
+                                <input class="form-input" id="accEmailPro" disabled style="opacity: 0.6; cursor: not-allowed;">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Current Password / كلمة السر الحالية</label>
+                                <input class="form-input" id="accOldPassPro" type="password" placeholder="Saisir mot de passe actuel pour modifier">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">New Password / كلمة السر الجديدة</label>
+                                <input class="form-input" id="accNewPassPro" type="password" placeholder="Min 6 characters">
+                            </div>
+                            <p class="form-error" id="accErrorPro"></p>
+                            <button class="form-btn btn-primary" onclick="saveAccountPro()">Enregistrer le Compte</button>
+                        </div>
+
+                        <!-- TAB 2: Ma Chaîne -->
+                        <div id="set-pro-channel" class="settings-pane-pro">
+                            <h3><i class="fa-solid fa-circle-play"></i> Personnalisation de la Chaîne</h3>
+                            <div class="form-group">
+                                <label class="form-label">Nom de la chaîne</label>
+                                <input class="form-input" id="channelNamePro" placeholder="Ex: Ahmed Code">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Description / Bio</label>
+                                <textarea class="form-textarea" id="channelBioPro" placeholder="Présentez votre chaîne aux twensa..."></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Catégorie Principale</label>
+                                <select class="form-select" id="channelCatPro" style="width:100%">
+                                    <option value="">Sélectionnez</option>
+                                    <option value="Education">Education</option>
+                                    <option value="Design">Design</option>
+                                    <option value="Programming">Programming</option>
+                                    <option value="Languages">Languages</option>
+                                    <option value="Marketing">Marketing</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Website / Lien</label>
+                                <input class="form-input" id="channelLinkPro" placeholder="https://votre-site.com">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Social Handle</label>
+                                <input class="form-input" id="channelSocialPro" placeholder="@votre_username">
+                            </div>
+                            <button class="form-btn btn-primary" onclick="saveChannelPro()">Mettre à jour la chaîne</button>
+                        </div>
+
+                        <!-- TAB 3: Préférences -->
+                        <div id="set-pro-preferences" class="settings-pane-pro">
+                            <h3><i class="fa-solid fa-sliders"></i> Préférences de l'Interface</h3>
+                            
+                            <div class="setting-row-pro">
+                                <div class="setting-info-pro">
+                                    <div class="setting-title-pro">🌙 Mode Sombre</div>
+                                    <div class="setting-desc-pro">Activer ou désactiver le mode nuit</div>
+                                </div>
+                                <div class="toggle" id="t-pro-dark" onclick="toggleSetPro('dark')"></div>
+                            </div>
+                            <div class="setting-row-pro">
+                                <div class="setting-info-pro">
+                                    <div class="setting-title-pro">🌐 Langue / Interface</div>
+                                    <div class="setting-desc-pro">Choisir votre langue préférée</div>
+                                </div>
+                                <select class="form-select" id="langSelectPro" onchange="setLangPro(this.value)">
+                                    <option value="derja">🇹🇳 Tounsi / Derja</option>
+                                    <option value="fr">🇫🇷 Français</option>
+                                    <option value="en">🇬🇧 English</option>
+                                </select>
+                            </div>
+                            <div class="setting-row-pro">
+                                <div class="setting-info-pro">
+                                    <div class="setting-title-pro">▶️ Lecture Automatique</div>
+                                    <div class="setting-desc-pro">Lancer automatiquement la vidéo suivante</div>
+                                </div>
+                                <div class="toggle" id="t-pro-auto" onclick="toggleSetPro('auto')"></div>
+                            </div>
+                            <div class="setting-row-pro">
+                                <div class="setting-info-pro">
+                                    <div class="setting-title-pro">📺 Qualité Vidéo</div>
+                                    <div class="setting-desc-pro">Résolution par défaut recommandée</div>
+                                </div>
+                                <select class="form-select" id="qualitySelectPro" onchange="setQualityPro(this.value)">
+                                    <option value="auto">Auto</option>
+                                    <option value="hd1080">1080p Full HD</option>
+                                    <option value="hd720">720p HD</option>
+                                </select>
+                            </div>
+                            <div class="setting-row-pro">
+                                <div class="setting-info-pro">
+                                    <div class="setting-title-pro">🔤 Taille du texte</div>
+                                    <div class="setting-desc-pro">Ajuster la taille de la police globale</div>
+                                </div>
+                                <select class="form-select" id="fontSelectPro" onchange="setFontSizePro(this.value)">
+                                    <option value="small">Petit</option>
+                                    <option value="normal">Normal</option>
+                                    <option value="large">Grand</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- TAB 4: Données & Sécurité -->
+                        <div id="set-pro-privacy" class="settings-pane-pro">
+                            <h3><i class="fa-solid fa-trash-can"></i> Données & Confidentialité</h3>
+                            
+                            <div class="danger-box-pro">
+                                <div class="danger-text-pro">
+                                    <h4>Effacer l'historique de visionnage</h4>
+                                    <p>Supprimer toutes les vidéos enregistrées de votre compte local.</p>
+                                </div>
+                                <button class="btn-danger-pro" onclick="clearHistoryPro()"><i class="fa-solid fa-clock-rotate-left"></i> Effacer</button>
+                            </div>
+
+                            <div class="danger-box-pro">
+                                <div class="danger-text-pro">
+                                    <h4>Effacer les vidéos likées</h4>
+                                    <p>Réinitialiser tous les likes donnés aux vidéos.</p>
+                                </div>
+                                <button class="btn-danger-pro" onclick="clearLikesPro()"><i class="fa-solid fa-heart-crack"></i> Effacer</button>
+                            </div>
+
+                            <div class="danger-box-pro extreme">
+                                <div class="danger-text-pro">
+                                    <h4>Réinitialiser l'Application</h4>
+                                    <p>Supprime absolument toutes vos données locales, comptes et préférences.</p>
+                                </div>
+                                <button class="btn-danger-extreme-pro" onclick="resetAllAppDataPro()"><i class="fa-solid fa-triangle-exclamation"></i> Tout Réinitialiser</button>
+                            </div>
+                        </div>
+                    </main>
+                </div>
             </div>
         </div>
 
@@ -484,7 +823,7 @@
             <div class="grid" id="historyGrid"></div>
         </div>
 
-</main>
+    </main>
 
 <script src="data.js"></script>
 <script>
@@ -549,15 +888,28 @@ function extractCleanId(raw) {
 function navigate(page, data = null) {
     document.getElementById("dropdown")?.classList.remove("show");
     document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+    
+    // Redirect account and channel pages to the Unified Settings
+    if (page === "account") {
+        navigate("settings");
+        const tabBtn = document.querySelector(".tab-btn-pro[onclick*='account']");
+        if (tabBtn) openSettingsTab('account', tabBtn);
+        return;
+    }
+    if (page === "channel") {
+        navigate("settings");
+        const tabBtn = document.querySelector(".tab-btn-pro[onclick*='channel']");
+        if (tabBtn) openSettingsTab('channel', tabBtn);
+        return;
+    }
+
     const target = document.getElementById("page-" + page);
     if (target) target.classList.add("active");
     
     if (page === "home") { renderHome(); }
     else if (page === "video" && data) { loadVideoPage(data); }
     else if (page === "category" && data) { loadCategoryPage(data); }
-    else if (page === "account") { loadAccountPage(); }
-    else if (page === "channel") { loadChannelPage(); }
-    else if (page === "settings") { loadToggles(); }
+    else if (page === "settings") { loadUserSettingsPro(); }
     else if (page === "liked") { loadLikedPage(); }
     else if (page === "subscriptions") { loadSubscriptionsPage(); }
     else if (page === "history") { loadHistoryPage(); }
@@ -599,48 +951,17 @@ function applyTheme() {
 function toggleTheme() {
     const s = S.g("settings") || { dark: 0, auto: 1, notif: 0, history: 1, public: 1, search: 1 };
     s.dark = s.dark ? 0 : 1;
-    S.s("settings", s); applyTheme(); loadToggles();
+    S.s("settings", s); applyTheme(); loadUserSettingsPro();
 }
 function applyFontSize() {
     const s = S.g("settings") || { fontSize: "normal" };
     document.body.classList.remove("font-small", "font-normal", "font-large");
     document.body.classList.add("font-" + (s.fontSize || "normal"));
 }
-function setFontSize(v) { const s = S.g("settings") || {}; s.fontSize = v; S.s("settings", s); applyFontSize(); }
 function applyGridSize() {
     const s = S.g("settings") || { gridSize: "280" };
     document.querySelectorAll(".grid").forEach(g => g.style.gridTemplateColumns = `repeat(auto-fill, minmax(${s.gridSize || 280}px, 1fr))`);
 }
-function setGridSize(v) { const s = S.g("settings") || {}; s.gridSize = v; S.s("settings", s); applyGridSize(); }
-function setLang(v) { const s = S.g("settings") || {}; s.lang = v; S.s("settings", s); const trans = { derja: "Lawwej 3la cours...", fr: "Rechercher...", en: "Search courses..." }; document.getElementById("searchInput").placeholder = trans[v] || trans.en; }
-function setQuality(v) { const s = S.g("settings") || {}; s.quality = v; S.s("settings", s); }
-
-function switchSettingsTab(page, btn) {
-    document.querySelectorAll(".settings-tab").forEach(t => t.classList.remove("active"));
-    btn.classList.add("active");
-    document.querySelectorAll(".settings-page-content").forEach(p => p.classList.remove("active"));
-    document.getElementById("set-" + page)?.classList.add("active");
-}
-
-function loadToggles() {
-    const s = S.g("settings") || { dark: 0, auto: 1, notif: 0, history: 1, public: 1, search: 1, fontSize: "normal", gridSize: "280", lang: "derja", quality: "auto" };
-    ["dark", "auto", "notif", "history", "public", "search"].forEach(k => {
-        const el = document.getElementById("t-" + k);
-        if (el) { if (s[k]) el.classList.add("on"); else el.classList.remove("on"); }
-    });
-    const langSel = document.getElementById("langSelect"); if (langSel && s.lang) langSel.value = s.lang;
-    const fontSel = document.getElementById("fontSelect"); if (fontSel) fontSel.value = s.fontSize || "normal";
-    const gridSel = document.getElementById("gridSelect"); if (gridSel) gridSel.value = s.gridSize || "280";
-    const qSel = document.getElementById("qualitySelect"); if (qSel) qSel.value = s.quality || "auto";
-}
-
-function toggleSet(k) {
-    const s = S.g("settings") || { dark: 0, auto: 1, notif: 0, history: 1, public: 1, search: 1 };
-    s[k] = s[k] ? 0 : 1; S.s("settings", s); loadToggles();
-    if (k === "dark") applyTheme();
-}
-function clearHistory() { S.r("history"); alert("✅ History cleared"); }
-function clearLikes() { S.r("likes"); alert("✅ Likes cleared"); }
 
 // ====== AUTH ======
 function renderAuth() {
@@ -669,7 +990,6 @@ function toggleAuthMode() {
     document.getElementById("signupAvatar").style.display = isSignUp ? "flex" : "none";
     document.getElementById("authSwitch").innerHTML = isSignUp ? 'Already have an account? <b>Sign In</b>' : 'Don\'t have an account? <b>Sign Up</b>';
 }
-let tempAvatar = "";
 function previewAvatar(e) { const f = e.target.files[0]; if (f) { const r = new FileReader(); r.onload = x => { tempAvatar = x.target.result; document.getElementById("signupAvatar").innerHTML = `<img src="${tempAvatar}"><input type="file" accept="image/*" onchange="previewAvatar(event)">`; }; r.readAsDataURL(f); } }
 function handleAuth() {
     const n = document.getElementById("authName").value.trim(), em = document.getElementById("authEmail").value.trim(), p = document.getElementById("authPass").value, err = document.getElementById("authError");
@@ -691,100 +1011,165 @@ function handleAuth() {
 }
 function logOut() { user = null; S.r("user"); renderAuth(); document.getElementById("dropdown")?.classList.remove("show"); navigate("home"); }
 
-// ====== ACCOUNT SETTINGS (PRO) ======
-function loadAccountPage() {
-    if (!user) { openAuth(); navigate('home'); return; }
-    document.getElementById("accName").value = user.name || "";
-    document.getElementById("accEmail").value = user.email || "";
-    document.getElementById("accOldPass").value = "";
-    document.getElementById("accNewPass").value = "";
-    document.getElementById("accConfirmPass").value = "";
-    document.getElementById("accError").textContent = "";
+// ====== UNIFIED SETTINGS LOGIC PRO ======
+function openSettingsTab(tabId, btn) {
+    document.querySelectorAll(".settings-pane-pro").forEach(pane => pane.classList.remove("active"));
+    document.querySelectorAll(".tab-btn-pro").forEach(b => b.classList.remove("active"));
     
-    var wrap = document.getElementById("accAvatarWrap");
-    if (wrap) {
-        wrap.innerHTML = user.avatar 
-            ? '<img src="' + user.avatar + '"><input type="file" accept="image/*" onchange="changeAccPic(event)">' 
-            : '<i class="fas fa-camera"></i><input type="file" accept="image/*" onchange="changeAccPic(event)">';
-    }
+    document.getElementById("set-pro-" + tabId)?.classList.add("active");
+    btn.classList.add("active");
 }
 
-function changeAccPic(e) {
-    var f = e.target.files[0];
+function loadUserSettingsPro() {
+    if (!user) { openAuth(); navigate('home'); return; }
+    
+    // Tab 1: Mon Compte
+    document.getElementById("accNamePro").value = user.name || "";
+    document.getElementById("accEmailPro").value = user.email || "";
+    document.getElementById("accOldPassPro").value = "";
+    document.getElementById("accNewPassPro").value = "";
+    document.getElementById("accErrorPro").textContent = "";
+
+    const wrap = document.getElementById("accAvatarWrapPro");
+    if (wrap) {
+        wrap.innerHTML = user.avatar 
+            ? `<img src="${user.avatar}">` 
+            : (user.name || "U")[0].toUpperCase();
+    }
+
+    // Tab 2: Ma Chaîne
+    const ch = S.g("channel_" + user.id) || { name: user.name, bio: "", category: "", link: "", insta: "" };
+    document.getElementById("channelNamePro").value = ch.name || "";
+    document.getElementById("channelBioPro").value = ch.bio || "";
+    document.getElementById("channelCatPro").value = ch.category || "";
+    document.getElementById("channelLinkPro").value = ch.link || "";
+    document.getElementById("channelSocialPro").value = ch.insta || "";
+
+    // Tab 3: Préférences
+    const s = S.g("settings") || { dark: 0, auto: 1, notif: 0, history: 1, public: 1, search: 1, fontSize: "normal", gridSize: "280", lang: "derja", quality: "auto" };
+    ["dark", "auto"].forEach(k => {
+        const el = document.getElementById("t-pro-" + k);
+        if (el) {
+            if (s[k]) el.classList.add("on");
+            else el.classList.remove("on");
+        }
+    });
+    const langSel = document.getElementById("langSelectPro"); if (langSel) langSel.value = s.lang || "derja";
+    const fontSel = document.getElementById("fontSelectPro"); if (fontSel) fontSel.value = s.fontSize || "normal";
+    const qSel = document.getElementById("qualitySelectPro"); if (qSel) qSel.value = s.quality || "auto";
+}
+
+function changeAccPicPro(e) {
+    const f = e.target.files[0];
     if (f) {
-        var r = new FileReader();
-        r.onload = function(x) {
+        const r = new FileReader();
+        r.onload = x => {
             user.avatar = x.target.result;
             S.s("user", user);
-            var us = S.g("users") || [];
-            var idx = us.findIndex(function(u) { return u.id === user.id; });
+            let us = S.g("users") || [];
+            let idx = us.findIndex(u => u.id === user.id);
             if (idx > -1) { us[idx] = user; S.s("users", us); }
             renderAuth();
-            loadAccountPage();
+            loadUserSettingsPro();
         };
         r.readAsDataURL(f);
     }
 }
 
-function saveAccount() {
-    var err = document.getElementById("accError");
-    if (err) err.textContent = "";
-    var n = document.getElementById("accName").value.trim();
-    var o = document.getElementById("accOldPass").value;
-    var np = document.getElementById("accNewPass").value;
-    var cp = document.getElementById("accConfirmPass").value;
-    
-    if (n) user.name = n;
-    
-    if (o || np || cp) {
-        if (o !== user.pass) { if(err) err.textContent = "Current password is wrong!"; return; }
-        if (np.length < 6) { if(err) err.textContent = "New password must be 6+ characters!"; return; }
-        if (np !== cp) { if(err) err.textContent = "New passwords don't match!"; return; }
-        user.pass = np;
-    }
-    
+function randomizeAvatarPro() {
+    if (!user) return;
+    const seed = Math.random().toString(36).substring(7);
+    const newAvatar = `https://api.dicebear.com/7.x/bottts/svg?seed=${seed}`;
+    user.avatar = newAvatar;
     S.s("user", user);
-    var us = S.g("users") || [];
-    var idx = us.findIndex(function(u) { return u.id === user.id; });
+    let us = S.g("users") || [];
+    let idx = us.findIndex(u => u.id === user.id);
     if (idx > -1) { us[idx] = user; S.s("users", us); }
     renderAuth();
-    loadAccountPage();
-    alert("✅ Account settings saved successfully!");
+    loadUserSettingsPro();
 }
 
-// ====== CHANNEL SETTINGS (PRO) ======
-function loadChannelPage() {
-    if (!user) { openAuth(); navigate('home'); return; }
-    var ch = S.g("channel_" + user.id) || { name: user.name, bio: "", category: "", link: "", insta: "", twitter: "", yt: "" };
-    
-    document.getElementById("channelNameDisplay").textContent = ch.name || user.name;
-    document.getElementById("channelBioDisplay").textContent = ch.bio || "No description yet";
-    document.getElementById("channelBigAvatar").innerHTML = user.avatar 
-        ? '<img src="' + user.avatar + '">' 
-        : (user.name || "U")[0].toUpperCase();
-    
-    document.getElementById("channelName").value = ch.name || "";
-    document.getElementById("channelBio").value = ch.bio || "";
-    document.getElementById("channelCat").value = ch.category || "";
-    document.getElementById("channelLink").value = ch.link || "";
-    document.getElementById("channelInsta").value = ch.insta || "";
-    document.getElementById("channelTwitter").value = ch.twitter || "";
-    document.getElementById("channelYT").value = ch.yt || "";
+function saveAccountPro() {
+    const err = document.getElementById("accErrorPro");
+    err.textContent = "";
+    const n = document.getElementById("accNamePro").value.trim();
+    const o = document.getElementById("accOldPassPro").value;
+    const np = document.getElementById("accNewPassPro").value;
+
+    if (n) user.name = n;
+    if (o || np) {
+        if (o !== user.pass) { err.textContent = "كلمة السر الحالية خاطئة!"; return; }
+        if (np.length < 6) { err.textContent = "كلمة السر الجديدة قصيرة جداً (6+ حروف)!"; return; }
+        user.pass = np;
+    }
+
+    S.s("user", user);
+    let us = S.g("users") || [];
+    let idx = us.findIndex(u => u.id === user.id);
+    if (idx > -1) { us[idx] = user; S.s("users", us); }
+    renderAuth();
+    loadUserSettingsPro();
+    alert("✅ Vos informations de compte ont été mises à jour!");
 }
 
-function saveChannel() {
-    var ch = {
-        name: document.getElementById("channelName").value.trim(),
-        bio: document.getElementById("channelBio").value.trim(),
-        category: document.getElementById("channelCat").value,
-        link: document.getElementById("channelLink").value.trim(),
-        insta: document.getElementById("channelInsta").value.trim(),
-        twitter: document.getElementById("channelTwitter").value.trim(),
-        yt: document.getElementById("channelYT").value.trim()
+function saveChannelPro() {
+    const ch = {
+        name: document.getElementById("channelNamePro").value.trim(),
+        bio: document.getElementById("channelBioPro").value.trim(),
+        category: document.getElementById("channelCatPro").value,
+        link: document.getElementById("channelLinkPro").value.trim(),
+        insta: document.getElementById("channelSocialPro").value.trim()
     };
     S.s("channel_" + user.id, ch);
-    loadChannelPage();
-    alert("✅ Channel settings saved successfully!");
+    alert("✅ Vos paramètres de chaîne ont été enregistrés!");
+}
+
+function toggleSetPro(k) {
+    const s = S.g("settings") || { dark: 0, auto: 1, notif: 0, history: 1, public: 1, search: 1 };
+    s[k] = s[k] ? 0 : 1;
+    S.s("settings", s);
+    loadUserSettingsPro();
+    if (k === "dark") applyTheme();
+}
+
+function setLangPro(v) {
+    const s = S.g("settings") || {};
+    s.lang = v; S.s("settings", s);
+    const trans = { derja: "Lawwej 3la cours...", fr: "Rechercher...", en: "Search courses..." };
+    document.getElementById("searchInput").placeholder = trans[v] || trans.en;
+}
+
+function setFontSizePro(v) {
+    const s = S.g("settings") || {};
+    s.fontSize = v; S.s("settings", s);
+    applyFontSize();
+}
+
+function setQualityPro(v) {
+    const s = S.g("settings") || {};
+    s.quality = v; S.s("settings", s);
+}
+
+function clearHistoryPro() {
+    if (confirm("Voulez-vous vraiment effacer l'historique ?")) {
+        S.r("history");
+        alert("🧹 Historique effacé!");
+    }
+}
+
+function clearLikesPro() {
+    if (confirm("Voulez-vous effacer vos likes ?")) {
+        S.r("likes");
+        alert("💔 Likes réinitialisés!");
+    }
+}
+
+function resetAllAppDataPro() {
+    if (confirm("⚠️ ATTENTION : Cela va supprimer absolument toutes vos données locales. Confirmer ?")) {
+        localStorage.clear();
+        alert("🔄 Réinitialisation réussie. Rechargement...");
+        window.location.reload();
+    }
 }
 
 // ====== LIKES / SUBS ======
@@ -827,11 +1212,9 @@ function downloadV(id) {
     const cobalt = document.getElementById("dlCobalt");
     const ssyt = document.getElementById("dlSSYT");
     const y2m = document.getElementById("dlY2Mate");
-    const sf = document.getElementById("dlSaveFrom");
     if (cobalt) cobalt.href = `https://cobalt.tools/?u=${encoded}`;
     if (ssyt) ssyt.href = `https://ssyoutube.com/watch?v=${id}`;
     if (y2m) y2m.href = `https://www.y2mate.com/youtube/${id}`;
-    if (sf) sf.href = `https://en.savefrom.net/#url=${encoded}`;
     document.getElementById("dlModal")?.classList.add("active");
 }
 function closeDlModal() { document.getElementById("dlModal")?.classList.remove("active"); }
@@ -928,7 +1311,6 @@ function renderNextBatch() {
     `).join(""));
 }
 
-function esc(s) { return (s || "").replace(/'/g, "\\'").replace(/"/g, '\\"'); }
 function showAll() { currentFilter = { cat: null, sub: null, search: "" }; document.getElementById("searchInput").value = ""; document.querySelectorAll(".side-btn,.f-chip").forEach(b => b.classList.remove("active")); document.querySelector(".f-chip")?.classList.add("active"); document.querySelectorAll("#catList .side-btn")[0]?.classList.add("active"); navigate("home"); }
 function filterChipHome(c) { currentFilter.cat = c; currentFilter.sub = null; document.querySelectorAll(".f-chip").forEach(b => b.classList.remove("active")); event?.target?.classList.add("active"); navigate("home"); }
 function filterSubHome(s) { currentFilter.sub = s; document.querySelectorAll("#subList .side-btn").forEach(b => b.classList.remove("active")); event?.target?.classList.add("active"); navigate("home"); }
@@ -1027,5 +1409,7 @@ applyTheme();
 applyFontSize();
 renderAuth();
 const il = (S.g("settings") || {}).lang;
-if (il) setLang(il);
+if (il) setLangPro(il);
 </script>
+</body>
+</html>
