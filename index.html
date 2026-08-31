@@ -3,552 +3,158 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TunisianTube — Apprendre en Darija</title>
-<link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="16" fill="%23e70013"/><path d="M26 20v24l20-12z" fill="white"/></svg>'>
+<title>TunisianTube</title>
+<link rel="icon" type="image/png" href="logo.png">
 <script>
-/* Pre-paint theme to avoid flash */
-try{var _s=JSON.parse(localStorage.getItem('tt_settings')||'{}');if(_s.theme)document.documentElement.setAttribute('data-theme',_s.theme);}catch(e){}
+// theme mel fou2, bech maywallich flash abyedh
+try{var s=JSON.parse(localStorage.getItem("tt_settings")||"{}");if(s.theme)document.documentElement.setAttribute("data-theme",s.theme);}catch(e){}
 </script>
-<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700&family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
-<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
-<style>
-/* ============ DESIGN TOKENS ============ */
-:root{
-  --bg:#f4f5f7;--surface:#ffffff;--surface2:#eef0f3;--surface3:#e3e6eb;
-  --text:#0d0f14;--text2:#5b6270;--text3:#9aa1ad;
-  --border:rgba(13,15,20,.09);--border2:rgba(13,15,20,.16);
-  --accent:#e70013;--accent2:#ff3d4e;--accent-soft:rgba(231,0,19,.08);
-  --gold:#f5a623;--red:#e70013;
-  --gradient:linear-gradient(135deg,#e70013 0%,#ff5e3a 100%);
-  --gradient2:linear-gradient(135deg,#e70013,#b8000f);
-  --radius:18px;--radius-sm:12px;--radius-full:999px;
-  --shadow-sm:0 1px 2px rgba(13,15,20,.05),0 4px 14px rgba(13,15,20,.06);
-  --shadow-md:0 8px 30px rgba(13,15,20,.1);
-  --shadow-lg:0 24px 70px rgba(13,15,20,.18);
-  --transition:cubic-bezier(.22,.68,.32,1);
-  --header-h:64px;--side-w:248px;
-}
-[data-theme="dark"]{
-  --bg:#0b0b10;--surface:#121218;--surface2:#1a1a22;--surface3:#232330;
-  --text:#f2f3f7;--text2:#a3a8b8;--text3:#6b7183;
-  --border:rgba(255,255,255,.08);--border2:rgba(255,255,255,.16);
-  --accent:#ff2d3f;--accent2:#ff5e3a;--accent-soft:rgba(255,45,63,.12);
-  --gradient:linear-gradient(135deg,#ff2d3f 0%,#ff7a3d 100%);
-  --gradient2:linear-gradient(135deg,#ff2d3f,#c40818);
-  --shadow-sm:0 1px 2px rgba(0,0,0,.4),0 4px 14px rgba(0,0,0,.3);
-  --shadow-md:0 8px 30px rgba(0,0,0,.45);
-  --shadow-lg:0 24px 70px rgba(0,0,0,.6);
-}
-/* ============ BASE ============ */
-*{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;transition:background .35s,color .35s;overflow-x:hidden}
-body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.5;
-  background:radial-gradient(900px 500px at 85% -10%,rgba(231,0,19,.09),transparent 60%),radial-gradient(700px 420px at -10% 30%,rgba(255,122,61,.06),transparent 60%)}
-.ar,.ar *{font-family:'Cairo','Inter',sans-serif}
-::selection{background:var(--accent);color:#fff}
-::-webkit-scrollbar{width:10px;height:8px}
-::-webkit-scrollbar-track{background:transparent}
-::-webkit-scrollbar-thumb{background:var(--surface3);border-radius:99px;border:2px solid var(--bg)}
-::-webkit-scrollbar-thumb:hover{background:var(--text3)}
-button{font-family:inherit}
-a{color:inherit}
-input,textarea,select{font-family:inherit;color:var(--text)}
-img{display:block}
-svg.lucide{width:18px;height:18px;stroke-width:2}
-@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-@keyframes scaleIn{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:scale(1)}}
-@keyframes blob{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(30px,-24px) scale(1.08)}66%{transform:translate(-24px,18px) scale(.95)}}
-@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-@keyframes shimmer{from{background-position:200% 0}to{background-position:-200% 0}}
-@keyframes spin{to{transform:rotate(360deg)}}
-/* ============ HEADER ============ */
-.hdr{position:fixed;top:0;left:0;right:0;height:var(--header-h);z-index:900;display:flex;align-items:center;gap:16px;padding:0 18px;
-  background:color-mix(in srgb,var(--bg) 78%,transparent);backdrop-filter:blur(18px) saturate(1.4);-webkit-backdrop-filter:blur(18px) saturate(1.4);border-bottom:1px solid var(--border)}
-.hdr-left{display:flex;align-items:center;gap:12px;min-width:0;flex-shrink:0}
-.menu-i{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text2);transition:.25s;border:1px solid transparent}
-.menu-i:hover{background:var(--surface2);color:var(--text)}
-.logo-wrap{display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none}
-.logo-mark{width:34px;height:34px;border-radius:10px;background:var(--gradient);display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(231,0,19,.4);position:relative;overflow:hidden;flex-shrink:0}
-.logo-mark::after{content:"";position:absolute;top:-40%;left:-60%;width:60%;height:180%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.45),transparent);transform:rotate(12deg);animation:shimmer 4s linear infinite;background-size:200% 100%}
-.logo-mark svg{width:18px;height:18px;fill:#fff;stroke:#fff}
-.logo-t{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:19px;letter-spacing:-.4px;white-space:nowrap}
-.logo-r{color:var(--accent)}
-.logo-dot{width:7px;height:7px;border-radius:50%;background:var(--accent);margin-left:2px;animation:fadeIn 1s}
-.search-wrap{flex:1;display:flex;justify-content:center}
-.search-inner{width:min(600px,100%);display:flex;align-items:center;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-full);overflow:hidden;transition:.3s}
-.search-inner:focus-within{border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-soft);background:var(--surface)}
-.search-inner input{flex:1;padding:11px 20px;background:transparent;border:none;outline:none;font-size:14px;color:var(--text)}
-.search-inner input::placeholder{color:var(--text3)}
-.search-btn{width:52px;height:42px;display:flex;align-items:center;justify-content:center;background:transparent;border:none;border-left:1px solid var(--border);color:var(--text2);cursor:pointer;transition:.25s;border-radius:0 var(--radius-full) var(--radius-full) 0}
-.search-btn:hover{background:var(--gradient);color:#fff;border-left-color:transparent}
-.hdr-right{display:flex;align-items:center;gap:9px;flex-shrink:0}
-.vid-count{font-size:12px;font-weight:700;color:var(--text2);background:var(--surface2);border:1px solid var(--border);padding:7px 13px;border-radius:var(--radius-full);white-space:nowrap}
-.icon-btn{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:transparent;border:1px solid transparent;color:var(--text2);cursor:pointer;transition:.25s;position:relative}
-.icon-btn:hover{background:var(--surface2);color:var(--text);border-color:var(--border)}
-.signin-btn{display:inline-flex;align-items:center;gap:8px;padding:9px 18px;border-radius:var(--radius-full);background:var(--gradient);color:#fff;font-weight:700;font-size:13.5px;border:none;cursor:pointer;box-shadow:0 6px 20px rgba(231,0,19,.35);transition:.3s}
-.signin-btn:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(231,0,19,.45)}
-.avatar-btn{width:38px;height:38px;border-radius:50%;border:2px solid var(--accent);cursor:pointer;overflow:hidden;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:14px;background:var(--gradient);transition:.25s;padding:0}
-.avatar-btn:hover{transform:scale(1.06)}
-.avatar-btn img{width:100%;height:100%;object-fit:cover}
-/* ============ DROPDOWN ============ */
-.dropdown{position:fixed;top:calc(var(--header-h) + 6px);right:16px;width:280px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow-lg);z-index:950;padding:8px;display:none;animation:scaleIn .22s var(--transition)}
-.dropdown.open{display:block}
-.dd-header{display:flex;align-items:center;gap:12px;padding:14px 12px;border-bottom:1px solid var(--border);margin-bottom:6px}
-.dd-avatar{width:44px;height:44px;border-radius:50%;background:var(--gradient);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:16px;flex-shrink:0;overflow:hidden}
-.dd-avatar img{width:100%;height:100%;object-fit:cover}
-.dd-name{font-weight:800;font-size:14.5px}
-.dd-email{font-size:12px;color:var(--text2);margin-top:2px;word-break:break-all}
-.dd-item{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:10px;cursor:pointer;font-size:13.5px;font-weight:600;color:var(--text);transition:.2s}
-.dd-item svg{color:var(--text2);width:17px;height:17px}
-.dd-item:hover{background:var(--surface2)}
-.dd-item:hover svg{color:var(--accent)}
-.dd-item.danger{color:var(--accent)}
-.dd-item.danger svg{color:var(--accent)}
-.dd-sep{height:1px;background:var(--border);margin:6px 4px}
-/* ============ OVERLAY / AUTH ============ */
-.ov{position:fixed;inset:0;background:rgba(5,5,10,.65);backdrop-filter:blur(8px);z-index:1000;display:none;align-items:center;justify-content:center;padding:20px}
-.ov.active{display:flex;animation:fadeIn .25s}
-.ov-box{width:100%;max-width:420px;background:var(--surface);border:1px solid var(--border);border-radius:22px;box-shadow:var(--shadow-lg);overflow:hidden;animation:scaleIn .3s var(--transition);max-height:92vh;overflow-y:auto}
-.ov-head{display:flex;align-items:center;justify-content:space-between;padding:22px 24px 0}
-.ov-head h2{font-size:20px;font-weight:800;font-family:'Space Grotesk',sans-serif}
-.ov-close{width:32px;height:32px;border-radius:50%;background:var(--surface2);border:none;color:var(--text2);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:.25s}
-.ov-close:hover{background:var(--accent);color:#fff;transform:rotate(90deg)}
-.ov-body{padding:20px 24px 26px}
-.avatar-upload{width:84px;height:84px;border-radius:50%;margin:6px auto 20px;background:var(--surface2);border:2px dashed var(--border2);display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;overflow:hidden;color:var(--text3);transition:.25s;font-weight:800;font-size:22px}
-.avatar-upload:hover{border-color:var(--accent);color:var(--accent)}
-.avatar-upload input{position:absolute;inset:0;opacity:0;cursor:pointer}
-.avatar-upload img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
-.form-group{margin-bottom:14px}
-.form-label{display:block;font-size:12px;font-weight:700;color:var(--text2);margin-bottom:6px;text-transform:uppercase;letter-spacing:.4px}
-.form-input{width:100%;padding:12px 15px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);font-size:14px;color:var(--text);outline:none;transition:.25s}
-.form-input:focus{border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-soft);background:var(--surface)}
-.form-textarea{width:100%;padding:12px 15px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);font-size:14px;color:var(--text);outline:none;min-height:90px;resize:vertical;transition:.25s}
-.form-textarea:focus{border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-soft)}
-.form-select{padding:9px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;font-size:13.5px;color:var(--text);outline:none;cursor:pointer}
-.form-error{color:var(--accent);font-size:12.5px;font-weight:600;min-height:18px;margin-bottom:8px}
-.form-btn{width:100%;padding:13px;border-radius:var(--radius-sm);font-size:14.5px;font-weight:700;cursor:pointer;border:none;transition:.3s}
-.btn-primary{background:var(--gradient);color:#fff;box-shadow:0 8px 22px rgba(231,0,19,.3)}
-.btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(231,0,19,.42)}
-.form-switch{text-align:center;font-size:13px;color:var(--text2);margin-top:16px;cursor:pointer}
-.form-switch b{color:var(--accent)}
-/* ============ DOWNLOAD MODAL ============ */
-.dl-modal{display:none;position:fixed;inset:0;background:rgba(5,5,10,.7);backdrop-filter:blur(6px);z-index:1100;justify-content:center;align-items:center;padding:20px}
-.dl-modal.active{display:flex;animation:fadeIn .3s}
-.dl-box{background:var(--surface);border:1px solid var(--border);border-radius:22px;padding:30px;width:100%;max-width:430px;text-align:center;position:relative;box-shadow:var(--shadow-lg);animation:scaleIn .3s var(--transition)}
-.dl-close{position:absolute;right:16px;top:16px;width:30px;height:30px;border-radius:50%;background:var(--surface2);border:none;color:var(--text2);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.25s}
-.dl-close:hover{background:var(--accent);color:#fff;transform:rotate(90deg)}
-.dl-icon{width:70px;height:70px;border-radius:22px;background:var(--accent-soft);color:var(--accent);display:flex;align-items:center;justify-content:center;margin:0 auto 16px}
-.dl-icon svg{width:30px;height:30px}
-.dl-title{font-size:19px;font-weight:800;margin-bottom:6px;font-family:'Space Grotesk',sans-serif}
-.dl-desc{font-size:13px;color:var(--text2);margin-bottom:22px}
-.dl-options{display:flex;flex-direction:column;gap:10px}
-.dl-btn{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-radius:var(--radius-sm);border:1px solid var(--border);color:var(--text);text-decoration:none;font-size:13.5px;font-weight:600;background:var(--surface2);transition:.3s}
-.dl-btn span{display:flex;align-items:center;gap:10px}
-.dl-btn:hover{background:var(--surface3);transform:translateY(-2px)}
-.dl-btn.best{background:var(--gradient);color:#fff;border:none;box-shadow:0 6px 18px rgba(231,0,19,.35)}
-.dl-btn.best:hover{filter:brightness(1.08)}
-/* ============ LAYOUT ============ */
-.layout{display:flex;padding-top:var(--header-h);position:relative;z-index:1}
-.side{position:fixed;top:var(--header-h);left:0;bottom:0;width:var(--side-w);padding:18px 14px 30px;overflow-y:auto;background:transparent;z-index:800;transition:transform .35s var(--transition)}
-.side h4{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1.2px;color:var(--text3);padding:10px 12px 8px}
-.side-link{display:flex;align-items:center;gap:12px;width:100%;padding:9px 12px;border-radius:11px;background:transparent;border:none;color:var(--text);font-size:13.5px;font-weight:600;cursor:pointer;transition:.2s;text-align:left}
-.side-link svg{width:17px;height:17px;color:var(--text2);flex-shrink:0}
-.side-link:hover{background:var(--surface2)}
-.side-link:hover svg{color:var(--accent)}
-.side-link.active{background:var(--accent-soft);color:var(--accent)}
-.side-link.active svg{color:var(--accent)}
-.side-count{margin-left:auto;font-size:11px;font-weight:700;color:var(--text3);background:var(--surface2);padding:2px 8px;border-radius:99px}
-.side-foot{margin-top:18px;padding:14px 12px;font-size:11px;color:var(--text3);line-height:1.6;border-top:1px solid var(--border)}
-.side-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:790;backdrop-filter:blur(2px)}
-.main{flex:1;min-width:0;margin-left:var(--side-w);padding:22px 26px 60px;transition:margin .35s var(--transition)}
-body.sidebar-collapsed .main{margin-left:0}
-body.sidebar-collapsed .side{transform:translateX(-100%)}
-/* ============ PAGES ============ */
-.page{display:none}
-.page.active{display:block;animation:fadeIn .35s var(--transition)}
-.back-btn{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;margin-bottom:20px;font-size:13.5px;font-weight:600;border-radius:var(--radius-sm);background:var(--surface);color:var(--text);border:1px solid var(--border);transition:.3s;cursor:pointer}
-.back-btn:hover{background:var(--surface2);transform:translateX(-4px);border-color:var(--border2)}
-.page-header{display:flex;align-items:center;gap:16px;margin-bottom:24px;padding-bottom:18px;border-bottom:1px solid var(--border)}
-.page-header h1{font-size:24px;font-weight:800;font-family:'Space Grotesk',sans-serif;letter-spacing:-.4px}
-.page-icon{width:54px;height:54px;border-radius:18px;background:var(--gradient);display:flex;align-items:center;justify-content:center;color:#fff;box-shadow:0 8px 22px rgba(231,0,19,.35);flex-shrink:0}
-.page-icon svg{width:24px;height:24px}
-.page-sub{font-size:13px;color:var(--text2);margin-top:3px;font-weight:500}
-/* ============ HERO ============ */
-.hero{position:relative;border-radius:26px;overflow:hidden;background:var(--surface);border:1px solid var(--border);margin-bottom:26px;padding:44px 42px 40px;isolation:isolate}
-.hero-blob1,.hero-blob2,.hero-blob3{position:absolute;border-radius:50%;filter:blur(70px);z-index:-1;opacity:.55}
-.hero-blob1{width:420px;height:420px;background:radial-gradient(circle,#e70013,transparent 65%);top:-180px;right:-90px;animation:blob 14s ease-in-out infinite}
-.hero-blob2{width:320px;height:320px;background:radial-gradient(circle,#ff7a3d,transparent 65%);bottom:-160px;left:24%;animation:blob 18s ease-in-out infinite reverse}
-.hero-blob3{width:220px;height:220px;background:radial-gradient(circle,#7c3aed,transparent 65%);top:20%;left:-100px;opacity:.3;animation:blob 16s ease-in-out infinite}
-[data-theme="dark"] .hero{background:linear-gradient(160deg,#16101a,#101017 60%)}
-.hero-kicker{display:inline-flex;align-items:center;gap:8px;font-size:11.5px;font-weight:800;letter-spacing:1.6px;text-transform:uppercase;color:var(--accent);background:var(--accent-soft);border:1px solid color-mix(in srgb,var(--accent) 25%,transparent);padding:8px 15px;border-radius:var(--radius-full);margin-bottom:18px}
-.hero-kicker svg{width:14px;height:14px}
-.hero h1{font-size:clamp(30px,4.4vw,52px);font-weight:900;line-height:1.08;letter-spacing:-1.5px;font-family:'Space Grotesk',sans-serif;max-width:640px}
-.hero h1 .grad{background:var(--gradient);-webkit-background-clip:text;background-clip:text;color:transparent}
-.hero h1 .ar{font-family:'Cairo',sans-serif}
-.hero p{margin-top:16px;font-size:15.5px;color:var(--text2);max-width:520px;line-height:1.65}
-.hero-cta{display:flex;gap:12px;margin-top:26px;flex-wrap:wrap;align-items:center}
-.hero-btn{display:inline-flex;align-items:center;gap:9px;padding:13px 24px;border-radius:var(--radius-full);font-size:14px;font-weight:700;cursor:pointer;border:none;transition:.3s}
-.hero-btn.primary{background:var(--gradient);color:#fff;box-shadow:0 10px 30px rgba(231,0,19,.4)}
-.hero-btn.primary:hover{transform:translateY(-3px);box-shadow:0 16px 38px rgba(231,0,19,.5)}
-.hero-btn.ghost{background:var(--surface2);color:var(--text);border:1px solid var(--border)}
-.hero-btn.ghost:hover{background:var(--surface3)}
-.hero-stats{display:flex;gap:26px;margin-top:32px;flex-wrap:wrap}
-.hstat b{font-size:22px;font-weight:900;font-family:'Space Grotesk',sans-serif;display:block;letter-spacing:-.5px}
-.hstat b i{font-style:normal;color:var(--accent)}
-.hstat span{font-size:12px;color:var(--text3);font-weight:600}
-.hero-ring{position:absolute;right:44px;top:50%;transform:translateY(-50%);width:190px;height:190px;border-radius:50%;border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;z-index:-1}
-.hero-ring::before{content:"";position:absolute;inset:22px;border-radius:50%;border:1px dashed var(--border2);animation:spin 30s linear infinite}
-.hero-ring .core{width:96px;height:96px;border-radius:50%;background:var(--gradient);display:flex;align-items:center;justify-content:center;box-shadow:0 20px 50px rgba(231,0,19,.45)}
-.hero-ring .core svg{width:38px;height:38px;color:#fff;fill:#fff}
-.marquee-wrap{overflow:hidden;margin:-6px 0 24px;mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
-.marquee{display:flex;gap:10px;width:max-content;animation:marquee 28s linear infinite}
-.mq-chip{display:inline-flex;align-items:center;gap:7px;padding:8px 16px;border-radius:var(--radius-full);background:var(--surface);border:1px solid var(--border);font-size:12.5px;font-weight:700;color:var(--text2);white-space:nowrap}
-.mq-chip svg{width:13px;height:13px;color:var(--accent)}
-/* ============ FILTER BAR ============ */
-.filter-bar{display:flex;gap:9px;overflow-x:auto;padding:4px 2px 16px;scrollbar-width:none;position:sticky;top:var(--header-h);z-index:500;background:linear-gradient(var(--bg) 78%,transparent)}
-.filter-bar::-webkit-scrollbar{display:none}
-.chip{flex-shrink:0;padding:9px 18px;border-radius:var(--radius-full);background:var(--surface);border:1px solid var(--border);color:var(--text);font-size:13px;font-weight:700;cursor:pointer;transition:.28s var(--transition);white-space:nowrap;display:inline-flex;align-items:center;gap:7px}
-.chip svg{width:14px;height:14px}
-.chip:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-2px)}
-.chip.active{background:var(--gradient);color:#fff;border-color:transparent;box-shadow:0 6px 18px rgba(231,0,19,.35)}
-/* ============ GRID & CARDS ============ */
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:22px 20px}
-.card{background:transparent;border-radius:var(--radius);cursor:pointer;transition:transform .35s var(--transition)}
-.card:hover{transform:translateY(-5px)}
-.thumb{position:relative;aspect-ratio:16/9;border-radius:var(--radius);overflow:hidden;background:var(--surface2);box-shadow:var(--shadow-sm)}
-.thumb img{width:100%;height:100%;object-fit:cover;transition:transform .5s var(--transition)}
-.card:hover .thumb img{transform:scale(1.06)}
-.thumb::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(0,0,0,.45));opacity:0;transition:.35s}
-.card:hover .thumb::after{opacity:1}
-.thumb-play{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;transform:scale(.8);transition:.35s var(--transition);z-index:2}
-.card:hover .thumb-play{opacity:1;transform:scale(1)}
-.thumb-play span{width:54px;height:54px;border-radius:50%;background:rgba(231,0,19,.92);display:flex;align-items:center;justify-content:center;box-shadow:0 10px 30px rgba(0,0,0,.4);backdrop-filter:blur(4px)}
-.thumb-play svg{width:22px;height:22px;color:#fff;fill:#fff;margin-left:2px}
-.dur{position:absolute;right:10px;bottom:10px;background:rgba(10,10,14,.85);color:#fff;font-size:11px;font-weight:700;padding:4px 8px;border-radius:7px;z-index:3;backdrop-filter:blur(4px);font-variant-numeric:tabular-nums}
-.cat-chip{position:absolute;left:10px;top:10px;background:rgba(10,10,14,.78);backdrop-filter:blur(6px);color:#fff;font-size:10.5px;font-weight:700;padding:5px 10px;border-radius:8px;z-index:3;display:flex;align-items:center;gap:5px}
-.cat-chip svg{width:11px;height:11px}
-.card-body{display:flex;gap:12px;padding:13px 6px 4px}
-.card-avatar{width:38px;height:38px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:14px;box-shadow:0 4px 12px rgba(0,0,0,.25)}
-.card-info{min-width:0;flex:1}
-.card-title{font-size:14.5px;font-weight:700;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:5px}
-.card-title .ar{font-size:15px}
-.card-ch{font-size:12.5px;color:var(--text2);font-weight:600;display:flex;align-items:center;gap:5px}
-.card-ch svg{width:13px;height:13px;color:var(--accent)}
-.card-meta{font-size:12px;color:var(--text3);margin-top:3px;font-weight:500}
-.card-topic{display:inline-block;margin-top:7px;font-size:10.5px;font-weight:800;color:var(--accent);background:var(--accent-soft);padding:3px 9px;border-radius:6px;letter-spacing:.3px}
-/* skeleton */
-.skel{border-radius:var(--radius);overflow:hidden}
-.skel .sk-t{aspect-ratio:16/9;border-radius:var(--radius)}
-.skel .sk-l{height:14px;border-radius:7px;margin-top:12px}
-.sk-t,.sk-l{background:linear-gradient(100deg,var(--surface2) 40%,var(--surface3) 50%,var(--surface2) 60%);background-size:200% 100%;animation:shimmer 1.4s linear infinite}
-/* sentinel */
-#sentinel{height:10px}
-.load-spin{display:flex;justify-content:center;padding:26px}
-.load-spin .sp{width:26px;height:26px;border-radius:50%;border:3px solid var(--surface3);border-top-color:var(--accent);animation:spin .8s linear infinite}
-.empty-state{text-align:center;padding:80px 20px;color:var(--text2)}
-.empty-state .e-i{width:80px;height:80px;border-radius:26px;background:var(--surface2);display:flex;align-items:center;justify-content:center;margin:0 auto 18px;color:var(--text3)}
-.empty-state .e-i svg{width:32px;height:32px}
-.empty-state h2{font-size:20px;font-weight:800;color:var(--text);margin-bottom:6px}
-.empty-state p{font-size:13.5px}
-/* ============ VIDEO PAGE ============ */
-.video-page-container{display:grid;grid-template-columns:1fr 380px;gap:24px;max-width:1600px;margin:0 auto}
-.video-main{background:var(--surface);border-radius:var(--radius);overflow:hidden;border:1px solid var(--border);box-shadow:var(--shadow-md)}
-.video-main .back-btn{margin:16px 20px 4px}
-.video-player-large{width:100%;aspect-ratio:16/9;background:#000;position:relative}
-.video-player-large iframe{width:100%;height:100%;border:none;position:absolute;inset:0}
-.video-info-large{padding:22px 26px 26px}
-.video-title-large{font-size:21px;font-weight:800;line-height:1.32;margin-bottom:18px;letter-spacing:-.3px}
-.video-title-large .ar{font-family:'Cairo',sans-serif}
-.channel-row{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:15px;padding-bottom:20px;border-bottom:1px solid var(--border)}
-.channel-info{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-.channel-avatar{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:16px;box-shadow:0 6px 16px rgba(231,0,19,.3);flex-shrink:0}
-.channel-details h3{font-size:15px;font-weight:800}
-.channel-details p{font-size:12px;color:var(--text2);margin-top:2px}
-.subscribe-btn{padding:11px 22px;border-radius:var(--radius-full);background:var(--gradient2);color:#fff;font-size:13px;font-weight:800;box-shadow:0 6px 18px rgba(231,0,19,.35);transition:.3s;display:inline-flex;align-items:center;gap:7px;border:none;cursor:pointer}
-.subscribe-btn:hover{transform:translateY(-2px)}
-.subscribe-btn.subscribed{background:var(--surface3);color:var(--text);box-shadow:none}
-.subscribe-btn.subscribed svg{color:var(--accent)}
-.video-actions-row{display:flex;gap:9px;flex-wrap:wrap}
-.action-btn{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:var(--radius-full);background:var(--surface2);border:1px solid var(--border);color:var(--text);font-size:13px;font-weight:700;transition:.3s;cursor:pointer}
-.action-btn svg{width:15px;height:15px}
-.action-btn:hover{background:var(--surface3);transform:translateY(-2px)}
-.action-btn.liked{color:var(--accent);border-color:color-mix(in srgb,var(--accent) 40%,transparent);background:var(--accent-soft)}
-.action-btn.liked svg{fill:var(--accent)}
-.video-description{background:var(--surface2);padding:18px 20px;border-radius:var(--radius-sm);margin-top:20px;font-size:13.5px;line-height:1.7;border-left:3px solid var(--accent);color:var(--text)}
-.video-description .meta-line{display:block;font-size:12px;color:var(--text3);margin-bottom:8px;font-weight:600}
-.tag{background:var(--accent-soft);color:var(--accent);padding:3px 9px;border-radius:6px;font-size:11px;font-weight:800;margin-right:8px;display:inline-block;margin-top:8px}
-/* related */
-.related-videos h3{font-size:15px;font-weight:800;margin-bottom:16px;display:flex;align-items:center;gap:9px;font-family:'Space Grotesk',sans-serif}
-.related-videos h3 svg{width:17px;height:17px;color:var(--accent)}
-.related-item{display:flex;gap:11px;margin-bottom:8px;cursor:pointer;transition:.3s;padding:8px;border-radius:var(--radius-sm)}
-.related-item:hover{background:var(--surface);transform:translateX(4px);box-shadow:var(--shadow-sm)}
-.related-thumb{width:140px;aspect-ratio:16/9;border-radius:10px;overflow:hidden;flex-shrink:0;background:var(--surface2);position:relative}
-.related-thumb img{width:100%;height:100%;object-fit:cover;transition:transform .4s}
-.related-item:hover .related-thumb img{transform:scale(1.06)}
-.related-thumb .dur{right:5px;bottom:5px;font-size:10px;padding:2px 6px}
-.related-info{flex:1;min-width:0;padding-top:2px}
-.related-title{font-size:12.5px;font-weight:700;line-height:1.38;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.related-ch{font-size:11px;color:var(--text2);margin-top:4px;font-weight:600}
-.related-cat{font-size:10px;color:var(--accent);font-weight:800;margin-top:4px;background:var(--accent-soft);padding:2px 7px;border-radius:5px;display:inline-block}
-/* comments */
-.comments-large{margin-top:26px;border-top:1px solid var(--border);padding-top:22px}
-.cmt-head{display:flex;align-items:center;gap:10px;font-size:16px;font-weight:800;margin-bottom:20px;font-family:'Space Grotesk',sans-serif}
-.cmt-head span{color:var(--text3);font-size:13px;font-weight:600}
-.cmt-form-large{display:flex;gap:14px;margin-bottom:24px}
-.cmt-avatar-large{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;flex-shrink:0;overflow:hidden;font-size:14px}
-.cmt-avatar-large img{width:100%;height:100%;object-fit:cover}
-.cmt-input-wrap-large{flex:1}
-.cmt-input-large{width:100%;padding:10px 2px;border:none;border-bottom:1.5px solid var(--border);background:transparent;color:var(--text);font-size:14px;transition:.3s;outline:none}
-.cmt-input-large:focus{border-bottom-color:var(--accent)}
-.cmt-btns-large{display:flex;justify-content:flex-end;margin-top:10px}
-.cmt-submit-large{padding:9px 22px;border-radius:var(--radius-full);background:var(--gradient);color:#fff;font-size:13px;font-weight:700;border:none;cursor:pointer;transition:.3s}
-.cmt-submit-large:hover{transform:translateY(-2px)}
-.cmt-list-large{display:flex;flex-direction:column;gap:2px}
-.cmt-item-large{display:flex;gap:12px;padding:14px 6px;border-bottom:1px solid var(--surface2);position:relative;animation:fadeIn .3s}
-.cmt-user-large{font-weight:800;font-size:13px;display:flex;align-items:center;gap:8px}
-.cmt-text-large{font-size:13.5px;margin-top:5px;line-height:1.55;color:var(--text)}
-.cmt-time-large{font-size:11px;color:var(--text3);font-weight:500}
-.cmt-del-large{position:absolute;right:4px;top:12px;color:var(--text3);background:none;border:none;cursor:pointer;padding:6px;border-radius:8px;opacity:0;transition:.2s;display:flex}
-.cmt-item-large:hover .cmt-del-large{opacity:1}
-.cmt-del-large:hover{color:var(--accent);background:var(--accent-soft)}
-.cmt-del-large svg{width:14px;height:14px}
-.cmt-login-large{font-size:13.5px;color:var(--text2);padding:18px;background:var(--surface2);border-radius:var(--radius-sm);text-align:center;margin-bottom:20px}
-.cmt-login-large a{color:var(--accent);cursor:pointer;font-weight:800}
-/* ============ SETTINGS PRO ============ */
-.settings-container-pro{max-width:980px;margin:10px auto;background:var(--surface);border:1px solid var(--border);border-radius:22px;overflow:hidden;box-shadow:var(--shadow-md)}
-.settings-header-pro{padding:26px 28px;background:var(--surface2);border-bottom:1px solid var(--border);position:relative;overflow:hidden}
-.settings-header-pro::after{content:"";position:absolute;right:-60px;top:-90px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,var(--accent-soft),transparent 70%)}
-.settings-header-pro h2{font-size:24px;font-weight:800;display:flex;align-items:center;gap:12px;font-family:'Space Grotesk',sans-serif}
-.settings-header-pro h2 svg{color:var(--accent)}
-.settings-header-pro p{font-size:13.5px;color:var(--text2);margin-top:6px}
-.settings-layout-pro{display:grid;grid-template-columns:240px 1fr;min-height:540px}
-.settings-sidebar-pro{background:var(--surface2);border-right:1px solid var(--border);padding:18px 10px;display:flex;flex-direction:column;gap:5px}
-.tab-btn-pro{background:transparent;color:var(--text2);border:none;text-align:left;padding:12px 15px;border-radius:11px;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:12px;transition:.2s}
-.tab-btn-pro svg{width:17px;height:17px}
-.tab-btn-pro:hover{background:var(--surface3);color:var(--text)}
-.tab-btn-pro.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(231,0,19,.3)}
-.tab-btn-pro.danger.active{background:#7f1d1d}
-.settings-content-pro{padding:30px 32px}
-.settings-pane-pro{display:none;animation:fadeIn .3s}
-.settings-pane-pro.active{display:block}
-.settings-pane-pro h3{font-size:19px;font-weight:800;margin-bottom:24px;padding-bottom:12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;font-family:'Space Grotesk',sans-serif}
-.settings-pane-pro h3 svg{color:var(--accent);width:19px;height:19px}
-.avatar-upload-box-pro{display:flex;align-items:center;gap:22px;margin-bottom:26px;padding:20px;background:var(--surface2);border-radius:var(--radius-sm);border:1px solid var(--border);flex-wrap:wrap}
-.avatar-preview-wrapper-pro{width:82px;height:82px;border-radius:50%;background:var(--surface3);border:2px solid var(--accent);display:flex;align-items:center;justify-content:center;overflow:hidden;color:#fff;font-weight:800;font-size:24px;flex-shrink:0}
-.avatar-preview-wrapper-pro img{width:100%;height:100%;object-fit:cover}
-.avatar-actions-pro{display:flex;flex-direction:column;gap:9px;align-items:flex-start}
-.btn-secondary-pro{background:var(--surface3);color:var(--text);padding:9px 17px;font-size:13px;font-weight:700;border-radius:var(--radius-sm);cursor:pointer;display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border);transition:.25s}
-.btn-secondary-pro:hover{border-color:var(--accent);color:var(--accent)}
-.btn-text-pro{font-size:12.5px;color:var(--text2);background:transparent;border:none;cursor:pointer;font-weight:700;display:inline-flex;align-items:center;gap:6px}
-.btn-text-pro:hover{color:var(--accent)}
-.setting-row-pro{display:flex;align-items:center;justify-content:space-between;padding:17px 0;border-bottom:1px solid var(--border);gap:14px}
-.setting-row-pro:last-child{border-bottom:none}
-.setting-info-pro{flex:1;min-width:0}
-.setting-title-pro{font-size:15px;font-weight:700;display:flex;align-items:center;gap:10px}
-.setting-title-pro svg{width:16px;height:16px;color:var(--accent)}
-.setting-desc-pro{font-size:12.5px;color:var(--text2);margin-top:3px}
-.toggle{width:50px;height:28px;border-radius:99px;background:var(--surface3);position:relative;cursor:pointer;transition:.3s;flex-shrink:0;border:1px solid var(--border)}
-.toggle::after{content:"";position:absolute;top:2px;left:2px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.25);transition:.3s var(--transition)}
-.toggle.on{background:var(--gradient);border-color:transparent}
-.toggle.on::after{left:24px}
-.danger-box-pro{display:flex;justify-content:space-between;align-items:center;padding:18px;background:rgba(231,0,19,.05);border:1px solid rgba(231,0,19,.18);border-radius:var(--radius-sm);margin-bottom:14px;gap:15px}
-.danger-box-pro h4{font-size:14.5px;font-weight:800}
-.danger-box-pro p{font-size:12px;color:var(--text2);margin-top:4px}
-.btn-danger-pro{background:var(--red);color:#fff;font-size:13px;font-weight:800;padding:10px 18px;border-radius:var(--radius-sm);cursor:pointer;border:none;white-space:nowrap;transition:.25s}
-.btn-danger-pro:hover{filter:brightness(1.1);transform:translateY(-1px)}
-.btn-danger-extreme-pro{background:#7f1d1d;color:#fca5a5;font-size:13px;font-weight:800;padding:10px 18px;border-radius:var(--radius-sm);cursor:pointer;border:1px solid #dc2626;white-space:nowrap;transition:.25s}
-.btn-danger-extreme-pro:hover{background:#991b1b;color:#fff}
-/* ============ TOASTS ============ */
-.toasts{position:fixed;bottom:24px;right:24px;z-index:2000;display:flex;flex-direction:column;gap:10px;max-width:340px}
-.toast{display:flex;align-items:center;gap:11px;background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:14px;padding:13px 17px;font-size:13.5px;font-weight:600;box-shadow:var(--shadow-lg);animation:toastIn .35s var(--transition)}
-.toast svg{width:17px;height:17px;color:var(--accent);flex-shrink:0}
-@keyframes toastIn{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:none}}
-.toast.out{animation:toastOut .3s forwards}
-@keyframes toastOut{to{opacity:0;transform:translateX(40px)}}
-/* footer */
-.foot{margin-top:54px;padding-top:22px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;color:var(--text3);font-size:12px;font-weight:500}
-.foot b{color:var(--text2)}
-.foot .ar{font-size:13px}
-/* ============ RESPONSIVE ============ */
-@media(max-width:1280px){.hero-ring{display:none}}
-@media(max-width:1150px){
-  .main{margin-left:0}
-  .side{transform:translateX(-105%);background:var(--surface);border-right:1px solid var(--border);box-shadow:var(--shadow-lg)}
-  body.sidebar-open .side{transform:translateX(0)}
-  body.sidebar-open .side-backdrop{display:block}
-  body.sidebar-collapsed .side{transform:translateX(-105%)}
-}
-@media(max-width:1024px){.video-page-container{grid-template-columns:1fr}.related-videos{margin-top:4px}}
-@media(max-width:860px){
-  .search-wrap{position:absolute;left:0;right:0;top:var(--header-h);padding:10px 14px;background:var(--bg);border-bottom:1px solid var(--border);display:none}
-  body.search-open .search-wrap{display:flex;animation:fadeIn .25s}
-  .vid-count{display:none}
-  .logo-t{font-size:17px}
-  body{padding-bottom:0}
-  .main{padding:16px 14px 50px}
-  body.search-open .layout{padding-top:calc(var(--header-h) + 62px)}
-}
-@media(max-width:768px){
-  .hero{padding:30px 24px}
-  .hero-stats{gap:18px}
-  .video-info-large{padding:16px 18px 20px}
-  .video-title-large{font-size:17.5px}
-  .channel-row{flex-direction:column;align-items:flex-start}
-  .video-actions-row{width:100%;overflow-x:auto;flex-wrap:nowrap;padding-bottom:4px}
-  .action-btn{padding:9px 15px;font-size:12px;white-space:nowrap}
-  .settings-layout-pro{grid-template-columns:1fr}
-  .settings-sidebar-pro{flex-direction:row;overflow-x:auto;border-right:none;border-bottom:1px solid var(--border)}
-  .tab-btn-pro{white-space:nowrap;font-size:12.5px}
-  .settings-content-pro{padding:22px 18px}
-  .avatar-upload-box-pro{flex-direction:column;text-align:center;align-items:center}
-  .avatar-actions-pro{align-items:center}
-  .danger-box-pro{flex-direction:column;text-align:center}
-  .dl-box{padding:24px 20px}
-  .related-thumb{width:108px}
-  .grid{grid-template-columns:1fr 1fr;gap:16px 12px}
-  .card-title{font-size:13px}
-}
-@media(max-width:560px){.grid{grid-template-columns:1fr}.dropdown{right:8px;width:calc(100vw - 16px)}.signin-btn span{display:none}.signin-btn{padding:10px 12px}.hdr{gap:10px;padding:0 12px}}
-@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
-</style>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@600;700&family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<!-- ================= HEADER ================= -->
 <header class="hdr">
   <div class="hdr-left">
-    <button class="menu-i" onclick="toggleSidebar()" aria-label="Menu"><i data-lucide="menu"></i></button>
+    <button class="menu-i" onclick="toggleSidebar()"><i class="fa-solid fa-bars"></i></button>
     <div class="logo-wrap" onclick="navigate('home')">
-      <div class="logo-mark"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></div>
-      <span class="logo-t">Tunisian<span class="logo-r">Tube</span><span class="logo-dot"></span></span>
+      <img src="logo.png" alt="logo" class="logo-img" onerror="this.style.display='none'">
+      <span class="logo-t">Tunisian<span class="logo-r">Tube</span></span>
     </div>
   </div>
   <div class="search-wrap">
     <div class="search-inner">
-      <input type="text" id="searchInput" data-i18n-ph="search" placeholder="Search courses..." oninput="onSearchInput()" onkeydown="if(event.key==='Enter')navigate('home')">
-      <button class="search-btn" onclick="navigate('home')" aria-label="Search"><i data-lucide="search"></i></button>
+      <input type="text" id="searchInput" placeholder="Rechercher des cours..." oninput="onSearchInput()" onkeydown="if(event.key==='Enter')navigate('home')">
+      <button class="search-btn" onclick="navigate('home')"><i class="fa-solid fa-magnifying-glass"></i></button>
     </div>
   </div>
   <div class="hdr-right">
     <span class="vid-count" id="vCount">0 cours</span>
-    <button class="icon-btn" onclick="toggleMobileSearch()" style="display:none" id="mSearchBtn"><i data-lucide="search"></i></button>
-    <button class="icon-btn" onclick="toggleTheme()" id="themeBtn" aria-label="Theme"><i data-lucide="sun"></i></button>
-    <button class="icon-btn" onclick="navigate('settings')" aria-label="Settings"><i data-lucide="settings"></i></button>
+    <button class="icon-btn" onclick="toggleMobileSearch()" id="mSearchBtn" style="display:none"><i class="fa-solid fa-magnifying-glass"></i></button>
+    <button class="icon-btn" onclick="toggleTheme()" id="themeBtn"><i class="fa-solid fa-sun"></i></button>
+    <button class="icon-btn" onclick="navigate('settings')"><i class="fa-solid fa-gear"></i></button>
     <div id="authArea"></div>
   </div>
 </header>
 
-<!-- ================= USER DROPDOWN ================= -->
 <div class="dropdown" id="dropdown">
   <div class="dd-header">
     <div class="dd-avatar" id="ddAvatar">U</div>
-    <div class="dd-info"><div class="dd-name" id="ddName">User</div><div class="dd-email" id="ddEmail">email</div></div>
+    <div><div class="dd-name" id="ddName">User</div><div class="dd-email" id="ddEmail"></div></div>
   </div>
-  <div class="dd-item" onclick="goSettings('channel')"><i data-lucide="tv"></i> <span data-i18n="mychannel">My Channel</span></div>
-  <div class="dd-item" onclick="goSettings('account')"><i data-lucide="user-cog"></i> <span data-i18n="accset">Account Settings</span></div>
-  <div class="dd-item" onclick="navigate('settings')"><i data-lucide="settings"></i> <span data-i18n="appset">App Settings</span></div>
+  <div class="dd-item" onclick="goSettings('channel')"><i class="fa-solid fa-tv"></i> <span data-i18n="mychannel">Ma Chaîne</span></div>
+  <div class="dd-item" onclick="goSettings('account')"><i class="fa-solid fa-user-gear"></i> <span data-i18n="accset">Paramètres du compte</span></div>
+  <div class="dd-item" onclick="navigate('settings')"><i class="fa-solid fa-gear"></i> <span data-i18n="appset">Paramètres de l'app</span></div>
   <div class="dd-sep"></div>
-  <div class="dd-item" onclick="navigate('liked')"><i data-lucide="heart"></i> <span data-i18n="liked">Liked Videos</span></div>
-  <div class="dd-item" onclick="navigate('subscriptions')"><i data-lucide="bell"></i> <span data-i18n="subs_p">Subscriptions</span></div>
-  <div class="dd-item" onclick="navigate('history')"><i data-lucide="history"></i> <span data-i18n="hist">Watch History</span></div>
+  <div class="dd-item" onclick="navigate('liked')"><i class="fa-solid fa-heart"></i> <span data-i18n="liked">Vidéos aimées</span></div>
+  <div class="dd-item" onclick="navigate('subscriptions')"><i class="fa-solid fa-bell"></i> <span data-i18n="subs_p">Abonnements</span></div>
+  <div class="dd-item" onclick="navigate('history')"><i class="fa-solid fa-clock-rotate-left"></i> <span data-i18n="hist">Historique</span></div>
   <div class="dd-sep"></div>
-  <div class="dd-item danger" onclick="logOut()"><i data-lucide="log-out"></i> <span data-i18n="out">Sign Out</span></div>
+  <div class="dd-item danger" onclick="logOut()"><i class="fa-solid fa-right-from-bracket"></i> <span data-i18n="out">Se déconnecter</span></div>
 </div>
 
-<!-- ================= AUTH MODAL ================= -->
 <div class="ov" id="authOv">
   <div class="ov-box">
-    <div class="ov-head"><h2 id="authTitle">Create Account</h2><button class="ov-close" onclick="closeAuth()"><i data-lucide="x"></i></button></div>
+    <div class="ov-head">
+      <h2 id="authTitle">Create Account</h2>
+      <button class="ov-close" onclick="closeAuth()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
     <div class="ov-body">
-      <div class="avatar-upload" id="signupAvatar"><i data-lucide="camera"></i><input type="file" accept="image/*" onchange="previewAvatar(event)"></div>
-      <div class="form-group" id="nameGroup"><label class="form-label" data-i18n="dname">Display Name</label><input class="form-input" id="authName" placeholder="Yasmine Ben Ali"></div>
-      <div class="form-group"><label class="form-label">Email</label><input class="form-input" id="authEmail" type="email" placeholder="email@example.tn"></div>
-      <div class="form-group"><label class="form-label" data-i18n="pass">Password</label><input class="form-input" id="authPass" type="password" placeholder="Min 6 characters"></div>
+      <div class="avatar-upload" id="signupAvatar">
+        <i class="fa-solid fa-camera"></i>
+        <input type="file" accept="image/*" onchange="previewAvatar(event)">
+      </div>
+      <div class="form-group" id="nameGroup">
+        <label class="form-label">Nom</label>
+        <input class="form-input" id="authName" placeholder="Yasmine Ben Ali">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input class="form-input" id="authEmail" type="email" placeholder="email@example.tn">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Mot de passe</label>
+        <input class="form-input" id="authPass" type="password" placeholder="Min 6 caractères">
+      </div>
       <p class="form-error" id="authError"></p>
       <button class="form-btn btn-primary" id="authBtn" onclick="handleAuth()">Create Account</button>
-      <p class="form-switch" id="authSwitch" onclick="toggleAuthMode()">Already have an account? <b>Sign In</b></p>
+      <p class="form-switch" id="authSwitch" onclick="toggleAuthMode()">Déjà un compte ? <b>Sign In</b></p>
     </div>
   </div>
 </div>
 
-<!-- ================= DOWNLOAD MODAL ================= -->
 <div class="dl-modal" id="dlModal" onclick="if(event.target===this)closeDlModal()">
   <div class="dl-box">
-    <button class="dl-close" onclick="closeDlModal()"><i data-lucide="x"></i></button>
-    <div class="dl-icon"><i data-lucide="download"></i></div>
-    <h2 class="dl-title" data-i18n="dl_title">Download Video</h2>
-    <p class="dl-desc">Cobalt : 0 pub, ultra rapide. 100% gratuit.</p>
+    <button class="dl-close" onclick="closeDlModal()"><i class="fa-solid fa-xmark"></i></button>
+    <div class="dl-icon"><i class="fa-solid fa-download"></i></div>
+    <h2 class="dl-title" data-i18n="dl_title">Télécharger la vidéo</h2>
+    <p class="dl-desc">Cobalt : 0 pub, w surtoul.</p>
     <div class="dl-options">
-      <a class="dl-btn best" id="dlCobalt" href="https://cobalt.tools" target="_blank" rel="noopener"><span><i data-lucide="zap"></i> Cobalt (Best — No Ads)</span><i data-lucide="arrow-right"></i></a>
-      <a class="dl-btn" id="dlSSYT" href="#" target="_blank" rel="noopener"><span><i data-lucide="download"></i> SSYouTube</span><i data-lucide="arrow-right"></i></a>
-      <a class="dl-btn" id="dlY2Mate" href="#" target="_blank" rel="noopener"><span><i data-lucide="video"></i> Y2Mate</span><i data-lucide="arrow-right"></i></a>
+      <a class="dl-btn best" id="dlCobalt" href="https://cobalt.tools" target="_blank" rel="noopener"><span><i class="fa-solid fa-bolt"></i> Cobalt (el a7sen)</span><i class="fa-solid fa-arrow-right"></i></a>
+      <a class="dl-btn" id="dlSSYT" href="#" target="_blank" rel="noopener"><span><i class="fa-solid fa-download"></i> SSYouTube</span><i class="fa-solid fa-arrow-right"></i></a>
+      <a class="dl-btn" id="dlY2Mate" href="#" target="_blank" rel="noopener"><span><i class="fa-solid fa-video"></i> Y2Mate</span><i class="fa-solid fa-arrow-right"></i></a>
     </div>
   </div>
 </div>
 
-<!-- ================= LAYOUT ================= -->
 <div class="layout">
   <div class="side-backdrop" onclick="closeMobileSidebar()"></div>
   <aside class="side" id="sidebar">
-    <h4 data-i18n="cats">Categories</h4>
+    <h4 data-i18n="cats">Catégories</h4>
     <div id="catList"></div>
-    <h4 data-i18n="topics">Topics</h4>
+    <h4 data-i18n="topics">Sujets</h4>
     <div id="subList"></div>
-    <div class="side-foot">TunisianTube © 2025<br><span class="ar">صنع بحب في تونس</span> — Made with passion in Tunisia</div>
+    <div class="side-foot">TunisianTube © 2025<br><span class="ar">صنع بحب في تونس</span></div>
   </aside>
 
   <main class="main" id="mainContent">
 
-    <!-- ============ HOME ============ -->
     <div class="page active" id="page-home">
       <section class="hero" id="hero">
-        <div class="hero-blob1"></div><div class="hero-blob2"></div><div class="hero-blob3"></div>
-        <div class="hero-ring"><div class="core"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></div></div>
-        <span class="hero-kicker"><i data-lucide="sparkles"></i> <span data-i18n="hero_kicker">The Tunisian learning platform</span></span>
-        <h1><span data-i18n="hero_t1">Learn something</span> <span class="grad" data-i18n="hero_t2">new every day</span><br><span class="ar" data-i18n="hero_t3">بالدارجة التونسية</span></h1>
-        <p data-i18n="hero_p">Free courses in programming, design, languages and marketing — curated for the Tunisian community. Awel haja: t7ebb té9ra? A7na hna.</p>
+        <div class="hero-blob1"></div><div class="hero-blob2"></div>
+        <span class="hero-kicker"><i class="fa-solid fa-wand-magic-sparkles"></i> <span data-i18n="hero_kicker">La plateforme d'apprentissage tunisienne</span></span>
+        <h1><span data-i18n="hero_t1">Apprends quelque chose de</span> <span class="grad" data-i18n="hero_t2">nouveau chaque jour</span><br><span class="ar" data-i18n="hero_t3">بالدارجة التونسية</span></h1>
+        <p data-i18n="hero_p">Des cours gratuits en programmation, design, langues et marketing — sélectionnés pour la communauté tunisienne.</p>
         <div class="hero-cta">
-          <button class="hero-btn primary" onclick="scrollToGrid()"><i data-lucide="play"></i> <span data-i18n="hero_cta">Start watching</span></button>
-          <button class="hero-btn ghost" onclick="navigate('settings')"><i data-lucide="sliders-horizontal"></i> <span data-i18n="hero_pref">Preferences</span></button>
+          <button class="hero-btn primary" onclick="scrollToGrid()"><i class="fa-solid fa-play"></i> <span data-i18n="hero_cta">Commencer</span></button>
+          <button class="hero-btn ghost" onclick="navigate('settings')"><i class="fa-solid fa-sliders"></i> <span data-i18n="hero_pref">Préférences</span></button>
         </div>
         <div class="hero-stats">
-          <div class="hstat"><b id="statV">40</b><span data-i18n="courses">courses</span></div>
-          <div class="hstat"><b>5</b><span data-i18n="cats">Categories</span></div>
-          <div class="hstat"><b><i>100%</i></b><span data-i18n="free">free</span></div>
-          <div class="hstat"><b id="statH">80h+</b><span data-i18n="content">of content</span></div>
+          <div class="hstat"><b id="statV">0</b><span data-i18n="courses">cours</span></div>
+          <div class="hstat"><b id="statC">5</b><span data-i18n="cats">Catégories</span></div>
+          <div class="hstat"><b><i>100%</i></b><span data-i18n="free">gratuit</span></div>
+          <div class="hstat"><b id="statH">0h</b><span data-i18n="content">heures de contenu</span></div>
         </div>
       </section>
+
       <div class="marquee-wrap" id="marqueeWrap"><div class="marquee" id="marquee"></div></div>
       <div class="filter-bar" id="filterBar"></div>
       <div class="grid" id="grid"></div>
       <div id="sentinel"></div>
       <div class="empty-state" id="empty" style="display:none">
-        <div class="e-i"><i data-lucide="search-x"></i></div>
-        <h2 data-i18n="empty">No videos found</h2>
-        <p data-i18n="empty_p">Try different keywords or browse categories.</p>
+        <div class="e-i"><i class="fa-solid fa-magnifying-glass"></i></div>
+        <h2 data-i18n="empty">Aucune vidéo trouvée</h2>
+        <p data-i18n="empty_p">Essaie d'autres mots-clés ou parcours les catégories.</p>
       </div>
       <footer class="foot">
-        <span><b>TunisianTube</b> — <span data-i18n="foot1">Learn in Darija, grow without limits.</span></span>
+        <span><b>TunisianTube</b> — <span data-i18n="foot1">Apprends en darija, évolue sans limites.</span></span>
         <span class="ar">يلا نتعلموا جميع بعضنا</span>
       </footer>
     </div>
 
-    <!-- ============ VIDEO ============ -->
     <div class="page" id="page-video">
       <div class="video-page-container">
         <div class="video-main">
-          <button class="back-btn" onclick="navigate('home')"><i data-lucide="arrow-left"></i> <span data-i18n="back">Back</span></button>
+          <button class="back-btn" onclick="navigate('home')"><i class="fa-solid fa-arrow-left"></i> <span data-i18n="back">Retour</span></button>
           <div class="video-player-large" id="playerLarge"></div>
           <div class="video-info-large">
             <h1 class="video-title-large" id="mTitleLarge"></h1>
             <div class="channel-row">
               <div class="channel-info">
                 <div class="channel-avatar" id="mChanAvatar">C</div>
-                <div class="channel-details"><h3 id="mChanLarge">Channel</h3><p id="mCatLarge">Category</p></div>
-                <button class="subscribe-btn" id="subscribeBtn" onclick="toggleSubFromPage()"><i data-lucide="bell"></i> <span>Subscribe</span></button>
+                <div><h3 id="mChanLarge">Channel</h3><p id="mCatLarge"></p></div>
+                <button class="subscribe-btn" id="subscribeBtn" onclick="toggleSubFromPage()"><i class="fa-solid fa-bell"></i> <span>S'abonner</span></button>
               </div>
               <div class="video-actions-row" id="mActionsLarge"></div>
             </div>
@@ -557,83 +163,100 @@ body.sidebar-collapsed .side{transform:translateX(-100%)}
           </div>
         </div>
         <div class="related-videos">
-          <h3><i data-lucide="monitor-play"></i> <span data-i18n="related">Related Videos</span></h3>
+          <h3><i class="fa-solid fa-tv"></i> <span data-i18n="related">Vidéos similaires</span></h3>
           <div id="relatedList"></div>
         </div>
       </div>
     </div>
 
-    <!-- ============ CATEGORY ============ -->
     <div class="page" id="page-category">
-      <button class="back-btn" onclick="navigate('home')"><i data-lucide="arrow-left"></i> <span data-i18n="home">Home</span></button>
-      <div class="page-header"><div class="page-icon" id="catIcon"><i data-lucide="folder"></i></div><div><h1 id="catTitle">Category</h1><p class="page-sub" id="catSub"></p></div></div>
+      <button class="back-btn" onclick="navigate('home')"><i class="fa-solid fa-arrow-left"></i> <span data-i18n="home">Accueil</span></button>
+      <div class="page-header">
+        <div class="page-icon" id="catIcon"><i class="fa-solid fa-folder"></i></div>
+        <div><h1 id="catTitle">Catégorie</h1><p class="page-sub" id="catSub"></p></div>
+      </div>
       <div class="grid" id="categoryGrid"></div>
     </div>
 
-    <!-- ============ SETTINGS ============ -->
     <div class="page" id="page-settings">
-      <button class="back-btn" onclick="navigate('home')"><i data-lucide="arrow-left"></i> <span data-i18n="back">Back</span></button>
+      <button class="back-btn" onclick="navigate('home')"><i class="fa-solid fa-arrow-left"></i> <span data-i18n="back">Retour</span></button>
       <div class="settings-container-pro">
         <div class="settings-header-pro">
-          <h2><i data-lucide="settings"></i> <span data-i18n="set_title">Settings</span></h2>
-          <p data-i18n="set_sub">Manage your account, channel and preferences.</p>
+          <h2><i class="fa-solid fa-gear"></i> <span data-i18n="set_title">Paramètres</span></h2>
+          <p data-i18n="set_sub">Gérez votre compte, chaîne et préférences.</p>
         </div>
         <div class="settings-layout-pro">
           <aside class="settings-sidebar-pro">
-            <button class="tab-btn-pro active" data-tab="account" onclick="openSettingsTab('account', this)"><i data-lucide="circle-user-round"></i> <span data-i18n="tab_acc">My Account</span></button>
-            <button class="tab-btn-pro" data-tab="channel" onclick="openSettingsTab('channel', this)"><i data-lucide="tv"></i> <span data-i18n="tab_ch">My Channel</span></button>
-            <button class="tab-btn-pro" data-tab="preferences" onclick="openSettingsTab('preferences', this)"><i data-lucide="sliders-horizontal"></i> <span data-i18n="tab_pref">Preferences</span></button>
-            <button class="tab-btn-pro danger" data-tab="privacy" onclick="openSettingsTab('privacy', this)"><i data-lucide="shield-alert"></i> <span data-i18n="tab_sec">Security</span></button>
+            <button class="tab-btn-pro active" data-tab="account" onclick="openSettingsTab('account', this)"><i class="fa-solid fa-circle-user"></i> <span data-i18n="tab_acc">Mon Compte</span></button>
+            <button class="tab-btn-pro" data-tab="channel" onclick="openSettingsTab('channel', this)"><i class="fa-solid fa-tv"></i> <span data-i18n="tab_ch">Ma Chaîne</span></button>
+            <button class="tab-btn-pro" data-tab="preferences" onclick="openSettingsTab('preferences', this)"><i class="fa-solid fa-sliders"></i> <span data-i18n="tab_pref">Préférences</span></button>
+            <button class="tab-btn-pro danger" data-tab="privacy" onclick="openSettingsTab('privacy', this)"><i class="fa-solid fa-shield-halved"></i> <span data-i18n="tab_sec">Sécurité</span></button>
           </aside>
           <main class="settings-content-pro">
 
             <div id="set-pro-account" class="settings-pane-pro active">
-              <h3><i data-lucide="user-round-pen"></i> <span data-i18n="acc_info">Personal Information</span></h3>
+              <h3><i class="fa-solid fa-user-gear"></i> <span data-i18n="acc_info">Informations Personnelles</span></h3>
               <div id="accLocked"></div>
               <div id="accBody">
                 <div class="avatar-upload-box-pro">
-                  <div class="avatar-preview-wrapper-pro" id="accAvatarWrapPro"><i data-lucide="camera"></i></div>
+                  <div class="avatar-preview-wrapper-pro" id="accAvatarWrapPro"><i class="fa-solid fa-camera"></i></div>
                   <div class="avatar-actions-pro">
-                    <label class="btn-secondary-pro"><i data-lucide="upload"></i> <span data-i18n="upload_img">Upload image</span><input type="file" accept="image/*" style="display:none" onchange="changeAccPicPro(event)"></label>
-                    <button class="btn-text-pro" onclick="randomizeAvatarPro()"><i data-lucide="shuffle"></i> <span data-i18n="random_av">Random</span></button>
+                    <label class="btn-secondary-pro"><i class="fa-solid fa-upload"></i> <span data-i18n="upload_img">Charger une image</span><input type="file" accept="image/*" style="display:none" onchange="changeAccPicPro(event)"></label>
+                    <button class="btn-text-pro" onclick="randomizeAvatarPro()"><i class="fa-solid fa-shuffle"></i> <span data-i18n="random_av">Aléatoire</span></button>
                   </div>
                 </div>
-                <div class="form-group"><label class="form-label" data-i18n="dname">Display Name</label><input class="form-input" id="accNamePro" placeholder="Votre nom"></div>
+                <div class="form-group"><label class="form-label" data-i18n="dname">Nom affiché</label><input class="form-input" id="accNamePro"></div>
                 <div class="form-group"><label class="form-label">Email</label><input class="form-input" id="accEmailPro" disabled></div>
-                <div class="form-group"><label class="form-label" data-i18n="cur_pass">Current Password</label><input class="form-input" id="accOldPassPro" type="password" placeholder="••••••••"></div>
-                <div class="form-group"><label class="form-label" data-i18n="new_pass">New Password</label><input class="form-input" id="accNewPassPro" type="password" placeholder="Min 6 characters"></div>
+                <div class="form-group"><label class="form-label" data-i18n="cur_pass">Mot de passe actuel</label><input class="form-input" id="accOldPassPro" type="password"></div>
+                <div class="form-group"><label class="form-label" data-i18n="new_pass">Nouveau mot de passe</label><input class="form-input" id="accNewPassPro" type="password" placeholder="Min 6 caractères"></div>
                 <p class="form-error" id="accErrorPro"></p>
-                <button class="form-btn btn-primary" onclick="saveAccountPro()" data-i18n="save">Save</button>
+                <button class="form-btn btn-primary" onclick="saveAccountPro()" data-i18n="save">Enregistrer</button>
               </div>
             </div>
 
             <div id="set-pro-channel" class="settings-pane-pro">
-              <h3><i data-lucide="circle-play"></i> <span data-i18n="ch_perso">Channel Customization</span></h3>
-              <div class="form-group"><label class="form-label" data-i18n="ch_name">Channel Name</label><input class="form-input" id="channelNamePro"></div>
+              <h3><i class="fa-solid fa-circle-play"></i> <span data-i18n="ch_perso">Personnalisation de la chaîne</span></h3>
+              <div class="form-group"><label class="form-label" data-i18n="ch_name">Nom de la chaîne</label><input class="form-input" id="channelNamePro"></div>
               <div class="form-group"><label class="form-label">Description</label><textarea class="form-textarea" id="channelBioPro"></textarea></div>
-              <div class="form-group"><label class="form-label" data-i18n="ch_cat">Category</label>
+              <div class="form-group"><label class="form-label" data-i18n="ch_cat">Catégorie</label>
                 <select class="form-select" id="channelCatPro" style="width:100%">
                   <option value="">—</option><option>Education</option><option>Design</option><option>Programming</option><option>Languages</option><option>Marketing</option><option>Other</option>
-                </select></div>
-              <div class="form-group"><label class="form-label">Website</label><input class="form-input" id="channelLinkPro" placeholder="https://"></div>
-              <div class="form-group"><label class="form-label">Social</label><input class="form-input" id="channelSocialPro" placeholder="@handle"></div>
-              <button class="form-btn btn-primary" onclick="saveChannelPro()" data-i18n="save2">Save</button>
+                </select>
+              </div>
+              <div class="form-group"><label class="form-label">Site web</label><input class="form-input" id="channelLinkPro" placeholder="https://"></div>
+              <div class="form-group"><label class="form-label">Réseaux</label><input class="form-input" id="channelSocialPro" placeholder="@handle"></div>
+              <button class="form-btn btn-primary" onclick="saveChannelPro()" data-i18n="save2">Sauvegarder</button>
             </div>
 
             <div id="set-pro-preferences" class="settings-pane-pro">
-              <h3><i data-lucide="sliders-horizontal"></i> <span data-i18n="tab_pref">Preferences</span></h3>
-              <div class="setting-row-pro"><div class="setting-info-pro"><div class="setting-title-pro"><i data-lucide="moon"></i> <span data-i18n="dark_m">Dark Mode</span></div><div class="setting-desc-pro" data-i18n="dark_d">Night mode interface</div></div><div class="toggle" id="t-pro-dark" onclick="toggleSetPro('dark')"></div></div>
-              <div class="setting-row-pro"><div class="setting-info-pro"><div class="setting-title-pro"><i data-lucide="globe"></i> <span data-i18n="lang">Language</span></div><div class="setting-desc-pro" data-i18n="lang_d">Interface language</div></div><select class="form-select" id="langSelectPro" onchange="setLangPro(this.value)"><option value="dz">Derja (Tounsi)</option><option value="fr">Français</option><option value="en">English</option></select></div>
-              <div class="setting-row-pro"><div class="setting-info-pro"><div class="setting-title-pro"><i data-lucide="play"></i> Autoplay</div><div class="setting-desc-pro" data-i18n="auto_d">Play videos automatically</div></div><div class="toggle" id="t-pro-auto" onclick="toggleSetPro('auto')"></div></div>
-              <div class="setting-row-pro"><div class="setting-info-pro"><div class="setting-title-pro"><i data-lucide="monitor-play"></i> <span data-i18n="qual">Quality</span></div><div class="setting-desc-pro" data-i18n="qual_d">Default resolution</div></div><select class="form-select" id="qualitySelectPro" onchange="setQualityPro(this.value)"><option value="auto">Auto</option><option value="hd1080">1080p</option><option value="hd720">720p</option></select></div>
-              <div class="setting-row-pro"><div class="setting-info-pro"><div class="setting-title-pro"><i data-lucide="type"></i> <span data-i18n="fsize">Text Size</span></div><div class="setting-desc-pro">Font size</div></div><select class="form-select" id="fontSelectPro" onchange="setFontSizePro(this.value)"><option value="small">Small</option><option value="normal">Normal</option><option value="large">Large</option></select></div>
+              <h3><i class="fa-solid fa-sliders"></i> <span data-i18n="tab_pref">Préférences</span></h3>
+              <div class="setting-row-pro">
+                <div><div class="setting-title-pro"><i class="fa-solid fa-moon"></i> <span data-i18n="dark_m">Mode Sombre</span></div><div class="setting-desc-pro" data-i18n="dark_d">Interface de nuit</div></div>
+                <div class="toggle" id="t-pro-dark" onclick="toggleSetPro('dark')"></div>
+              </div>
+              <div class="setting-row-pro">
+                <div><div class="setting-title-pro"><i class="fa-solid fa-globe"></i> <span data-i18n="lang">Langue</span></div><div class="setting-desc-pro" data-i18n="lang_d">Langue de l'interface</div></div>
+                <select class="form-select" id="langSelectPro" onchange="setLangPro(this.value)"><option value="dz">Derja</option><option value="fr">Français</option><option value="en">English</option></select>
+              </div>
+              <div class="setting-row-pro">
+                <div><div class="setting-title-pro"><i class="fa-solid fa-play"></i> Autoplay</div><div class="setting-desc-pro" data-i18n="auto_d">Lecture automatique</div></div>
+                <div class="toggle" id="t-pro-auto" onclick="toggleSetPro('auto')"></div>
+              </div>
+              <div class="setting-row-pro">
+                <div><div class="setting-title-pro"><i class="fa-solid fa-display"></i> <span data-i18n="qual">Qualité</span></div><div class="setting-desc-pro" data-i18n="qual_d">Résolution par défaut</div></div>
+                <select class="form-select" id="qualitySelectPro" onchange="setQualityPro(this.value)"><option value="auto">Auto</option><option value="hd1080">1080p</option><option value="hd720">720p</option></select>
+              </div>
+              <div class="setting-row-pro">
+                <div><div class="setting-title-pro"><i class="fa-solid fa-text-height"></i> <span data-i18n="fsize">Taille du texte</span></div><div class="setting-desc-pro">Font size</div></div>
+                <select class="form-select" id="fontSelectPro" onchange="setFontSizePro(this.value)"><option value="small">Petit</option><option value="normal">Normal</option><option value="large">Grand</option></select>
+              </div>
             </div>
 
             <div id="set-pro-privacy" class="settings-pane-pro">
-              <h3><i data-lucide="trash-2"></i> <span data-i18n="data_sec">Data & Security</span></h3>
-              <div class="danger-box-pro"><div><h4 data-i18n="clr_hist">Clear history</h4><p data-i18n="clr_hist_p">Remove all watched videos</p></div><button class="btn-danger-pro" onclick="clearHistoryPro()"><span data-i18n="clear">Clear</span></button></div>
-              <div class="danger-box-pro"><div><h4 data-i18n="clr_like">Clear likes</h4><p data-i18n="clr_like_p">Reset all your liked videos</p></div><button class="btn-danger-pro" onclick="clearLikesPro()"><span data-i18n="clear">Clear</span></button></div>
-              <div class="danger-box-pro"><div><h4 data-i18n="reset_all">Reset everything</h4><p data-i18n="reset_all_p">Delete all your local data</p></div><button class="btn-danger-extreme-pro" onclick="resetAllAppDataPro()"><span data-i18n="reset">Reset All</span></button></div>
+              <h3><i class="fa-solid fa-trash-can"></i> <span data-i18n="data_sec">Données & Sécurité</span></h3>
+              <div class="danger-box-pro"><div><h4 data-i18n="clr_hist">Effacer l'historique</h4><p data-i18n="clr_hist_p">Supprime toutes les vidéos vues</p></div><button class="btn-danger-pro" onclick="clearHistoryPro()"><span data-i18n="clear">Effacer</span></button></div>
+              <div class="danger-box-pro"><div><h4 data-i18n="clr_like">Effacer les likes</h4><p data-i18n="clr_like_p">Réinitialise tes vidéos aimées</p></div><button class="btn-danger-pro" onclick="clearLikesPro()"><span data-i18n="clear">Effacer</span></button></div>
+              <div class="danger-box-pro"><div><h4 data-i18n="reset_all">Tout réinitialiser</h4><p data-i18n="reset_all_p">Supprime toutes tes données locales</p></div><button class="btn-danger-extreme-pro" onclick="resetAllAppDataPro()"><span data-i18n="reset">Tout Reset</span></button></div>
             </div>
 
           </main>
@@ -641,24 +264,31 @@ body.sidebar-collapsed .side{transform:translateX(-100%)}
       </div>
     </div>
 
-    <!-- ============ LIKED ============ -->
     <div class="page" id="page-liked">
-      <button class="back-btn" onclick="navigate('home')"><i data-lucide="arrow-left"></i> <span data-i18n="back">Back</span></button>
-      <div class="page-header"><div class="page-icon"><i data-lucide="heart"></i></div><div><h1 data-i18n="liked">Liked Videos</h1><p class="page-sub" id="likedSub"></p></div></div>
+      <button class="back-btn" onclick="navigate('home')"><i class="fa-solid fa-arrow-left"></i> <span data-i18n="back">Retour</span></button>
+      <div class="page-header">
+        <div class="page-icon" style="background:linear-gradient(135deg,#e70013,#ff7a3d)"><i class="fa-solid fa-heart"></i></div>
+        <div><h1 data-i18n="liked">Vidéos aimées</h1><p class="page-sub" id="likedSub"></p></div>
+      </div>
       <div class="grid" id="likedGrid"></div>
     </div>
 
-    <!-- ============ SUBSCRIPTIONS ============ -->
     <div class="page" id="page-subscriptions">
-      <button class="back-btn" onclick="navigate('home')"><i data-lucide="arrow-left"></i> <span data-i18n="back">Back</span></button>
-      <div class="page-header"><div class="page-icon"><i data-lucide="bell"></i></div><div><h1 data-i18n="subs_p">Subscriptions</h1><p class="page-sub" id="subsSub"></p></div></div>
+      <button class="back-btn" onclick="navigate('home')"><i class="fa-solid fa-arrow-left"></i> <span data-i18n="back">Retour</span></button>
+      <div class="page-header">
+        <div class="page-icon" style="background:linear-gradient(135deg,#e70013,#ff7a3d)"><i class="fa-solid fa-bell"></i></div>
+        <div><h1 data-i18n="subs_p">Abonnements</h1><p class="page-sub" id="subsSub"></p></div>
+      </div>
       <div class="grid" id="subsGrid"></div>
     </div>
 
-    <!-- ============ HISTORY ============ -->
     <div class="page" id="page-history">
-      <button class="back-btn" onclick="navigate('home')"><i data-lucide="arrow-left"></i> <span data-i18n="back">Back</span></button>
-      <div class="page-header"><div class="page-icon"><i data-lucide="history"></i></div><div><h1 data-i18n="hist">Watch History</h1><p class="page-sub" id="histSub"></p></div><button class="back-btn" style="margin:0 0 0 auto" onclick="clearHistoryPro();renderHistory()"><i data-lucide="trash-2"></i> <span data-i18n="clear">Clear</span></button></div>
+      <button class="back-btn" onclick="navigate('home')"><i class="fa-solid fa-arrow-left"></i> <span data-i18n="back">Retour</span></button>
+      <div class="page-header">
+        <div class="page-icon"><i class="fa-solid fa-clock-rotate-left"></i></div>
+        <div><h1 data-i18n="hist">Historique</h1><p class="page-sub" id="histSub"></p></div>
+        <button class="back-btn" style="margin:0 0 0 auto" onclick="clearHistoryPro()"><i class="fa-solid fa-trash"></i> <span data-i18n="clear">Effacer</span></button>
+      </div>
       <div class="grid" id="historyGrid"></div>
     </div>
 
@@ -667,420 +297,7 @@ body.sidebar-collapsed .side{transform:translateX(-100%)}
 
 <div class="toasts" id="toasts"></div>
 
-<script>
-/* ================================================================
-   TUNISIANTUBE — Data Layer
-================================================================ */
-const CHANNELS = {
-  "Darija Code Academy":{g:["#e70013","#ff7a3d"]},
-  "El Academy":{g:["#1d4ed8","#38bdf8"]},
-  "Tounsi Tech":{g:["#0f766e","#34d399"]},
-  "Math Bel Darja":{g:["#7c3aed","#c084fc"]},
-  "Robotique TN":{g:["#be185d","#fb7185"]},
-  "Fann Design":{g:["#b45309","#fbbf24"]},
-  "Lingua TN":{g:["#065f46","#6ee7b7"]},
-  "Souk Digital":{g:["#9f1239","#fb923c"]}
-};
-const CAT_ICONS = {"Programming":"code-2","Design":"palette","Languages":"languages","Marketing":"megaphone","Education":"graduation-cap","Other":"folder"};
-const TOPIC_ICONS = {"Web":"layout-template","Python":"braces","Mobile":"smartphone","Data":"database","DevOps":"git-branch","IA":"brain","Maths":"sigma","UI/UX":"pen-tool","Photoshop":"image","Français":"book-open","Derja":"message-circle","Linguistique":"scan-text","Marketing":"trending-up","Programming":"terminal"};
-
-const VIDEOS = [
- {id:"js-full",yt:"PkZNo7MFNFg",t:"JavaScript — الكورس الكامل من الصفر | Full Course",ch:"Darija Code Academy",cat:"Programming",topic:"Web",dur:"3:26:41",d:400,tags:["javascript","web","cours complet"]},
- {id:"py-full",yt:"rfscVS0vtbw",t:"Python Full Course — تعلم البايثون خطوة بخطوة",ch:"El Academy",cat:"Programming",topic:"Python",dur:"4:26:52",d:380,tags:["python","debutant"]},
- {id:"py-mosh",yt:"_uQrJ0TkZlc",t:"Python في ساعة وحدة — أساسيات مضمونة",ch:"El Academy",cat:"Programming",topic:"Python",dur:"1:00:16",d:30,tags:["python","crash"]},
- {id:"react-full",yt:"nu_pCVPKzTk",t:"React كامل — ابني أول App متاعك في 2024",ch:"Darija Code Academy",cat:"Programming",topic:"Web",dur:"11:55:27",d:220,tags:["react","javascript","frontend"]},
- {id:"react-crash",yt:"w7ejDZ8SWv8",t:"React JS — Crash Course في 100 دقيقة",ch:"Tounsi Tech",cat:"Programming",topic:"Web",dur:"1:38:24",d:45,tags:["react","crash"]},
- {id:"js-crash",yt:"hdI2bqOjy3c",t:"JavaScript — الأساسيات بلا مقدمات",ch:"Tounsi Tech",cat:"Programming",topic:"Web",dur:"1:40:29",d:60,tags:["javascript"]},
- {id:"html-crash",yt:"UB1O30fR-EE",t:"HTML للمبتدئين — Crash بالتونسي",ch:"Tounsi Tech",cat:"Programming",topic:"Web",dur:"39:51",d:15,tags:["html","debutant"]},
- {id:"css-crash",yt:"yfoY53QXEnI",t:"CSS Crash Course — نسق أول موقع متاعك",ch:"Tounsi Tech",cat:"Programming",topic:"Web",dur:"1:25:10",d:50,tags:["css","design"]},
- {id:"html-mosh",yt:"BsDoLVMnmZs",t:"HTML في ساعة — البداية الصحيحة",ch:"El Academy",cat:"Programming",topic:"Web",dur:"1:09:33",d:90,tags:["html"]},
- {id:"css-hero",yt:"1Rs2ND1ryYc",t:"CSS — من Zero للبطل | Zero to Hero",ch:"Darija Code Academy",cat:"Programming",topic:"Web",dur:"6:18:42",d:190,tags:["css"]},
- {id:"htmlcss-full",yt:"G3e-cpL7ofc",t:"HTML & CSS — الكورس الكامل للمبتدئين",ch:"Darija Code Academy",cat:"Programming",topic:"Web",dur:"6:31:24",d:240,tags:["html","css"]},
- {id:"java-mosh",yt:"eIrMbAQSU34",t:"Java للمبتدئين — فهم البرمجة الكائنية OOP",ch:"El Academy",cat:"Programming",topic:"Programming",dur:"2:30:28",d:200,tags:["java","oop"]},
- {id:"node-mosh",yt:"TlB_eWDSMt4",t:"Node.js — Backend بالدارجة",ch:"El Academy",cat:"Programming",topic:"Web",dur:"1:18:16",d:120,tags:["nodejs","backend"]},
- {id:"frontend-boot",yt:"zJSY8tbf_ys",t:"Frontend Bootcamp — من الصفر لسوق الشغل",ch:"Darija Code Academy",cat:"Programming",topic:"Web",dur:"8:17:32",d:300,tags:["frontend","bootcamp"]},
- {id:"android-fcc",yt:"fis26HvvDII",t:"Android — اعمل أول App متاعك",ch:"Tounsi Tech",cat:"Programming",topic:"Mobile",dur:"6:57:43",d:320,tags:["android","mobile"]},
- {id:"flutter-37",yt:"VPvVD8t02U8",t:"Flutter — App لـ Android و iOS في كورس وحدة",ch:"Tounsi Tech",cat:"Programming",topic:"Mobile",dur:"37:06:20",d:170,tags:["flutter","mobile","dart"]},
- {id:"sql-full",yt:"HXV3zeQKqGY",t:"SQL & Databases — الكورس الكامل",ch:"El Academy",cat:"Programming",topic:"Data",dur:"4:20:39",d:280,tags:["sql","database"]},
- {id:"mysql-mosh",yt:"7S_tz1z_5bA",t:"MySQL — افهم قواعد البيانات مرة وحدة",ch:"El Academy",cat:"Programming",topic:"Data",dur:"3:10:12",d:140,tags:["mysql","sql"]},
- {id:"git-traversy",yt:"SWYqp7iY_Tc",t:"Git & GitHub — Crash Course الزهار",ch:"Tounsi Tech",cat:"Programming",topic:"DevOps",dur:"32:41",d:40,tags:["git","github"]},
- {id:"git-fcc",yt:"RGOj5yH7evk",t:"Git للمبتدئين — نظم الكود متاعك",ch:"Darija Code Academy",cat:"Programming",topic:"DevOps",dur:"1:06:00",d:110,tags:["git"]},
- {id:"docker-fcc",yt:"fqMOX6JJhGo",t:"Docker — الحاويات ببساطة",ch:"El Academy",cat:"Programming",topic:"DevOps",dur:"2:46:34",d:160,tags:["docker","devops"]},
- {id:"django",yt:"F5mRW0jo-U4",t:"Django — Backend بـ Python من الصفر",ch:"El Academy",cat:"Programming",topic:"Python",dur:"3:34:37",d:210,tags:["django","python"]},
- {id:"cpp",yt:"8jLOx1hD3_o",t:"C++ — من المبتدئ للمحترف",ch:"El Academy",cat:"Programming",topic:"Programming",dur:"4:01:19",d:330,tags:["cpp"]},
- {id:"ml-everybody",yt:"GwIo3gDZCVQ",t:"Machine Learning — الذكاء الاصطناعي للكل",ch:"Robotique TN",cat:"Education",topic:"IA",dur:"3:58:08",d:250,tags:["ia","ml"]},
- {id:"nn-3b1b",yt:"aircAruvnKk",t:"شنوة الـ Neural Network؟ — شرح بصري خلاب",ch:"Math Bel Darja",cat:"Education",topic:"IA",dur:"19:13",d:100,tags:["ia","neural"]},
- {id:"gd-3b1b",yt:"IHZwWFHWa-w",t:"Gradient Descent — كيفاش يتعلم الـ AI",ch:"Math Bel Darja",cat:"Education",topic:"IA",dur:"21:01",d:130,tags:["ia","maths"]},
- {id:"bp-3b1b",yt:"tIeHLnjs5U8",t:"Backpropagation — قلب التعلم العميق",ch:"Math Bel Darja",cat:"Education",topic:"IA",dur:"13:54",d:150,tags:["ia"]},
- {id:"calc-3b1b",yt:"WUvTyaaNkzM",t:"L'Essence du Calculus — Chapitre 1",ch:"Math Bel Darja",cat:"Education",topic:"Maths",dur:"17:04",d:270,tags:["maths","calculus"]},
- {id:"linalg-3b1b",yt:"fNk_zzaMoSs",t:"Algèbre Linéaire — les vecteurs autrement",ch:"Math Bel Darja",cat:"Education",topic:"Maths",dur:"09:51",d:290,tags:["maths","vecteurs"]},
- {id:"fourier-3b1b",yt:"spUNpyF58BY",t:"Transformée de Fourier — la beauté des maths",ch:"Math Bel Darja",cat:"Education",topic:"Maths",dur:"25:14",d:310,tags:["maths","fourier"]},
- {id:"figma",yt:"jwCmIBJ8Jtc",t:"Figma — صمم UI كي المحترفين",ch:"Fann Design",cat:"Design",topic:"UI/UX",dur:"2:02:27",d:180,tags:["figma","ui"]},
- {id:"ui-coders",yt:"c9Wg6Cb_YlU",t:"UI Design للمبرمجين — الذوق يتعلم",ch:"Fann Design",cat:"Design",topic:"UI/UX",dur:"52:41",d:80,tags:["ui","design"]},
- {id:"photoshop",yt:"xTzvQkOll2U",t:"Photoshop — أول درس للمبتدئين",ch:"Fann Design",cat:"Design",topic:"Photoshop",dur:"22:14",d:70,tags:["photoshop"]},
- {id:"fr-1h",yt:"RxCR3g6aYJ0",t:"Français — Apprends en 1 heure (A1 complet)",ch:"Lingua TN",cat:"Languages",topic:"Français",dur:"1:05:21",d:160,tags:["français","a1"]},
- {id:"fr-lesson",yt:"E3v9DtPL4Jo",t:"Français Débutant — la leçon complète",ch:"Lingua TN",cat:"Languages",topic:"Français",dur:"59:12",d:95,tags:["français"]},
- {id:"derja-1",yt:"TcDlF9ayfUM",t:"Apprendre le Tunisien (Derja) #1 — Salutations",ch:"Lingua TN",cat:"Languages",topic:"Derja",dur:"08:42",d:340,tags:["derja","tunisien"]},
- {id:"ling-intro",yt:"JnRV6GcHnDY",t:"Introduction à la Linguistique — chnowa el lughet?",ch:"Lingua TN",cat:"Languages",topic:"Linguistique",dur:"12:31",d:105,tags:["linguistique"]},
- {id:"mkt-3h",yt:"G6DmDqYLWL8",t:"Digital Marketing — الكورس الكامل في 3 سويع",ch:"Souk Digital",cat:"Marketing",topic:"Marketing",dur:"3:03:27",d:55,tags:["marketing","social media"]},
- {id:"mkt-10h",yt:"nkNHn0VqVBA",t:"Marketing Digital 2024 — 10 heures de formation",ch:"Souk Digital",cat:"Marketing",topic:"Marketing",dur:"10:57:12",d:230,tags:["marketing","seo"]}
-];
-const DESC_POOL = [
- "كورس كامل ومجاني مخصص للتونسيين. خلي لايك وشيير مع صحابك يلي تحب توصلهم الخدمة.",
- "Une formation complète et gratuite, sélectionnée pour la communauté tunisienne. Abonne-toi pour ne rien rater.",
- "شرح مبسط خطوة بخطوة، يصلح للمبتدئ والي عنده مستوى. بالتوفيق في التعلم!",
- "Cours 100% gratuit — zid abonne ro7ek lel chaîne bech youslouk el jdid."
-];
-const CMT_NAMES=["Ahmed Trabelsi","Yasmine Ben Ali","Mehdi Gharbi","Cyrine Haddad","Skander Msakni","Amine Khelifi","Nour Bouzid","Karim Jendoubi","Salma Ayari","Oussama Ben Ammar","Rim Sassi","Wassim Derbali"];
-const CMT_POOL=["شرح واضح برشا، شكرا خويا!","Enfin j'ai compris ce concept, merci beaucoup!","بارك الله فيك، محتوى عالمي بصراحة","Bravo 3lik, continue la série!","هذا أحسن كورس شفته في الموضوع","Walfit netfarej, w zidni na9ra akther. N7eb kima héké!","Merci! Yelzem chwaya exemples akther","الله يعطيك الصحة، تبرك الله فيك","Top quality content, ماشاء الله","سمحني وين نلقى الكود/الملفات؟","شكرا، استنى في الجزء الثاني","Simple w clair, برافو"];
-
-/* Deterministic pseudo-random helpers */
-function h32(s){let h=2166136261;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}return h>>>0}
-function vViews(v){return 4000+(h32(v.id)%880000)}
-function vLikes(v){return 40+(h32("L"+v.id)%9000)}
-function vDate(v){const now=Date.now();return new Date(now-(v.d%420)*864e5)}
-function chGrad(ch){const c=CHANNELS[ch]||{g:["#e70013","#ff7a3d"]};return `linear-gradient(135deg,${c.g[0]},${c.g[1]})`}
-function userGrad(name){const hues=[0,18,160,210,262,300,340,140];const h1=hues[h32(name)%hues.length];return `linear-gradient(135deg,hsl(${h1} 80% 48%),hsl(${(h1+40)%360} 85% 58%))`}
-
-/* ================================================================
-   Storage + State
-================================================================ */
-const store={
-  get(k,d){try{const v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch(e){return d}},
-  set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
-};
-let users=store.get("tt_users",[]);
-let session=store.get("tt_session",null);
-let likes=store.get("tt_likes",{});
-let subs=store.get("tt_subs",[]);
-let historyList=store.get("tt_history",[]);
-let commentsDB=store.get("tt_comments",{});
-let channelProfile=store.get("tt_channel",{name:"",bio:"",cat:"",link:"",social:""});
-let settings=Object.assign({theme:"dark",lang:"fr",autoplay:true,quality:"auto",font:"normal"},store.get("tt_settings",{}));
-let filter="all",topicFilter=null,searchQ="",batch=12,shown=0,currentList=[],currentVid=null,authMode="signup",signupAvatarData=null,signupAvatarGrad=null,settingsTab="account";
-const curUser=()=>users.find(u=>u.email===session)||null;
-
-/* ================================================================
-   i18n — Derja / Français / English
-================================================================ */
-const I18N={
-en:{search:"Search courses...",cats:"Categories",topics:"Topics",all:"All",courses:"courses",free:"free",content:"hours of content",signin:"Sign In",welcome:"Welcome",bye:"Signed out",mychannel:"My Channel",accset:"Account Settings",appset:"App Settings",liked:"Liked Videos",subs_p:"Subscriptions",hist:"Watch History",out:"Sign Out",related:"Related Videos",sub:"Subscribe",subd:"Subscribed",like:"Like",share:"Share",dl:"Download",dl_title:"Download Video",comments:"Comments",cmtph:"Add a comment...",post:"Post",login_cmt:"Sign in to join the conversation",login_first:"Sign in first",back:"Back",home:"Home",empty:"No videos found",empty_p:"Try different keywords or browse categories.",views:"views",ago:"ago",justnow:"just now",hero_kicker:"The Tunisian learning platform",hero_t1:"Learn something",hero_t2:"new every day",hero_t3:"بالدارجة التونسية",hero_p:"Free courses in programming, design, languages and marketing — curated for the Tunisian community.",hero_cta:"Start watching",hero_pref:"Preferences",set_title:"Settings",set_sub:"Manage your account, channel and preferences.",tab_acc:"My Account",tab_ch:"My Channel",tab_pref:"Preferences",tab_sec:"Security",acc_info:"Personal Information",dname:"Display Name",pass:"Password",cur_pass:"Current Password",new_pass:"New Password",save:"Save",save2:"Save",login_view:"Sign in to edit your account",ch_perso:"Channel Customization",ch_name:"Channel Name",ch_cat:"Category",dark_m:"Dark Mode",dark_d:"Night mode interface",lang:"Language",lang_d:"Interface language",auto_d:"Play videos automatically",qual:"Quality",qual_d:"Default resolution",fsize:"Text Size",data_sec:"Data & Security",clr_hist:"Clear history",clr_hist_p:"Remove all watched videos",clr_like:"Clear likes",clr_like_p:"Reset all your liked videos",reset_all:"Reset everything",reset_all_p:"Delete all your local data",clear:"Clear",reset:"Reset All",upload_img:"Upload image",random_av:"Random",link_copied:"Link copied!",saved_ok:"Saved",no_like:"No liked videos yet",no_subs:"Subscribe to channels to see their videos",no_hist:"No watch history yet",need_login:"You need to sign in first",cmt_del:"Comment deleted",cmt_added:"Comment posted",acc_upd:"Account updated",ch_saved:"Channel saved",reset_done:"All data cleared",err_name:"Enter a valid name",err_email:"Enter a valid email",err_pass:"Password: min 6 characters",err_exists:"Account already exists — sign in",err_creds:"Wrong email or password",err_oldpass:"Current password incorrect",now:"start now",foot1:"Learn in Darija, grow without limits."},
-fr:{search:"Rechercher des cours...",cats:"Catégories",topics:"Sujets",all:"Tout",courses:"cours",free:"gratuit",content:"heures de contenu",signin:"Se connecter",welcome:"Bienvenue",bye:"Déconnecté",mychannel:"Ma Chaîne",accset:"Paramètres du compte",appset:"Paramètres de l'app",liked:"Vidéos aimées",subs_p:"Abonnements",hist:"Historique",out:"Se déconnecter",related:"Vidéos similaires",sub:"S'abonner",subd:"Abonné",like:"J'aime",share:"Partager",dl:"Télécharger",dl_title:"Télécharger la vidéo",comments:"Commentaires",cmtph:"Ajouter un commentaire...",post:"Publier",login_cmt:"Connecte-toi pour commenter",login_first:"Connecte-toi d'abord",back:"Retour",home:"Accueil",empty:"Aucune vidéo trouvée",empty_p:"Essaie d'autres mots-clés ou parcours les catégories.",views:"vues",ago:"il y a",justnow:"à l'instant",hero_kicker:"La plateforme d'apprentissage tunisienne",hero_t1:"Apprends quelque chose de",hero_t2:"nouveau chaque jour",hero_t3:"بالدارجة التونسية",hero_p:"Des cours gratuits en programmation, design, langues et marketing — sélectionnés pour la communauté tunisienne.",hero_cta:"Commencer",hero_pref:"Préférences",set_title:"Paramètres",set_sub:"Gérez votre compte, chaîne et préférences.",tab_acc:"Mon Compte",tab_ch:"Ma Chaîne",tab_pref:"Préférences",tab_sec:"Sécurité",acc_info:"Informations Personnelles",dname:"Nom affiché",pass:"Mot de passe",cur_pass:"Mot de passe actuel",new_pass:"Nouveau mot de passe",save:"Enregistrer",save2:"Sauvegarder",login_view:"Connecte-toi pour modifier ton compte",ch_perso:"Personnalisation de la chaîne",ch_name:"Nom de la chaîne",ch_cat:"Catégorie",dark_m:"Mode Sombre",dark_d:"Interface de nuit",lang:"Langue",lang_d:"Langue de l'interface",auto_d:"Lecture automatique des vidéos",qual:"Qualité",qual_d:"Résolution par défaut",fsize:"Taille du texte",data_sec:"Données & Sécurité",clr_hist:"Effacer l'historique",clr_hist_p:"Supprime toutes les vidéos vues",clr_like:"Effacer les likes",clr_like_p:"Réinitialise toutes tes vidéos aimées",reset_all:"Tout réinitialiser",reset_all_p:"Supprime toutes tes données locales",clear:"Effacer",reset:"Tout Reset",upload_img:"Charger une image",random_av:"Aléatoire",link_copied:"Lien copié !",saved_ok:"Enregistré",no_like:"Aucune vidéo aimée pour l'instant",no_subs:"Abonne-toi à des chaînes pour voir leurs vidéos",no_hist:"Aucun historique de visionnage",need_login:"Tu dois d'abord te connecter",cmt_del:"Commentaire supprimé",cmt_added:"Commentaire publié",acc_upd:"Compte mis à jour",ch_saved:"Chaîne enregistrée",reset_done:"Toutes les données effacées",err_name:"Entre un nom valide",err_email:"Entre un email valide",err_pass:"Mot de passe : 6 caractères min",err_exists:"Ce compte existe déjà — connecte-toi",err_creds:"Email ou mot de passe incorrect",err_oldpass:"Mot de passe actuel incorrect",now:"commencer",foot1:"Apprends en darija, évolue sans limites."},
-dz:{search:"Fettech 3la cours...",cats:"Les Catégories",topics:"Sujets",all:"El Kol",courses:"cours",free:"belbech",content:"se3a mte3 contenu",signin:"Dokhol",welcome:"Ahla bik",bye:"Okhrejna",mychannel:"Channel mte3i",accset:"Compte mte3i",appset:"Réglages el App",liked:"Videos eli 3ejbouk",subs_p:"Abonnements",hist:"Eli tchouftha",out:"Okhroj",related:"Videos Kif Kif",sub:"Abonne-toi",subd:"M'abbouné",like:"3ejbetni",share:"Partage",dl:"T7ammel",dl_title:"T7ammel el video",comments:"Commentaires",cmtph:"Ekteb ra2yek...",post:"Ab3ath",login_cmt:"Sajjel bech tekteb commentaire",login_first:"Sajjel el lowel",back:"Erja3",home:"Accueil",empty:"Ma l9ina chay",empty_p:"Jarreb kelmet okhrin wala tfarej 3la catégories.",views:"vues",ago:"9bal",justnow:"tawa",hero_kicker:"Plateforme el ta3lim el Tounsiya",hero_t1:"Ta3allam 7aja",hero_t2:"jdida kol nhar",hero_t3:"بالدارجة التونسية",hero_p:"Cours belbech fel programmation, design, lenghet w marketing — m5ayrin 3ala 9yess el touensa.",hero_cta:"Abda tawa",hero_pref:"Réglages",set_title:"Réglages",set_sub:"Rigel compte mte3ek, channel w préférences.",tab_acc:"Compte mte3i",tab_ch:"Channel mte3i",tab_pref:"Préférences",tab_sec:"Sécurité",acc_info:"Informations mte3ek",dname:"Esmek",pass:"Mot de passe",cur_pass:"Mot de passe el 9dim",new_pass:"Mot de passe jdid",save:"Sajjel",save2:"Sajjel",login_view:"Sajjel bech tbeddel el compte",ch_perso:"Personnalisé el channel",ch_name:"Esm el channel",ch_cat:"Catégorie",dark_m:"Mode Lil",dark_d:"Interface fel dhلام",lang:"Lougha",lang_d:"Lougha mte3 l'interface",auto_d:"El video tekhdem wa7edha",qual:"Qualité",qual_d:"Résolution par défaut",fsize:"7ajm el texte",data_sec:"Données & Sécurité",clr_hist:"Fasakh l'historique",clr_hist_p:"Yemsa7 kol chay tchouftha",clr_like:"Fasakh el likes",clr_like_p:"Yemsa7 kol el likes",reset_all:"Fasakh kol chay",reset_all_p:"Yemsa7 kol el données mte3ek",clear:"Fasakh",reset:"Fasakh Kol",upload_img:"Dakhel taswira",random_av:"Aléatoire",link_copied:"Lien copié!",saved_ok:"Tesajjel",no_like:"Mazelt ma3jebek chay",no_subs:"Abonna 3la channels bech tfarej videothom",no_hist:"Mazelt ma tchouf chay",need_login:"Lazemk tsajjel el lowel",cmt_del:"Commentaire tfasakh",cmt_added:"Commentaire tba3ath",acc_upd:"Compte tbeddel",ch_saved:"Channel tesajjlet",reset_done:"Kol chay tfasakh",err_name:"Ekteb esm s7i7",err_email:"Ekteb email s7i7",err_pass:"Mot de passe: 6 7ourouf minimum",err_exists:"El compte mawjoud — sajjel",err_creds:"Email wala mot de passe ghalta",err_oldpass:"Mot de passe el 9dim ghalta",now:"abda",foot1:"Ta3allam bederja, w tkabber bla 7doud."}
-};
-const t=k=>(I18N[settings.lang]&&I18N[settings.lang][k])||I18N.fr[k]||k;
-function applyLang(){
-  document.querySelectorAll("[data-i18n]").forEach(el=>{el.textContent=t(el.getAttribute("data-i18n"))});
-  document.querySelectorAll("[data-i18n-ph]").forEach(el=>{el.placeholder=t(el.getAttribute("data-i18n-ph"))});
-  const sel=document.getElementById("langSelectPro");if(sel)sel.value=settings.lang;
-  updateCount();renderSidebar();renderChips();
-  if(currentVid)renderVideoPage(currentVid,true);
-}
-/* ================================================================
-   Icon helper + avatar builders
-================================================================ */
-const ic=(n,s)=>`<i data-lucide="${n}"${s?` style="${s}"`:""}></i>`;
-function refreshIcons(){if(window.lucide)lucide.createIcons()}
-function avatarHTML(name,grad,cls,imgUrl){const letter=(name||"U").trim().charAt(0).toUpperCase();
-  return `<div class="${cls}" style="background:${grad}">${imgUrl?`<img src="${imgUrl}" alt="">`:""}${imgUrl?"":letter}</div>`}
-function fmtViews(n){if(n>=1e6)return (n/1e6).toFixed(1).replace(".",",")+" M "+t("views");if(n>=1e3)return Math.round(n/1e3)+" k "+t("views");return n+" "+t("views")}
-function relTime(date){const s=Math.floor((Date.now()-new Date(date).getTime())/1000);if(s<90)return t("justnow");
-  const u=[[31536000,settings.lang==="en"?"y":settings.lang==="dz"?"3am":"an"],[2592000,settings.lang==="en"?"mo":"mois"],[604800,settings.lang==="en"?"w":"sem"],[86400,"j"],[3600,"h"],[60,"min"]];
-  for(const [sec,l] of u){const n=Math.floor(s/sec);if(n>=1)return settings.lang==="en"?`${n}${l} ${t("ago")}`:settings.lang==="dz"?`${t("ago")} ${n} ${l}`:`${t("ago")} ${n} ${l}`}
-  return t("justnow")}
-function toast(msg,icon="check"){const box=document.getElementById("toasts");const el=document.createElement("div");el.className="toast";el.innerHTML=ic(icon)+`<span>${msg}</span>`;box.appendChild(el);refreshIcons();setTimeout(()=>{el.classList.add("out");setTimeout(()=>el.remove(),320)},2600)}
-const $=s=>document.querySelector(s),$$=s=>document.querySelectorAll(s);
-const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
-/* ================================================================
-   Search / filter logic
-================================================================ */
-function currentFilter(){topicFilter=null;shown=0;
-  let list=[...VIDEOS].sort((a,b)=>vDate(b)-vDate(a));
-  if(filter!=="all")list=list.filter(v=>v.cat===filter);
-  if(searchQ){const q=searchQ.toLowerCase();list=list.filter(v=>(v.t+" "+v.ch+" "+v.cat+" "+v.topic+" "+v.tags.join(" ")).toLowerCase().includes(q))}
-  currentList=list;return list}
-let searchTimer=null;
-function onSearchInput(){clearTimeout(searchTimer);searchTimer=setTimeout(()=>{searchQ=$("#searchInput").value.trim();
-  if(!$("#page-home").classList.contains("active"))navigate("home");else{rebuildHome();renderGrid(true)}},180)}
-function renderChips(){const bar=$("#filterBar");const cats=[...new Set(VIDEOS.map(v=>v.cat))];
-  bar.innerHTML=`<button class="chip ${filter==="all"?"active":""}" onclick="setFilter('all')">${ic("flame")} ${t("all")}</button>`+
-  cats.map(c=>`<button class="chip ${filter===c?"active":""}" onclick="setFilter('${c}')">${ic(CAT_ICONS[c]||"folder")} ${c}</button>`).join("");
-  refreshIcons()}
-function setFilter(c){filter=c;renderChips();rebuildHome();renderGrid(true)}
-function updateCount(){$("#vCount").textContent=VIDEOS.length+" "+t("courses");$("#statV").textContent=VIDEOS.length}
-function rebuildHome(){const hero=$("#hero");const mq=$("#marqueeWrap");const hide=!!searchQ||filter!=="all";
-  hero.style.display=hide?"none":"";mq.style.display=hide?"none":"";currentFilter()}
-/* marquee */
-function renderMarquee(){const items=[...new Set(VIDEOS.map(v=>v.topic))];const seq=items.map(tp=>`<span class="mq-chip">${ic(TOPIC_ICONS[tp]||"sparkles")} ${tp}</span>`).join("");
-  $("#marquee").innerHTML=seq+seq;refreshIcons()}
-/* ================================================================
-   Sidebar
-================================================================ */
-function renderSidebar(){const cats=[...new Set(VIDEOS.map(v=>v.cat))];
-  $("#catList").innerHTML=`<button class="side-link ${filter==="all"?"active":""}" data-cat="all" onclick="setFilter('all');navigate('home')">${ic("layout-grid")} <span>${t("all")}</span><span class="side-count">${VIDEOS.length}</span></button>`+
-  cats.map(c=>{const n=VIDEOS.filter(v=>v.cat===c).length;
-    return `<button class="side-link ${filter===c?"active":""}" onclick="openCategory('${c}')">${ic(CAT_ICONS[c]||"folder")} <span>${c}</span><span class="side-count">${n}</span></button>`}).join("");
-  const topics=[...new Set(VIDEOS.map(v=>v.topic))].sort((a,b)=>VIDEOS.filter(v=>v.topic===b).length-VIDEOS.filter(v=>v.topic===a).length).slice(0,10);
-  $("#subList").innerHTML=topics.map(tp=>`<button class="side-link" onclick="openTopic('${tp}')">${ic(TOPIC_ICONS[tp]||"hash")} <span>${tp}</span><span class="side-count">${VIDEOS.filter(v=>v.topic===tp).length}</span></button>`).join("");
-  refreshIcons()}
-/* ================================================================
-   Grid rendering + infinite scroll
-================================================================ */
-function thumbSrc(v){return `https://i.ytimg.com/vi/${v.yt}/mqdefault.jpg`}
-function cardHTML(v){
-  return `<article class="card" onclick="openVideo('${v.id}')">
-    <div class="thumb">
-      <img src="${thumbSrc(v)}" alt="" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/${v.yt}/640/360'">
-      <div class="thumb-play"><span>${ic("play")}</span></div>
-      <span class="cat-chip">${ic(CAT_ICONS[v.cat]||"folder")} ${v.cat}</span>
-      <span class="dur">${v.dur}</span>
-    </div>
-    <div class="card-body">
-      ${avatarHTML(v.ch,chGrad(v.ch),"card-avatar")}
-      <div class="card-info">
-        <h3 class="card-title">${esc(v.t)}</h3>
-        <div class="card-ch">${v.ch} ${ic("badge-check")}</div>
-        <div class="card-meta">${fmtViews(vViews(v))} · ${relTime(vDate(v))}</div>
-        <span class="card-topic">${v.topic}</span>
-      </div>
-    </div>
-  </article>`}
-function skeletons(n){return Array.from({length:n},()=>`<div class="skel"><div class="sk-t"></div><div class="sk-l" style="width:82%"></div><div class="sk-l" style="width:55%"></div></div>`).join("")}
-function renderGrid(reset){const grid=$("#grid");if(reset){shown=0;grid.innerHTML=skeletons(8);$("#empty").style.display="none";
-    setTimeout(()=>{grid.innerHTML="";appendBatch()},420);return}
-  appendBatch()}
-function appendBatch(){const grid=$("#grid");const next=currentList.slice(shown,shown+batch);shown+=next.length;
-  const tmp=document.createElement("div");tmp.innerHTML=next.map(cardHTML).join("");
-  while(tmp.firstChild)grid.appendChild(tmp.firstChild);
-  $("#empty").style.display=currentList.length===0?"block":"none";
-  const sp=$("#loadSpin");if(sp)sp.remove();
-  if(shown<currentList.length){const d=document.createElement("div");d.id="loadSpin";d.className="load-spin";d.innerHTML=`<div class="sp"></div>`;grid.after(d)}
-  refreshIcons()}
-const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting&&$("#page-home").classList.contains("active")&&shown<currentList.length)appendBatch()})},{rootMargin:"300px"});
-io.observe($("#sentinel"));
-function scrollToGrid(){$("#filterBar").scrollIntoView({behavior:"smooth",block:"start"})}
-function listEmpty(el,msg,icon){el.innerHTML=`<div class="empty-state" style="grid-column:1/-1"><div class="e-i">${ic(icon||"inbox")}</div><h2>${msg}</h2></div>`;refreshIcons()}
-/* ================================================================
-   Navigation
-================================================================ */
-function navigate(page){showPage(page);
-  if(page==="home"){rebuildHome();renderGrid(true)}
-  if(page==="liked")renderLiked();
-  if(page==="subscriptions")renderSubs();
-  if(page==="history")renderHistory();
-  if(page==="settings")loadSettingsForms();
-  closeMobileSidebar();window.scrollTo({top:0,behavior:"smooth"})}
-function goSettings(tab){hideDropdown();navigate("settings");openSettingsTab(tab,document.querySelector(`.tab-btn-pro[data-tab="${tab}"]`))}
-function showPage(id){$$(".page").forEach(p=>p.classList.remove("active"));const el=$("#page-"+id);if(el){el.classList.add("active")}
-  if(id!=="video"){const pl=$("#playerLarge");if(pl)pl.innerHTML=""}}
-function openCategory(cat){const list=VIDEOS.filter(v=>v.cat===cat);
-  $("#catTitle").textContent=cat;$("#catSub").textContent=list.length+" "+t("courses");
-  $("#catIcon").innerHTML=ic(CAT_ICONS[cat]||"folder");
-  $("#categoryGrid").innerHTML=list.map(cardHTML).join("")||"";
-  if(!list.length)listEmpty($("#categoryGrid"),t("empty"),"search-x");
-  showPage("category");closeMobileSidebar();refreshIcons();window.scrollTo({top:0,behavior:"smooth"})}
-function openTopic(tp){const list=VIDEOS.filter(v=>v.topic===tp);
-  $("#catTitle").textContent=tp;$("#catSub").textContent=list.length+" "+t("courses");
-  $("#catIcon").innerHTML=ic(TOPIC_ICONS[tp]||"hash");
-  $("#categoryGrid").innerHTML=list.map(cardHTML).join("");
-  showPage("category");closeMobileSidebar();refreshIcons();window.scrollTo({top:0,behavior:"smooth"})}
-/* ================================================================
-   Video page
-================================================================ */
-function openVideo(id){const v=VIDEOS.find(x=>x.id===id);if(!v)return;currentVid=v;
-  historyList=historyList.filter(h=>h.id!==id);historyList.unshift({id,time:Date.now()});store.set("tt_history",historyList);
-  showPage("video");renderVideoPage(v);history.replaceState(null,"","#v="+id);window.scrollTo({top:0,behavior:"smooth"})}
-function renderVideoPage(v,keepPlayer){const auto=settings.autoplay?1:0;
-  if(!keepPlayer)$("#playerLarge").innerHTML=`<iframe src="https://www.youtube-nocookie.com/embed/${v.yt}?rel=0&autoplay=${auto}" title="${esc(v.t)}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`;
-  $("#mTitleLarge").textContent=v.t;
-  $("#mChanAvatar").outerHTML=avatarHTML(v.ch,chGrad(v.ch),"channel-avatar").replace('class="channel-avatar"','class="channel-avatar" id="mChanAvatar"');
-  $("#mChanLarge").textContent=v.ch;$("#mCatLarge").textContent=v.cat+" · "+v.topic;
-  renderSubscribeBtn(v);renderActions(v);
-  const desc=DESC_POOL[h32(v.id)%DESC_POOL.length];
-  $("#mDescLarge").innerHTML=`<span class="meta-line">${fmtViews(vViews(v))} · ${relTime(vDate(v))} · ${v.ch}</span>${esc(desc)}<br>${v.tags.map(tag=>`<span class="tag">#${tag}</span>`).join("")}`;
-  renderComments(v);renderRelated(v);refreshIcons()}
-function renderSubscribeBtn(v){const b=$("#subscribeBtn");const on=subs.includes(v.ch);
-  b.className="subscribe-btn"+(on?" subscribed":"");
-  b.innerHTML=ic(on?"bell-ring":"bell")+` <span>${on?t("subd"):t("sub")}</span>`;refreshIcons()}
-function toggleSubFromPage(){if(!currentVid)return;if(!guardAuth())return;
-  const i=subs.indexOf(currentVid.ch);
-  if(i>-1){subs.splice(i,1);toast(t("sub")+" ✕","bell-off")}else{subs.push(currentVid.ch);toast(t("subd"),"bell-ring")}
-  store.set("tt_subs",subs);renderSubscribeBtn(currentVid)}
-function renderActions(v){const liked=!!likes[v.id];
-  $("#mActionsLarge").innerHTML=
-   `<button class="action-btn ${liked?"liked":""}" onclick="toggleLike('${v.id}')">${ic("heart")} <span>${vLikes(v)+(liked?1:0)}</span></button>
-    <button class="action-btn" onclick="shareVideo('${v.id}')">${ic("share-2")} <span>${t("share")}</span></button>
-    <button class="action-btn" onclick="openDl('${v.id}')">${ic("download")} <span>${t("dl")}</span></button>`;
-  refreshIcons()}
-function toggleLike(id){if(!guardAuth())return;
-  if(likes[id])delete likes[id];else likes[id]=1;
-  store.set("tt_likes",likes);
-  if(currentVid&&currentVid.id===id)renderActions(currentVid)}
-function shareVideo(id){const url=location.origin+location.pathname+"#v="+id;
-  try{navigator.clipboard.writeText(url).then(()=>toast(t("link_copied"),"link-2"))}catch(e){toast(url,"link-2")}}
-function openDl(id){const v=VIDEOS.find(x=>x.id===id);if(!v)return;
-  $("#dlSSYT").href="https://ssyoutube.com/watch?v="+v.yt;
-  $("#dlY2Mate").href="https://www.y2mate.com/youtube/"+v.yt;
-  $("#dlCobalt").href="https://cobalt.tools/";
-  $("#dlModal").classList.add("active");refreshIcons()}
-function closeDlModal(){$("#dlModal").classList.remove("active")}
-function renderRelated(v){const rel=VIDEOS.filter(x=>x.id!==v.id).sort((a,b)=>(b.cat===v.cat)-(a.cat===v.cat)||(b.topic===v.topic)-(a.topic===v.topic)).slice(0,8);
-  $("#relatedList").innerHTML=rel.map(r=>`<div class="related-item" onclick="openVideo('${r.id}')">
-    <div class="related-thumb"><img src="${thumbSrc(r)}" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/${r.yt}/320/180'" alt=""><span class="dur">${r.dur}</span></div>
-    <div class="related-info"><div class="related-title">${esc(r.t)}</div><div class="related-ch">${r.ch}</div><span class="related-cat">${r.cat}</span></div></div>`).join("");
-  refreshIcons()}
-/* ================================================================
-   Comments
-================================================================ */
-function seedComments(v){const n=2+(h32("c"+v.id)%3);const arr=[];
-  for(let i=0;i<n;i++){const name=CMT_NAMES[(h32(v.id)+i*3)%CMT_NAMES.length];const txtIdx=(h32(v.id+i)%CMT_POOL.length);
-    arr.push({name,text:CMT_POOL[txtIdx],time:Date.now()-(1+(h32(v.id+i)%60))*864e5,seed:true})}
-  return arr}
-function allComments(v){return [...(commentsDB[v.id]||[]),...seedComments(v)].sort((a,b)=>b.time-a.time)}
-function renderComments(v){const list=allComments(v);const u=curUser();
-  const form=u?`<div class="cmt-form-large">
-      ${avatarHTML(u.name,u.grad||userGrad(u.name),"cmt-avatar-large",u.avatar)}
-      <div class="cmt-input-wrap-large">
-        <input class="cmt-input-large" id="cmtInput" placeholder="${t("cmtph")}" onkeydown="if(event.key==='Enter')addComment()">
-        <div class="cmt-btns-large"><button class="cmt-submit-large" onclick="addComment()">${t("post")}</button></div>
-      </div></div>`
-    :`<div class="cmt-login-large">${t("login_cmt")} — <a onclick="openAuth('signin')">${t("signin")}</a></div>`;
-  $("#cmtSectionLarge").innerHTML=`<div class="cmt-head">${t("comments")} <span>· ${list.length}</span></div>${form}
-    <div class="cmt-list-large">${list.map((c,i)=>`<div class="cmt-item-large">
-      ${avatarHTML(c.name,userGrad(c.name),"cmt-avatar-large",c.avatar)}
-      <div style="min-width:0;flex:1"><div class="cmt-user-large">${esc(c.name)} <span class="cmt-time-large">· ${relTime(c.time)}</span></div>
-      <div class="cmt-text-large">${esc(c.text)}</div></div>
-      ${!c.seed&&u&&c.email===u.email?`<button class="cmt-del-large" onclick="deleteComment('${v.id}',${c.time})">${ic("trash-2")}</button>`:""}
-    </div>`).join("")}</div>`;
-  refreshIcons()}
-function addComment(){if(!guardAuth())return;const u=curUser();const inp=$("#cmtInput");const text=inp.value.trim();if(!text)return;
-  (commentsDB[currentVid.id]=commentsDB[currentVid.id]||[]).push({name:u.name,email:u.email,text,avatar:u.avatar||null,time:Date.now()});
-  store.set("tt_comments",commentsDB);renderComments(currentVid);toast(t("cmt_added"),"message-circle")}
-function deleteComment(vid,time){commentsDB[vid]=(commentsDB[vid]||[]).filter(c=>c.time!==time);
-  store.set("tt_comments",commentsDB);renderComments(VIDEOS.find(v=>v.id===vid));toast(t("cmt_del"),"trash-2")}
-/* ================================================================
-   Liked / Subs / History pages
-================================================================ */
-function renderLiked(){const ids=Object.keys(likes);const list=ids.map(id=>VIDEOS.find(v=>v.id===id)).filter(Boolean);
-  $("#likedSub").textContent=list.length+" "+t("courses");
-  const g=$("#likedGrid");g.innerHTML=list.map(cardHTML).join("");if(!list.length)listEmpty(g,t("no_like"),"heart");refreshIcons()}
-function renderSubs(){const list=VIDEOS.filter(v=>subs.includes(v.ch));
-  $("#subsSub").textContent=subs.length+" " + (subs.length===1?"chaîne":"chaînes");
-  const g=$("#subsGrid");g.innerHTML=list.map(cardHTML).join("");if(!list.length)listEmpty(g,t("no_subs"),"bell");refreshIcons()}
-function renderHistory(){const list=historyList.map(h=>VIDEOS.find(v=>v.id===h.id)).filter(Boolean);
-  $("#histSub").textContent=list.length+" "+t("courses");
-  const g=$("#historyGrid");g.innerHTML=list.map(cardHTML).join("");if(!list.length)listEmpty(g,t("no_hist"),"history");refreshIcons()}
-/* ================================================================
-   Auth
-================================================================ */
-function guardAuth(){if(curUser())return true;openAuth("signin");toast(t("need_login"),"lock");return false}
-function openAuth(mode){authMode=mode||"signup";updateAuthUI();$("#authOv").classList.add("active");refreshIcons()}
-function closeAuth(){$("#authOv").classList.remove("active");$("#authError").textContent="";signupAvatarData=null;signupAvatarGrad=null;
-  $("#signupAvatar").innerHTML=ic("camera")+'<input type="file" accept="image/*" onchange="previewAvatar(event)">'}
-function toggleAuthMode(){authMode=authMode==="signup"?"signin":"signup";updateAuthUI()}
-function updateAuthUI(){const su=authMode==="signup";
-  $("#authTitle").textContent=su?"Create Account":"Sign In";
-  $("#nameGroup").style.display=su?"":"none";
-  $("#signupAvatar").style.display=su?"":"none";
-  $("#authBtn").textContent=su?"Create Account":"Sign In";
-  $("#authSwitch").innerHTML=su?`Already have an account? <b>Sign In</b>`:`No account yet? <b>Create one</b>`}
-function previewAvatar(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();
-  r.onload=ev=>{signupAvatarData=ev.target.result;$("#signupAvatar").innerHTML=`<img src="${signupAvatarData}"><input type="file" accept="image/*" onchange="previewAvatar(event)">`};
-  r.readAsDataURL(f)}
-function handleAuth(){const name=$("#authName").value.trim(),email=$("#authEmail").value.trim().toLowerCase(),pass=$("#authPass").value;
-  const err=$("#authError");err.textContent="";
-  const okMail=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  if(authMode==="signup"){
-    if(name.length<2){err.textContent=t("err_name");return}
-    if(!okMail){err.textContent=t("err_email");return}
-    if(pass.length<6){err.textContent=t("err_pass");return}
-    if(users.some(u=>u.email===email)){err.textContent=t("err_exists");return}
-    const u={name,email,pass,avatar:signupAvatarData,grad:signupAvatarGrad||userGrad(name)};
-    users.push(u);store.set("tt_users",users);session=email;store.set("tt_session",session);
-  }else{
-    const u=users.find(x=>x.email===email&&x.pass===pass);
-    if(!u){err.textContent=t("err_creds");return}
-    session=email;store.set("tt_session",session)}
-  closeAuth();renderAuthArea();if(currentVid)renderComments(currentVid);toast(t("welcome")+", "+curUser().name.split(" ")[0],"sparkles")}
-function logOut(){session=null;store.set("tt_session",null);hideDropdown();renderAuthArea();navigate("home");toast(t("bye"),"log-out")}
-function renderAuthArea(){const area=$("#authArea");const u=curUser();
-  if(!u){area.innerHTML=`<button class="signin-btn" onclick="openAuth('signin')">${ic("circle-user-round")} <span>${t("signin")}</span></button>`;refreshIcons();return}
-  area.innerHTML=`<button class="avatar-btn" style="background:${u.grad||userGrad(u.name)}" onclick="toggleDropdown(event)">${u.avatar?`<img src="${u.avatar}">`:esc(u.name.charAt(0).toUpperCase())}</button>`;
-  $("#ddAvatar").outerHTML=avatarHTML(u.name,u.grad||userGrad(u.name),"dd-avatar",u.avatar).replace('class="dd-avatar"','class="dd-avatar" id="ddAvatar"');
-  $("#ddName").textContent=u.name;$("#ddEmail").textContent=u.email;refreshIcons()}
-function toggleDropdown(e){e.stopPropagation();$("#dropdown").classList.toggle("open")}
-function hideDropdown(){$("#dropdown").classList.remove("open")}
-document.addEventListener("click",e=>{const d=$("#dropdown");if(d.classList.contains("open")&&!d.contains(e.target))hideDropdown()});
-/* ================================================================
-   Settings
-================================================================ */
-function openSettingsTab(tab,btn){$$(".tab-btn-pro").forEach(b=>b.classList.remove("active"));if(btn)btn.classList.add("active");
-  $$(".settings-pane-pro").forEach(p=>p.classList.remove("active"));const p=$("#set-pro-"+tab);if(p)p.classList.add("active");settingsTab=tab}
-function loadSettingsForms(){const u=curUser();
-  $("#accLocked").innerHTML=u?"":`<div class="cmt-login-large">${t("login_view")} — <a onclick="openAuth('signin')">${t("signin")}</a></div>`;
-  $("#accBody").style.display=u?"":"none";
-  if(u){$("#accNamePro").value=u.name;$("#accEmailPro").value=u.email;$("#accOldPassPro").value="";$("#accNewPassPro").value="";$("#accErrorPro").textContent="";
-    $("#accAvatarWrapPro").outerHTML=avatarHTML(u.name,u.grad||userGrad(u.name),"avatar-preview-wrapper-pro",u.avatar).replace('class="avatar-preview-wrapper-pro"','class="avatar-preview-wrapper-pro" id="accAvatarWrapPro"')}
-  $("#channelNamePro").value=channelProfile.name||"";$("#channelBioPro").value=channelProfile.bio||"";
-  $("#channelCatPro").value=channelProfile.cat||"";$("#channelLinkPro").value=channelProfile.link||"";$("#channelSocialPro").value=channelProfile.social||"";
-  $("#t-pro-dark").classList.toggle("on",settings.theme==="dark");
-  $("#t-pro-auto").classList.toggle("on",!!settings.autoplay);
-  $("#langSelectPro").value=settings.lang;$("#qualitySelectPro").value=settings.quality;$("#fontSelectPro").value=settings.font;
-  refreshIcons()}
-function changeAccPicPro(e){const u=curUser();if(!u)return;const f=e.target.files[0];if(!f)return;const r=new FileReader();
-  r.onload=ev=>{u.avatar=ev.target.result;store.set("tt_users",users);loadSettingsForms();renderAuthArea();toast(t("acc_upd"),"image")};r.readAsDataURL(f)}
-function randomizeAvatarPro(){const u=curUser();if(!u)return;u.avatar=null;
-  const h1=Math.floor(Math.random()*360);u.grad=`linear-gradient(135deg,hsl(${h1} 82% 48%),hsl(${(h1+50)%360} 86% 60%))`;
-  store.set("tt_users",users);loadSettingsForms();renderAuthArea();toast(t("acc_upd"),"shuffle")}
-function saveAccountPro(){const u=curUser();if(!u)return;const err=$("#accErrorPro");err.textContent="";
-  const name=$("#accNamePro").value.trim();const oldp=$("#accOldPassPro").value;const newp=$("#accNewPassPro").value;
-  if(name.length<2){err.textContent=t("err_name");return}
-  if(newp){if(oldp!==u.pass){err.textContent=t("err_oldpass");return}
-    if(newp.length<6){err.textContent=t("err_pass");return}u.pass=newp}
-  u.name=name;store.set("tt_users",users);renderAuthArea();toast(t("acc_upd"),"check")}
-function saveChannelPro(){channelProfile={name:$("#channelNamePro").value.trim(),bio:$("#channelBioPro").value.trim(),cat:$("#channelCatPro").value,link:$("#channelLinkPro").value.trim(),social:$("#channelSocialPro").value.trim()};
-  store.set("tt_channel",channelProfile);toast(t("ch_saved"),"tv")}
-function toggleSetPro(k){if(k==="dark"){settings.theme=settings.theme==="dark"?"light":"dark";applyTheme();$("#t-pro-dark").classList.toggle("on",settings.theme==="dark")}
-  if(k==="auto"){settings.autoplay=!settings.autoplay;$("#t-pro-auto").classList.toggle("on",settings.autoplay)}
-  store.set("tt_settings",settings)}
-function setLangPro(v){settings.lang=v;store.set("tt_settings",settings);applyLang();toast(t("saved_ok"),"globe")}
-function setQualityPro(v){settings.quality=v;store.set("tt_settings",settings);toast(t("saved_ok"),"monitor-play")}
-function setFontSizePro(v){settings.font=v;store.set("tt_settings",settings);applyFont();toast(t("saved_ok"),"type")}
-function clearHistoryPro(){historyList=[];store.set("tt_history",[]);if($("#page-history").classList.contains("active"))renderHistory();toast(t("reset_done"),"trash-2")}
-function clearLikesPro(){likes={};store.set("tt_likes",{});if(currentVid)renderActions(currentVid);toast(t("reset_done"),"heart")}
-function resetAllAppDataPro(){localStorage.clear();toast(t("reset_done"),"shield-alert");setTimeout(()=>location.reload(),900)}
-/* ================================================================
-   Theme / font / sidebar
-================================================================ */
-function applyTheme(){document.documentElement.setAttribute("data-theme",settings.theme);
-  $("#themeBtn").innerHTML=ic(settings.theme==="dark"?"sun":"moon");refreshIcons()}
-function toggleTheme(){settings.theme=settings.theme==="dark"?"light":"dark";store.set("tt_settings",settings);applyTheme();
-  const tog=$("#t-pro-dark");if(tog)tog.classList.toggle("on",settings.theme==="dark")}
-function applyFont(){document.body.style.zoom=settings.font==="small"?0.92:settings.font==="large"?1.08:1}
-function toggleSidebar(){if(window.innerWidth<=1150){document.body.classList.toggle("sidebar-open")}
-  else document.body.classList.toggle("sidebar-collapsed")}
-function closeMobileSidebar(){document.body.classList.remove("sidebar-open")}
-function toggleMobileSearch(){document.body.classList.toggle("search-open");if(document.body.classList.contains("search-open"))$("#searchInput").focus()}
-/* ================================================================
-   Boot
-================================================================ */
-function route(){const h=location.hash;if(h.startsWith("#v=")){const id=h.slice(3);
-  if(VIDEOS.some(v=>v.id===id)){openVideo(id);return true}}return false}
-window.addEventListener("hashchange",()=>{route()});
-window.addEventListener("resize",()=>{const b=$("#mSearchBtn");if(b)b.style.display=window.innerWidth<=860?"flex":"none";
-  if(window.innerWidth>1150)closeMobileSidebar()});
-document.addEventListener("keydown",e=>{if(e.key==="/"&&document.activeElement.tagName!=="INPUT"&&document.activeElement.tagName!=="TEXTAREA"){e.preventDefault();$("#searchInput").focus()}
-  if(e.key==="Escape"){closeAuth();closeDlModal();hideDropdown()}});
-$("#authOv").addEventListener("click",e=>{if(e.target.id==="authOv")closeAuth()});
-(function init(){
-  applyTheme();applyFont();applyLangStarter();
-  renderAuthArea();renderSidebar();renderChips();renderMarquee();updateCount();
-  currentFilter();
-  const b=$("#mSearchBtn");if(b)b.style.display=window.innerWidth<=860?"flex":"none";
-  if(!route()){renderGrid(true)}
-  loadSettingsForms();
-})();
-function applyLangStarter(){applyLang()}
-</script>
+<script src="data.js"></script>
+<script src="app.js"></script>
 </body>
 </html>
