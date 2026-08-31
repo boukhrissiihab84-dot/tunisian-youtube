@@ -38,15 +38,28 @@ let searchTimer;
 function navigate(page, data = null) {
     document.getElementById("dropdown")?.classList.remove("show");
     document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+    
+    // Auto Redirection ta3 account w channel lel Settings page mte3na el jdida
+    if (page === "account") {
+        navigate("settings");
+        const tabBtn = document.querySelector(".tab-btn-pro[onclick*='account']");
+        if (tabBtn) openSettingsTab('account', tabBtn);
+        return;
+    }
+    if (page === "channel") {
+        navigate("settings");
+        const tabBtn = document.querySelector(".tab-btn-pro[onclick*='channel']");
+        if (tabBtn) openSettingsTab('channel', tabBtn);
+        return;
+    }
+
     const target = document.getElementById("page-" + page);
     if (target) target.classList.add("active");
     
     if (page === "home") { renderHome(); }
     else if (page === "video" && data) { loadVideoPage(data); }
     else if (page === "category" && data) { loadCategoryPage(data); }
-    else if (page === "account") { loadAccountPage(); }
-    else if (page === "channel") { loadChannelPage(); }
-    else if (page === "settings") { loadToggles(); }
+    else if (page === "settings") { loadUserSettingsPro(); }
     else if (page === "liked") { loadLikedPage(); }
     else if (page === "subscriptions") { loadSubscriptionsPage(); }
     else if (page === "history") { loadHistoryPage(); }
@@ -88,46 +101,17 @@ function applyTheme() {
 function toggleTheme() {
     const s = S.g("settings") || { dark: 0, auto: 1, notif: 0, history: 1, public: 1, search: 1 };
     s.dark = s.dark ? 0 : 1;
-    S.s("settings", s); applyTheme(); loadToggles();
+    S.s("settings", s); applyTheme(); loadUserSettingsPro();
 }
 function applyFontSize() {
     const s = S.g("settings") || { fontSize: "normal" };
     document.body.classList.remove("font-small", "font-normal", "font-large");
     document.body.classList.add("font-" + (s.fontSize || "normal"));
 }
-function setFontSize(v) { const s = S.g("settings") || {}; s.fontSize = v; S.s("settings", s); applyFontSize(); }
 function applyGridSize() {
     const s = S.g("settings") || { gridSize: "280" };
     document.querySelectorAll(".grid").forEach(g => g.style.gridTemplateColumns = `repeat(auto-fill, minmax(${s.gridSize || 280}px, 1fr))`);
 }
-function setGridSize(v) { const s = S.g("settings") || {}; s.gridSize = v; S.s("settings", s); applyGridSize(); }
-function setLang(v) { const s = S.g("settings") || {}; s.lang = v; S.s("settings", s); const trans = { derja: "Lawwej 3la cours...", fr: "Rechercher...", en: "Search courses..." }; document.getElementById("searchInput").placeholder = trans[v] || trans.en; }
-function setQuality(v) { const s = S.g("settings") || {}; s.quality = v; S.s("settings", s); }
-
-function switchSettingsTab(page, btn) {
-    document.querySelectorAll(".settings-tab").forEach(t => t.classList.remove("active"));
-    btn.classList.add("active");
-    document.querySelectorAll(".settings-page-content").forEach(p => p.classList.remove("active"));
-    document.getElementById("set-" + page)?.classList.add("active");
-}
-function loadToggles() {
-    const s = S.g("settings") || { dark: 0, auto: 1, notif: 0, history: 1, public: 1, search: 1, fontSize: "normal", gridSize: "280", lang: "derja", quality: "auto" };
-    ["dark", "auto", "notif", "history", "public", "search"].forEach(k => {
-        const el = document.getElementById("t-" + k);
-        if (el) { if (s[k]) el.classList.add("on"); else el.classList.remove("on"); }
-    });
-    const langSel = document.getElementById("langSelect"); if (langSel && s.lang) langSel.value = s.lang;
-    const fontSel = document.getElementById("fontSelect"); if (fontSel) fontSel.value = s.fontSize || "normal";
-    const gridSel = document.getElementById("gridSelect"); if (gridSel) gridSel.value = s.gridSize || "280";
-    const qSel = document.getElementById("qualitySelect"); if (qSel) qSel.value = s.quality || "auto";
-}
-function toggleSet(k) {
-    const s = S.g("settings") || { dark: 0, auto: 1, notif: 0, history: 1, public: 1, search: 1 };
-    s[k] = s[k] ? 0 : 1; S.s("settings", s); loadToggles();
-    if (k === "dark") applyTheme();
-}
-function clearHistory() { S.r("history"); alert("✅ History cleared"); }
-function clearLikes() { S.r("likes"); alert("✅ Likes cleared"); }
 
 // ====== AUTH ======
 function renderAuth() {
@@ -156,7 +140,6 @@ function toggleAuthMode() {
     document.getElementById("signupAvatar").style.display = isSignUp ? "flex" : "none";
     document.getElementById("authSwitch").innerHTML = isSignUp ? 'Already have an account? <b>Sign In</b>' : 'Don\'t have an account? <b>Sign Up</b>';
 }
-let tempAvatar = "";
 function previewAvatar(e) { const f = e.target.files[0]; if (f) { const r = new FileReader(); r.onload = x => { tempAvatar = x.target.result; document.getElementById("signupAvatar").innerHTML = `<img src="${tempAvatar}"><input type="file" accept="image/*" onchange="previewAvatar(event)">`; }; r.readAsDataURL(f); } }
 function handleAuth() {
     const n = document.getElementById("authName").value.trim(), em = document.getElementById("authEmail").value.trim(), p = document.getElementById("authPass").value, err = document.getElementById("authError");
@@ -178,44 +161,168 @@ function handleAuth() {
 }
 function logOut() { user = null; S.r("user"); renderAuth(); document.getElementById("dropdown")?.classList.remove("show"); navigate("home"); }
 
-// ====== PROFILE / ACCOUNT ======
-function loadAccountPage() {
-    if (!user) { openAuth(); navigate("home"); return; }
-    document.getElementById("accName").value = user.name || "";
-    document.getElementById("accEmail").value = user.email || "";
-    document.getElementById("accAvatarWrap").innerHTML = user.avatar ? `<img src="${user.avatar}"><input type="file" accept="image/*" onchange="changeAccPic(event)">` : `<i class="fas fa-camera"></i><input type="file" accept="image/*" onchange="changeAccPic(event)">`;
-    document.getElementById("accOldPass").value = ""; document.getElementById("accNewPass").value = ""; document.getElementById("accError").textContent = "";
-}
-function changeAccPic(e) { const f = e.target.files[0]; if (f) { const r = new FileReader(); r.onload = x => { user.avatar = x.target.result; S.s("user", user); let us = S.g("users") || []; const idx = us.findIndex(u => u.id === user.id); if (idx > -1) { us[idx] = user; S.s("users", us); } renderAuth(); loadAccountPage(); }; r.readAsDataURL(f); } }
-function saveAccount() {
-    const err = document.getElementById("accError"); err.textContent = "";
-    const n = document.getElementById("accName").value.trim(), o = document.getElementById("accOldPass").value, np = document.getElementById("accNewPass").value;
-    if (n) user.name = n;
-    if (o || np) {
-        if (o !== user.pass) { err.textContent = "Current password is wrong!"; return; }
-        if (np.length < 6) { err.textContent = "New password must be 6+ characters!"; return; }
-        user.pass = np;
-    }
-    S.s("user", user); let us = S.g("users") || []; const idx = us.findIndex(u => u.id === user.id); if (idx > -1) { us[idx] = user; S.s("users", us); }
-    renderAuth(); loadAccountPage(); alert("✅ Account saved!");
+
+// ====== UNIFIED SETTINGS LOGIC PRO ======
+function openSettingsTab(tabId, btn) {
+    document.querySelectorAll(".settings-pane-pro").forEach(pane => pane.classList.remove("active"));
+    document.querySelectorAll(".tab-btn-pro").forEach(b => b.classList.remove("active"));
+    
+    document.getElementById("set-pro-" + tabId)?.classList.add("active");
+    if (btn) btn.classList.add("active");
 }
 
-function loadChannelPage() {
-    if (!user) { openAuth(); navigate("home"); return; }
-    const ch = S.g("channel_" + user.id) || { name: user.name, bio: "", category: "", link: "", social: "" };
-    document.getElementById("channelNameDisplay").textContent = ch.name || user.name;
-    document.getElementById("channelBioDisplay").textContent = ch.bio || "No description yet";
-    document.getElementById("channelBigAvatar").innerHTML = user.avatar ? `<img src="${user.avatar}">` : (user.name || "U")[0].toUpperCase();
-    document.getElementById("channelName").value = ch.name || "";
-    document.getElementById("channelBio").value = ch.bio || "";
-    document.getElementById("channelCat").value = ch.category || "";
-    document.getElementById("channelLink").value = ch.link || "";
-    document.getElementById("channelSocial").value = ch.social || "";
+function loadUserSettingsPro() {
+    if (!user) { openAuth(); navigate('home'); return; }
+    
+    // Tab 1: Mon Compte
+    document.getElementById("accNamePro").value = user.name || "";
+    document.getElementById("accEmailPro").value = user.email || "";
+    document.getElementById("accOldPassPro").value = "";
+    document.getElementById("accNewPassPro").value = "";
+    document.getElementById("accErrorPro").textContent = "";
+
+    const wrap = document.getElementById("accAvatarWrapPro");
+    if (wrap) {
+        wrap.innerHTML = user.avatar 
+            ? `<img src="${user.avatar}">` 
+            : (user.name || "U")[0].toUpperCase();
+    }
+
+    // Tab 2: Ma Chaîne
+    const ch = S.g("channel_" + user.id) || { name: user.name, bio: "", category: "", link: "", insta: "" };
+    document.getElementById("channelNamePro").value = ch.name || "";
+    document.getElementById("channelBioPro").value = ch.bio || "";
+    document.getElementById("channelCatPro").value = ch.category || "";
+    document.getElementById("channelLinkPro").value = ch.link || "";
+    document.getElementById("channelSocialPro").value = ch.insta || "";
+
+    // Tab 3: Préférences
+    const s = S.g("settings") || { dark: 0, auto: 1, notif: 0, history: 1, public: 1, search: 1, fontSize: "normal", gridSize: "280", lang: "derja", quality: "auto" };
+    ["dark", "auto"].forEach(k => {
+        const el = document.getElementById("t-pro-" + k);
+        if (el) {
+            if (s[k]) el.classList.add("on");
+            else el.classList.remove("on");
+        }
+    });
+    const langSel = document.getElementById("langSelectPro"); if (langSel) langSel.value = s.lang || "derja";
+    const fontSel = document.getElementById("fontSelectPro"); if (fontSel) fontSel.value = s.fontSize || "normal";
+    const qSel = document.getElementById("qualitySelectPro"); if (qSel) qSel.value = s.quality || "auto";
 }
-function saveChannel() {
-    const ch = { name: document.getElementById("channelName").value.trim(), bio: document.getElementById("channelBio").value.trim(), category: document.getElementById("channelCat").value, link: document.getElementById("channelLink").value.trim(), social: document.getElementById("channelSocial").value.trim() };
-    S.s("channel_" + user.id, ch); loadChannelPage(); alert("✅ Channel saved!");
+
+function changeAccPicPro(e) {
+    const f = e.target.files[0];
+    if (f) {
+        const r = new FileReader();
+        r.onload = x => {
+            user.avatar = x.target.result;
+            S.s("user", user);
+            let us = S.g("users") || [];
+            let idx = us.findIndex(u => u.id === user.id);
+            if (idx > -1) { us[idx] = user; S.s("users", us); }
+            renderAuth();
+            loadUserSettingsPro();
+        };
+        r.readAsDataURL(f);
+    }
 }
+
+function randomizeAvatarPro() {
+    if (!user) return;
+    const seed = Math.random().toString(36).substring(7);
+    const newAvatar = `https://api.dicebear.com/7.x/bottts/svg?seed=${seed}`;
+    user.avatar = newAvatar;
+    S.s("user", user);
+    let us = S.g("users") || [];
+    let idx = us.findIndex(u => u.id === user.id);
+    if (idx > -1) { us[idx] = user; S.s("users", us); }
+    renderAuth();
+    loadUserSettingsPro();
+}
+
+function saveAccountPro() {
+    const err = document.getElementById("accErrorPro");
+    err.textContent = "";
+    const n = document.getElementById("accNamePro").value.trim();
+    const o = document.getElementById("accOldPassPro").value;
+    const np = document.getElementById("accNewPassPro").value;
+
+    if (n) user.name = n;
+    if (o || np) {
+        if (o !== user.pass) { err.textContent = "كلمة السر الحالية خاطئة!"; return; }
+        if (np.length < 6) { err.textContent = "كلمة السر الجديدة قصيرة جداً (6+ حروف)!"; return; }
+        user.pass = np;
+    }
+
+    S.s("user", user);
+    let us = S.g("users") || [];
+    let idx = us.findIndex(u => u.id === user.id);
+    if (idx > -1) { us[idx] = user; S.s("users", us); }
+    renderAuth();
+    loadUserSettingsPro();
+    alert("✅ Vos informations de compte ont été mises à jour!");
+}
+
+function saveChannelPro() {
+    const ch = {
+        name: document.getElementById("channelNamePro").value.trim(),
+        bio: document.getElementById("channelBioPro").value.trim(),
+        category: document.getElementById("channelCatPro").value,
+        link: document.getElementById("channelLinkPro").value.trim(),
+        insta: document.getElementById("channelSocialPro").value.trim()
+    };
+    S.s("channel_" + user.id, ch);
+    alert("✅ Vos paramètres de chaîne ont été enregistrés!");
+}
+
+function toggleSetPro(k) {
+    const s = S.g("settings") || { dark: 0, auto: 1, notif: 0, history: 1, public: 1, search: 1 };
+    s[k] = s[k] ? 0 : 1;
+    S.s("settings", s);
+    loadUserSettingsPro();
+    if (k === "dark") applyTheme();
+}
+
+function setLangPro(v) {
+    const s = S.g("settings") || {};
+    s.lang = v; S.s("settings", s);
+    const trans = { derja: "Lawwej 3la cours...", fr: "Rechercher...", en: "Search courses..." };
+    document.getElementById("searchInput").placeholder = trans[v] || trans.en;
+}
+
+function setFontSizePro(v) {
+    const s = S.g("settings") || {};
+    s.fontSize = v; S.s("settings", s);
+    applyFontSize();
+}
+
+function setQualityPro(v) {
+    const s = S.g("settings") || {};
+    s.quality = v; S.s("settings", s);
+}
+
+function clearHistoryPro() {
+    if (confirm("Voulez-vous vraiment effacer l'historique ?")) {
+        S.r("history");
+        alert("🧹 Historique effacé!");
+    }
+}
+
+function clearLikesPro() {
+    if (confirm("Voulez-vous effacer vos likes ?")) {
+        S.r("likes");
+        alert("💔 Likes réinitialisées!");
+    }
+}
+
+function resetAllAppDataPro() {
+    if (confirm("⚠️ ATTENTION : Cela va supprimer absolument toutes vos données locales. Confirmer ?")) {
+        localStorage.clear();
+        alert("🔄 Réinitialisation réussie. Rechargement...");
+        window.location.reload();
+    }
+}
+
 
 // ====== LIKES / SUBS ======
 function getLikes(id) { return (S.g("likes") || {})[id] || []; }
@@ -236,14 +343,15 @@ function renderCmtsLarge(id) {
     if (!s) return;
     let inp = "";
     if (user) {
-        const av = user.avatar ? `<img src="${user.avatar}">` : user.name[0].toUpperCase();
-        inp = `<div class="cmt-form"><div class="cmt-avatar">${av}</div><div class="cmt-input-wrap"><input class="cmt-input" id="cmtInputLarge" placeholder="Add a comment..." onkeypress="if(event.key==='Enter')postCmt('${id}')"><div class="cmt-btns"><button class="cmt-submit" onclick="postCmt('${id}')">Comment</button></div></div></div>`;
+        const av = user.avatar ? `<img src="${user.avatar}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">` : user.name[0].toUpperCase();
+        inp = `<div class="cmt-form-large"><div class="cmt-avatar-large">${av}</div><div class="cmt-input-wrap-large"><input class="cmt-input-large" id="cmtInputLarge" placeholder="Add a comment..." onkeypress="if(event.key==='Enter')postCmt('${id}')"><div class="cmt-btns-large"><button class="cmt-submit-large" onclick="postCmt('${id}')">Comment</button></div></div></div>`;
     } else {
-        inp = `<p class="cmt-login"><a onclick="openAuth()">Sign in</a> to comment</p>`;
+        inp = `<p class="cmt-login-large"><a onclick="openAuth()">Sign in</a> to comment</p>`;
     }
-    let list = "";
-    if (!cmts.length) list = `<p style="color:var(--text3);font-size:13px;padding:8px 0">No comments yet. Be the first! 💬</p>`;
-    else cmts.forEach(c => { list += `<div class="cmt-item"><div class="cmt-avatar" style="width:32px;height:32px;font-size:12px">${c.name ? c.name[0].toUpperCase() : "U"}</div><div style="flex:1"><span class="cmt-user">@${c.name}</span>${user && user.id === c.uid ? `<button class="cmt-del" onclick="delCmt('${id}','${c.id}')"><i class="fas fa-trash"></i></button>` : ""}<p class="cmt-text">${c.text}</p><span class="cmt-time">${c.time}</span></div></div>`; });
+    let list = `<div class="cmt-list-large">`;
+    if (!cmts.length) list += `<p style="color:var(--text3);font-size:13px;padding:8px 0">No comments yet. Be the first! 💬</p>`;
+    else cmts.forEach(c => { list += `<div class="cmt-item-large"><div class="cmt-avatar-large" style="width:32px;height:32px;font-size:12px">${c.name ? c.name[0].toUpperCase() : "U"}</div><div style="flex:1"><span class="cmt-user-large">@${c.name}</span>${user && user.id === c.uid ? `<button class="cmt-del-large" onclick="delCmt('${id}','${c.id}')"><i class="fas fa-trash"></i></button>` : ""}<p class="cmt-text-large">${c.text}</p><span class="cmt-time-large">${c.time}</span></div></div>`; });
+    list += `</div>`;
     s.innerHTML = `<h3>💬 ${cmts.length} Comments</h3>${inp}${list}`;
 }
 
@@ -253,19 +361,21 @@ function shareV(id) { const u = `https://www.youtube.com/watch?v=${id}`; if (nav
 function downloadV(id) {
     const url = `https://www.youtube.com/watch?v=${id}`;
     const encoded = encodeURIComponent(url);
-    document.getElementById("dlCobalt").href = `https://cobalt.tools/?u=${encoded}`;
-    document.getElementById("dlSSYT").href = `https://ssyoutube.com/watch?v=${id}`;
-    document.getElementById("dlY2Mate").href = `https://www.y2mate.com/youtube/${id}`;
-    document.getElementById("dlSaveFrom").href = `https://en.savefrom.net/#url=${encoded}`;
-    document.getElementById("dlModal").classList.add("active");
+    const cobalt = document.getElementById("dlCobalt");
+    const ssyt = document.getElementById("dlSSYT");
+    const y2m = document.getElementById("dlY2Mate");
+    if (cobalt) cobalt.href = `https://cobalt.tools/?u=${encoded}`;
+    if (ssyt) ssyt.href = `https://ssyoutube.com/watch?v=${id}`;
+    if (y2m) y2m.href = `https://www.y2mate.com/youtube/${id}`;
+    document.getElementById("dlModal")?.classList.add("active");
 }
-function closeDlModal() { document.getElementById("dlModal").classList.remove("active"); }
+function closeDlModal() { document.getElementById("dlModal")?.classList.remove("active"); }
 
 // ====== DATA LOADING SYSTEM ======
 function initApp(raw) {
     if (!Array.isArray(raw)) return;
     allVideos = raw.map(v => {
-        const id = v.Video_ID || v.video_id || v.id || "";
+        const id = extractCleanId(v.Video_ID || v.video_id || v.id || v.Lien || v.url || "");
         return { id, title: v.Titre || v.title || "", channel: v.Chaine || v.channel || "", category: v.Categorie || v.category || "Autre", topic: v.Mawdhou3 || v.topic || "Général", thumb: `https://img.youtube.com/vi/${id}/mqdefault.jpg` };
     }).filter(v => v.id && v.id.length === 11);
     
@@ -286,6 +396,15 @@ if (typeof rawVideosData !== 'undefined' && Array.isArray(rawVideosData)) {
         .catch(err => {
             document.getElementById("grid").innerHTML = "<p style='color:red;text-align:center;grid-column:1/-1;padding:40px'>⚠️ rawVideosData na9es! Sseb data.js fi GitHub.</p>";
         });
+}
+
+// ====== ID EXTRACTOR ======
+function extractCleanId(raw) {
+    if (!raw) return "";
+    let s = String(raw).trim();
+    if (s.length === 11 && !s.includes("/") && !s.includes("?")) return s;
+    let m = s.match(/(?:v=|\/|youtu\.be\/)([0-9A-Za-z_-]{11})/);
+    return m ? m[1] : (s.length >= 11 ? s.substring(0, 11) : "");
 }
 
 function buildSide() {
@@ -325,6 +444,7 @@ function setListAndRender(list) {
     if (e) e.style.display = "none";
     
     setupInfiniteScroll();
+    renderNextBatch();
 }
 
 // 🚀 ZERO LAG INFINITE SCROLL Observer
@@ -355,7 +475,6 @@ function renderNextBatch() {
     `).join(""));
 }
 
-function esc(s) { return (s || "").replace(/'/g, "\\'").replace(/"/g, '\\"'); }
 function showAll() { currentFilter = { cat: null, sub: null, search: "" }; document.getElementById("searchInput").value = ""; document.querySelectorAll(".side-btn,.f-chip").forEach(b => b.classList.remove("active")); document.querySelector(".f-chip")?.classList.add("active"); document.querySelectorAll("#catList .side-btn")[0]?.classList.add("active"); navigate("home"); }
 function filterChipHome(c) { currentFilter.cat = c; currentFilter.sub = null; document.querySelectorAll(".f-chip").forEach(b => b.classList.remove("active")); event?.target?.classList.add("active"); navigate("home"); }
 function filterSubHome(s) { currentFilter.sub = s; document.querySelectorAll("#subList .side-btn").forEach(b => b.classList.remove("active")); event?.target?.classList.add("active"); navigate("home"); }
@@ -453,4 +572,4 @@ applyTheme();
 applyFontSize();
 renderAuth();
 const il = (S.g("settings") || {}).lang;
-if (il) setLang(il);
+if (il) setLangPro(il);
