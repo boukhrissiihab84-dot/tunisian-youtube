@@ -6,6 +6,36 @@
 
 let VIDEOS = []; // yamboo3 ba3d ma naloadjou el json
 
+/* ---------- sécurité: ken data.js tensa mel push ---------- */
+// bech el site mayekserch 7atta ken el fichier ma3ach mawjoud
+if(typeof loadCourses !== "function"){
+  console.warn("[app] data.js ma l9inehouch -> nkhedmou bel fallback integré");
+  window.h32 = function(s){let h=2166136261;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}return h>>>0};
+  window.vViews  = v => v.views || (4000 + (h32(v.id) % 880000));
+  window.vLikes  = v => (v.likes != null ? v.likes : 40 + (h32("L"+v.id) % 9000));
+  window.vDate   = v => new Date(Date.now() - (v.d % 420) * 864e5);
+  window.chGrad  = ch => {const h=h32(ch)%360;return `linear-gradient(135deg,hsl(${h} 78% 46%),hsl(${(h+42)%360} 84% 58%))`};
+  window.userGrad= n  => {const h=h32(n)%360;return `linear-gradient(135deg,hsl(${h} 80% 48%),hsl(${(h+40)%360} 85% 58%))`};
+  window.catIcon = c => ({"Programming":"code","Design":"palette","Languages":"language","Marketing":"bullhorn","Education":"graduation-cap"}[c] || "folder");
+  window.topicIcon = () => "hashtag";
+  window.CMT_NAMES = ["Ahmed","Yasmine","Mehdi","Cyrine","Skander","Amine","Nour","Karim","Salma","Oussama"];
+  window.CMT_POOL  = ["شرح واضح برشا، شكرا!","Enfin j'ai compris, merci!","بارك الله فيك، محتوى عالمي","Bravo 3lik, continue","هذا أحسن كورس شفته","Merci, yelzem exemples akther","Top content ماشاء الله","شكرا، استنى الجزء الثاني"];
+  window.descFor   = () => "Cours gratuit, sélectionné pour la communauté. خلي لايك وشيير!";
+  window.FALLBACK_LOCAL = [
+    {id:"f0",yt:"PkZNo7MFNFg",t:"JavaScript — الكورس الكامل من الصفر",ch:"Darija Code Academy",cat:"Programming",topic:"Web",dur:"3:26:41",d:60,views:null,likes:null,tags:["javascript"]},
+    {id:"f1",yt:"rfscVS0vtbw",t:"Python Full Course — تعلم البايثون",ch:"El Academy",cat:"Programming",topic:"Python",dur:"4:26:52",d:90,views:null,likes:null,tags:["python"]},
+    {id:"f2",yt:"nu_pCVPKzTk",t:"React كامل — ابني أول App متاعك",ch:"Darija Code Academy",cat:"Programming",topic:"Web",dur:"11:55:27",d:120,views:null,likes:null,tags:["react"]},
+    {id:"f3",yt:"UB1O30fR-EE",t:"HTML للمبتدئين — Crash بالتونسي",ch:"Tounsi Tech",cat:"Programming",topic:"Web",dur:"39:51",d:20,views:null,likes:null,tags:["html"]},
+    {id:"f4",yt:"VPvVD8t02U8",t:"Flutter — Android و iOS في كورس وحدة",ch:"Tounsi Tech",cat:"Programming",topic:"Mobile",dur:"37:06:20",d:150,views:null,likes:null,tags:["flutter"]},
+    {id:"f5",yt:"HXV3zeQKqGY",t:"SQL & Databases — الكورس الكامل",ch:"El Academy",cat:"Programming",topic:"Data",dur:"4:20:39",d:180,views:null,likes:null,tags:["sql"]},
+    {id:"f6",yt:"SWYqp7iY_Tc",t:"Git & GitHub — Crash Course",ch:"Tounsi Tech",cat:"Programming",topic:"DevOps",dur:"32:41",d:45,views:null,likes:null,tags:["git"]},
+    {id:"f7",yt:"aircAruvnKk",t:"شنوة الـ Neural Network؟",ch:"Math Bel Darja",cat:"Education",topic:"IA",dur:"19:13",d:100,views:null,likes:null,tags:["ia"]},
+    {id:"f8",yt:"RxCR3g6aYJ0",t:"Français — Apprends en 1 heure (A1)",ch:"Lingua TN",cat:"Languages",topic:"Français",dur:"1:05:21",d:160,views:null,likes:null,tags:["français"]},
+    {id:"f9",yt:"TcDlF9ayfUM",t:"Apprendre le Tunisien (Derja) #1",ch:"Lingua TN",cat:"Languages",topic:"Derja",dur:"08:42",d:200,views:null,likes:null,tags:["derja"]}
+  ];
+  window.loadCourses = async () => window.FALLBACK_LOCAL;
+}
+
 /* ---------- storage ---------- */
 const store = {
   get(k, d){ try{ const v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; }catch(e){ return d; } },
