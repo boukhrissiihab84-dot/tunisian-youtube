@@ -420,28 +420,3 @@ body.sidebar-collapsed .side{transform:translateX(-100%)}
   .hdr{gap:10px;padding:0 12px}
 }
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
-/* 🔧 FIX AVATAR SIZE - Sign Up Modal Only */
-#signupAvatar,
-.avatar-upload {
-  width: 84px !important;
-  height: 84px !important;
-  max-width: 84px !important;
-  max-height: 84px !important;
-  min-width: 84px !important;
-  min-height: 84px !important;
-  overflow: hidden !important;
-  flex-shrink: 0 !important;
-}
-
-#signupAvatar img,
-.avatar-upload img {
-  width: 100% !important;
-  height: 100% !important;
-  max-width: 100% !important;
-  max-height: 100% !important;
-  object-fit: cover !important;
-  position: absolute !important;
-  top: 0 !important;
-  left: 0 !important;
-  display: block !important;
-}
