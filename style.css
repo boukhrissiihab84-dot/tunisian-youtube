@@ -420,3 +420,48 @@ body.sidebar-collapsed .side{transform:translateX(-100%)}
   .hdr{gap:10px;padding:0 12px}
 }
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+/* ===== PROFILE IMAGE STYLING ===== */
+/* Thumbnail صغير - 160x200px */
+
+.hero-image-wrapper {
+    display: flex;
+    align-items: flex-start;
+    padding-top: 20px;
+}
+
+.hero-image {
+    width: 160px;
+    height: 200px;
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(231, 0, 19, 0.2);
+    object-fit: cover;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hero-image:hover {
+    transform: scale(1.05);
+    box-shadow: 0 12px 40px rgba(231, 0, 19, 0.3);
+}
+
+/* ===== TABLET (768px وفوق) ===== */
+@media (max-width: 1024px) {
+    .hero-image {
+        width: 150px;
+        height: 190px;
+    }
+}
+
+/* ===== MOBILE (768px وتحت) ===== */
+@media (max-width: 768px) {
+    .hero-image-wrapper {
+        display: none;  /* أخفي الصورة في الموبايل عشان الشاشة صغيرة */
+    }
+}
+
+/* أو إذا تحب تخليها في الموبايل بصيغة أصغر: */
+@media (max-width: 768px) {
+    .hero-image {
+        width: 120px;
+        height: 150px;
+    }
+}
