@@ -42,7 +42,7 @@ function extractCleanId(raw) {
 
 // ================ ROUTER / NAVIGATION ================
 function navigate(page, data = null) {
-    document.getElementById("dropdown")?.classList.remove("show");
+    document.getElementById("dropdown")?.classList.remove("show", "open");
     
     let targetTab = null;
     if (page === "account") { page = "settings"; targetTab = "account"; }
@@ -124,18 +124,41 @@ function renderAuth() {
     const a = document.getElementById("authArea");
     if (!a) return;
     if (user) {
-        const pic = user.avatar ? `<img src="${user.avatar}">` : (user.name || "U")[0].toUpperCase();
-        a.innerHTML = `<div class="avatar" onclick="toggleDropdown()">${typeof pic === 'string' && pic.length === 1 ? pic : `<img src="${user.avatar}">`}</div>`;
+        const initial = (user.name || "U")[0].toUpperCase();
+        const pic = user.avatar 
+            ? `<img src="${user.avatar}" alt="${user.name || 'User'}" class="avatar-img" style="width:100%!important;height:100%!important;object-fit:cover!important;object-position:center!important;border-radius:50%!important;position:absolute!important;inset:0!important;display:block!important;margin:0!important;padding:0!important;">` 
+            : initial;
+        a.innerHTML = `<button type="button" class="avatar avatar-btn" id="userAvatarBtn" onclick="toggleDropdown(event)" aria-label="Menu utilisateur" title="${user.name || 'User'}" style="width:38px!important;height:38px!important;min-width:38px!important;min-height:38px!important;max-width:38px!important;max-height:38px!important;border-radius:50%!important;border:2px solid var(--accent)!important;overflow:hidden!important;display:flex!important;align-items:center!important;justify-content:center!important;padding:0!important;position:relative!important;cursor:pointer!important;background:var(--surface2)!important;color:#fff!important;font-weight:800!important;font-size:14px!important;flex-shrink:0!important;box-sizing:border-box!important;">${pic}</button>`;
         const ddN = document.getElementById("ddName"), ddE = document.getElementById("ddEmail"), da = document.getElementById("ddAvatar");
         if (ddN) ddN.textContent = user.name || "User";
-        if (ddE) ddE.textContent = user.email;
-        if (da) da.innerHTML = user.avatar ? `<img src="${user.avatar}">` : (user.name || "U")[0].toUpperCase();
+        if (ddE) ddE.textContent = user.email || "";
+        if (da) {
+            da.innerHTML = user.avatar 
+                ? `<img src="${user.avatar}" alt="${user.name || 'User'}" class="avatar-img" style="width:100%!important;height:100%!important;object-fit:cover!important;object-position:center!important;border-radius:50%!important;position:absolute!important;inset:0!important;display:block!important;margin:0!important;padding:0!important;">` 
+                : initial;
+        }
     } else {
-        a.innerHTML = `<button class="auth-cta" onclick="openAuth()"><i class="fas fa-user-circle"></i> Sign In</button>`;
+        a.innerHTML = `<button class="signin-btn auth-cta" onclick="openAuth()"><i class="fas fa-user-circle"></i> <span data-i18n="signin">Sign In</span></button>`;
     }
 }
-function toggleDropdown() { document.getElementById("dropdown")?.classList.toggle("show"); }
-document.addEventListener("click", e => { const dd = document.getElementById("dropdown"); if (dd && !e.target.closest(".avatar") && !e.target.closest(".dropdown")) dd.classList.remove("show"); });
+function toggleDropdown(e) { 
+    if (e) e.stopPropagation();
+    const dd = document.getElementById("dropdown"); 
+    if (dd) {
+        const isOpen = dd.classList.contains("open") || dd.classList.contains("show");
+        if (isOpen) {
+            dd.classList.remove("open", "show");
+        } else {
+            dd.classList.add("open", "show");
+        }
+    }
+}
+document.addEventListener("click", e => { 
+    const dd = document.getElementById("dropdown"); 
+    if (dd && !e.target.closest(".avatar") && !e.target.closest(".avatar-btn") && !e.target.closest(".dropdown")) {
+        dd.classList.remove("open", "show"); 
+    }
+});
 function openAuth() { document.getElementById("authOv")?.classList.add("active"); }
 function closeAuth() { document.getElementById("authOv")?.classList.remove("active"); document.getElementById("authError").textContent = ""; }
 function toggleAuthMode() {
@@ -147,16 +170,45 @@ function toggleAuthMode() {
     document.getElementById("authSwitch").innerHTML = isSignUp ? 'Already have an account? <b>Sign In</b>' : 'Don\'t have an account? <b>Sign Up</b>';
 }
 
+function compressAndCropImage(file, maxSize, callback) {
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = x => {
+        const img = new Image();
+        img.onload = () => {
+            try {
+                const canvas = document.createElement("canvas");
+                canvas.width = maxSize;
+                canvas.height = maxSize;
+                const ctx = canvas.getContext("2d");
+                const minDim = Math.min(img.width, img.height);
+                const sx = (img.width - minDim) / 2;
+                const sy = (img.height - minDim) / 2;
+                ctx.drawImage(img, sx, sy, minDim, minDim, 0, 0, maxSize, maxSize);
+                const dataUrl = canvas.toDataURL("image/jpeg", 0.85);
+                callback(dataUrl);
+            } catch (err) {
+                callback(x.target.result);
+            }
+        };
+        img.onerror = () => callback(x.target.result);
+        img.src = x.target.result;
+    };
+    reader.onerror = () => {};
+    reader.readAsDataURL(file);
+}
+
 // 🚨 FIX AVATAR PREVIEW (Mise en forme CSS inline fixée pour éviter l'overflow)
 function previewAvatar(e) { 
     const f = e.target.files[0]; 
     if (f) { 
-        const r = new FileReader(); 
-        r.onload = x => { 
-            tempAvatar = x.target.result; 
-            document.getElementById("signupAvatar").innerHTML = `<img src="${tempAvatar}" style="width:100%!important;height:100%!important;object-fit:cover!important;border-radius:50%!important;position:absolute!important;inset:0!important;"><input type="file" accept="image/*" onchange="previewAvatar(event)" style="position:absolute;inset:0;opacity:0;cursor:pointer;z-index:10;width:100%;height:100%;">`; 
-        }; 
-        r.readAsDataURL(f); 
+        compressAndCropImage(f, 256, (dataUrl) => {
+            tempAvatar = dataUrl;
+            const el = document.getElementById("signupAvatar");
+            if (el) {
+                el.innerHTML = `<img src="${tempAvatar}" style="width:100%!important;height:100%!important;object-fit:cover!important;border-radius:50%!important;position:absolute!important;inset:0!important;"><input type="file" accept="image/*" onchange="previewAvatar(event)" style="position:absolute;inset:0;opacity:0;cursor:pointer;z-index:10;width:100%;height:100%;">`; 
+            }
+        });
     } 
 }
 
@@ -178,7 +230,7 @@ function handleAuth() {
     }
     renderAuth(); closeAuth(); tempAvatar = "";
 }
-function logOut() { user = null; S.r("user"); renderAuth(); document.getElementById("dropdown")?.classList.remove("show"); navigate("home"); }
+function logOut() { user = null; S.r("user"); renderAuth(); document.getElementById("dropdown")?.classList.remove("show", "open"); navigate("home"); }
 
 // ====== UNIFIED SETTINGS LOGIC PRO ======
 function openSettingsTab(tabId, btn) {
@@ -228,17 +280,15 @@ function loadUserSettingsPro() {
 function changeAccPicPro(e) {
     const f = e.target.files[0];
     if (f) {
-        const r = new FileReader();
-        r.onload = x => {
-            user.avatar = x.target.result;
+        compressAndCropImage(f, 256, (dataUrl) => {
+            user.avatar = dataUrl;
             S.s("user", user);
             let us = S.g("users") || [];
             let idx = us.findIndex(u => u.id === user.id);
             if (idx > -1) { us[idx] = user; S.s("users", us); }
             renderAuth();
             loadUserSettingsPro();
-        };
-        r.readAsDataURL(f);
+        });
     }
 }
 

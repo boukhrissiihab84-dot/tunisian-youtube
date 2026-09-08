@@ -73,23 +73,36 @@ a{color:inherit}
 .vid-count{font-size:12px;font-weight:700;color:var(--text2);background:var(--surface2);border:1px solid var(--border);padding:7px 13px;border-radius:var(--radius-full);white-space:nowrap}
 .icon-btn{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:transparent;border:1px solid transparent;color:var(--text2);transition:.25s;font-size:16px}
 .icon-btn:hover{background:var(--surface2);color:var(--text);border-color:var(--border)}
-.signin-btn{display:inline-flex;align-items:center;gap:8px;padding:9px 18px;border-radius:var(--radius-full);background:var(--gradient);color:#fff;font-weight:700;font-size:13.5px;border:none;box-shadow:0 6px 20px rgba(231,0,19,.35);transition:.3s}
-.signin-btn:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(231,0,19,.45)}
+.signin-btn,
+.auth-cta{display:inline-flex;align-items:center;gap:8px;padding:9px 18px;border-radius:var(--radius-full);background:var(--gradient);color:#fff;font-weight:700;font-size:13.5px;border:none;box-shadow:0 6px 20px rgba(231,0,19,.35);transition:.3s;cursor:pointer}
+.signin-btn:hover,
+.auth-cta:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(231,0,19,.45)}
 
-/* ===== HEADER AVATAR (FIXED) ===== */
+/* ===== HEADER AVATAR (LOCKED TO 38PX CIRCLE) ===== */
+#authArea{
+  display:flex!important;
+  align-items:center!important;
+  position:relative!important;
+  flex-shrink:0!important;
+}
+.avatar,
 .avatar-btn{
   width:38px!important;height:38px!important;
   min-width:38px!important;min-height:38px!important;
   max-width:38px!important;max-height:38px!important;
-  border-radius:50%!important;border:2px solid var(--accent);
-  overflow:hidden!important;display:flex!important;align-items:center;justify-content:center;
-  color:#fff;font-weight:800;font-size:14px;transition:.25s;padding:0!important;
-  flex-shrink:0!important;position:relative!important;
+  border-radius:50%!important;border:2px solid var(--accent)!important;
+  overflow:hidden!important;display:flex!important;align-items:center!important;justify-content:center!important;
+  color:#fff!important;font-weight:800!important;font-size:14px!important;transition:.25s!important;padding:0!important;
+  flex-shrink:0!important;position:relative!important;cursor:pointer!important;
+  background:var(--surface2)!important;box-sizing:border-box!important;
 }
+.avatar:hover,
 .avatar-btn:hover{transform:scale(1.06)}
+.avatar img,
 .avatar-btn img{
   width:100%!important;height:100%!important;
   max-width:100%!important;max-height:100%!important;
+  min-width:100%!important;min-height:100%!important;
   object-fit:cover!important;object-position:center!important;
   border-radius:50%!important;display:block!important;
   position:absolute!important;inset:0!important;margin:0!important;padding:0!important;
@@ -97,7 +110,8 @@ a{color:inherit}
 
 /* ---------- dropdown ---------- */
 .dropdown{position:fixed;top:calc(var(--header-h) + 6px);right:16px;width:280px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow-lg);z-index:950;padding:8px;display:none;animation:scaleIn .22s var(--transition)}
-.dropdown.open{display:block}
+.dropdown.open,
+.dropdown.show{display:block}
 .dd-header{display:flex;align-items:center;gap:12px;padding:14px 12px;border-bottom:1px solid var(--border);margin-bottom:6px}
 
 /* ===== DROPDOWN AVATAR (FIXED) ===== */
