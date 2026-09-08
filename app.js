@@ -16,24 +16,9 @@ const GUARANTEED_TOUNES_COURSES = [
 
 // ====== STORAGE HELPER ======
 const S = {
-    g(k) {
-        try {
-            const v = localStorage.getItem(k);
-            return v ? JSON.parse(v) : null;
-        } catch (e) {
-            return null;
-        }
-    },
-    s(k, v) {
-        try {
-            localStorage.setItem(k, JSON.stringify(v));
-        } catch (e) {}
-    },
-    r(k) {
-        try {
-            localStorage.removeItem(k);
-        } catch (e) {}
-    }
+    g(k) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : null; } catch (e) { return null; } },
+    s(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} },
+    r(k) { try { localStorage.removeItem(k); } catch (e) {} }
 };
 
 let allVideos = [];
@@ -60,36 +45,25 @@ function navigate(page, data = null) {
     document.getElementById("dropdown")?.classList.remove("show");
     
     let targetTab = null;
-    if (page === "account") {
-        page = "settings";
-        targetTab = "account";
-    } else if (page === "channel") {
-        page = "settings";
-        targetTab = "channel";
-    }
+    if (page === "account") { page = "settings"; targetTab = "account"; }
+    else if (page === "channel") { page = "settings"; targetTab = "channel"; }
 
     document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
     const target = document.getElementById("page-" + page);
     if (target) target.classList.add("active");
     
-    if (page === "home") { 
-        renderHome(); 
-    }
-    else if (page === "video" && data) { 
-        loadVideoPage(data); 
-    }
-    else if (page === "category" && data) { 
-        loadCategoryPage(data); 
-    }
+    if (page === "home") { renderHome(); }
+    else if (page === "video" && data) { loadVideoPage(data); }
+    else if (page === "category" && data) { loadCategoryPage(data); }
     else if (page === "settings") { 
         loadUserSettingsPro(); 
         if (targetTab) {
             const tabBtn = document.querySelector(`.tab-btn-pro[onclick*='${targetTab}']`);
-            openSettingsTab(targetTab, tabBtn);
+            if(tabBtn) openSettingsTab(targetTab, tabBtn);
         } else {
             const tabBtn = document.querySelector(".tab-btn-pro.active") || document.querySelector(".tab-btn-pro");
             const tabId = tabBtn ? tabBtn.getAttribute("onclick").match(/'([^']+)'/)[1] : "account";
-            openSettingsTab(tabId, tabBtn);
+            if(tabBtn) openSettingsTab(tabId, tabBtn);
         }
     }
     else if (page === "liked") { loadLikedPage(); }
@@ -172,6 +146,20 @@ function toggleAuthMode() {
     document.getElementById("signupAvatar").style.display = isSignUp ? "flex" : "none";
     document.getElementById("authSwitch").innerHTML = isSignUp ? 'Already have an account? <b>Sign In</b>' : 'Don\'t have an account? <b>Sign Up</b>';
 }
+
+// 🚨 FIX AVATAR PREVIEW (Mise en forme CSS inline fixée pour éviter l'overflow)
+function previewAvatar(e) { 
+    const f = e.target.files[0]; 
+    if (f) { 
+        const r = new FileReader(); 
+        r.onload = x => { 
+            tempAvatar = x.target.result; 
+            document.getElementById("signupAvatar").innerHTML = `<img src="${tempAvatar}" style="width:100%!important;height:100%!important;object-fit:cover!important;border-radius:50%!important;position:absolute!important;inset:0!important;"><input type="file" accept="image/*" onchange="previewAvatar(event)" style="position:absolute;inset:0;opacity:0;cursor:pointer;z-index:10;width:100%;height:100%;">`; 
+        }; 
+        r.readAsDataURL(f); 
+    } 
+}
+
 function handleAuth() {
     const n = document.getElementById("authName").value.trim(), em = document.getElementById("authEmail").value.trim(), p = document.getElementById("authPass").value, err = document.getElementById("authError");
     err.textContent = "";
@@ -192,7 +180,6 @@ function handleAuth() {
 }
 function logOut() { user = null; S.r("user"); renderAuth(); document.getElementById("dropdown")?.classList.remove("show"); navigate("home"); }
 
-
 // ====== UNIFIED SETTINGS LOGIC PRO ======
 function openSettingsTab(tabId, btn) {
     document.querySelectorAll(".settings-pane-pro").forEach(pane => pane.classList.remove("active"));
@@ -205,7 +192,6 @@ function openSettingsTab(tabId, btn) {
 function loadUserSettingsPro() {
     if (!user) { openAuth(); navigate('home'); return; }
     
-    // Tab 1: Mon Compte
     document.getElementById("accNamePro").value = user.name || "";
     document.getElementById("accEmailPro").value = user.email || "";
     document.getElementById("accOldPassPro").value = "";
@@ -215,11 +201,10 @@ function loadUserSettingsPro() {
     const wrap = document.getElementById("accAvatarWrapPro");
     if (wrap) {
         wrap.innerHTML = user.avatar 
-            ? `<img src="${user.avatar}">` 
+            ? `<img src="${user.avatar}" style="width:100%!important;height:100%!important;object-fit:cover!important;border-radius:50%!important;position:absolute!important;inset:0!important;">` 
             : (user.name || "U")[0].toUpperCase();
     }
 
-    // Tab 2: Ma Chaîne
     const ch = S.g("channel_" + user.id) || { name: user.name, bio: "", category: "", link: "", insta: "" };
     document.getElementById("channelNamePro").value = ch.name || "";
     document.getElementById("channelBioPro").value = ch.bio || "";
@@ -227,7 +212,6 @@ function loadUserSettingsPro() {
     document.getElementById("channelLinkPro").value = ch.link || "";
     document.getElementById("channelSocialPro").value = ch.insta || "";
 
-    // Tab 3: Préférences
     const s = S.g("settings") || { dark: 0, auto: 1, notif: 0, history: 1, public: 1, search: 1, fontSize: "normal", gridSize: "280", lang: "derja", quality: "auto" };
     ["dark", "auto"].forEach(k => {
         const el = document.getElementById("t-pro-" + k);
@@ -333,17 +317,11 @@ function setQualityPro(v) {
 }
 
 function clearHistoryPro() {
-    if (confirm("Voulez-vous vraiment effacer l'historique ?")) {
-        S.r("history");
-        alert("🧹 Historique effacé!");
-    }
+    if (confirm("Voulez-vous vraiment effacer l'historique ?")) { S.r("history"); alert("🧹 Historique effacé!"); }
 }
 
 function clearLikesPro() {
-    if (confirm("Voulez-vous effacer vos likes ?")) {
-        S.r("likes");
-        alert("💔 Likes réinitialisées!");
-    }
+    if (confirm("Voulez-vous effacer vos likes ?")) { S.r("likes"); alert("💔 Likes réinitialisées!"); }
 }
 
 function resetAllAppDataPro() {
@@ -353,7 +331,6 @@ function resetAllAppDataPro() {
         window.location.reload();
     }
 }
-
 
 // ====== LIKES / SUBS ======
 function getLikes(id) { return (S.g("likes") || {})[id] || []; }
@@ -374,8 +351,8 @@ function renderCmtsLarge(id) {
     if (!s) return;
     let inp = "";
     if (user) {
-        const av = user.avatar ? `<img src="${user.avatar}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">` : user.name[0].toUpperCase();
-        inp = `<div class="cmt-form-large"><div class="cmt-avatar-large">${av}</div><div class="cmt-input-wrap-large"><input class="cmt-input-large" id="cmtInputLarge" placeholder="Add a comment..." onkeypress="if(event.key==='Enter')postCmt('${id}')"><div class="cmt-btns-large"><button class="cmt-submit-large" onclick="postCmt('${id}')">Comment</button></div></div></div>`;
+        const av = user.avatar ? `<img src="${user.avatar}" style="width:100%!important;height:100%!important;object-fit:cover!important;border-radius:50%!important;position:absolute!important;inset:0!important;">` : user.name[0].toUpperCase();
+        inp = `<div class="cmt-form-large"><div class="cmt-avatar-large" style="position:relative!important;">${av}</div><div class="cmt-input-wrap-large"><input class="cmt-input-large" id="cmtInputLarge" placeholder="Add a comment..." onkeypress="if(event.key==='Enter')postCmt('${id}')"><div class="cmt-btns-large"><button class="cmt-submit-large" onclick="postCmt('${id}')">Comment</button></div></div></div>`;
     } else {
         inp = `<p class="cmt-login-large"><a onclick="openAuth()">Sign in</a> to comment</p>`;
     }
@@ -402,15 +379,12 @@ function downloadV(id) {
 }
 function closeDlModal() { document.getElementById("dlModal")?.classList.remove("active"); }
 
-
 // ====== DATA LOADING SYSTEM ======
 function initApp(raw) {
-    // If raw database is missing or empty, force Emergency Fallback
     if (!Array.isArray(raw) || raw.length === 0) {
         console.warn("⚠️ Database empty! Forcing GUARANTEED fallback...");
         raw = GUARANTEED_TOUNES_COURSES;
     }
-    
     allVideos = raw.map(v => {
         const id = extractCleanId(v.Video_ID || v.video_id || v.id || v.Lien || v.url || "");
         return { 
@@ -423,19 +397,11 @@ function initApp(raw) {
         };
     }).filter(v => v.id && v.id.length === 11);
     
-    // Safety Net: if somehow filtering produced 0 videos, reload with GUARANTEED
     if (allVideos.length === 0) {
         console.error("🚨 Zero videos passed the filter! Hard reloading with GUARANTEED data...");
         allVideos = GUARANTEED_TOUNES_COURSES.map(v => {
             const id = v.Video_ID;
-            return {
-                id,
-                title: v.Titre,
-                channel: v.Chaine,
-                category: v.Categorie,
-                topic: v.Mawdhou3,
-                thumb: `https://img.youtube.com/vi/${id}/mqdefault.jpg`
-            };
+            return { id, title: v.Titre, channel: v.Chaine, category: v.Categorie, topic: v.Mawdhou3, thumb: `https://img.youtube.com/vi/${id}/mqdefault.jpg` };
         });
     }
     
@@ -443,29 +409,17 @@ function initApp(raw) {
     buildSide(); buildChips(); initRouter();
 }
 
-// 🟢 BULLETPROOF DATABASE ROUTER LOADING
 try {
     if (typeof rawVideosData !== 'undefined' && Array.isArray(rawVideosData) && rawVideosData.length > 0) {
-        console.log("✅ rawVideosData loaded from data.js");
         initApp(rawVideosData);
     } else {
         throw new Error("data.js not defined or empty");
     }
 } catch (e) {
-    console.warn("⚠️ data.js loading failed. Trying JSON fetch...", e);
     fetch(`tounes_courses.json?nocache=${Date.now()}`, { cache: "no-store" })
-        .then(r => {
-            if (!r.ok) throw new Error("JSON Fetch failed");
-            return r.json();
-        })
-        .then(d => {
-            console.log("✅ Loaded from JSON successfully.");
-            initApp(d);
-        })
-        .catch(err => {
-            console.error("🚨 Both data.js and JSON failed. Running Emergency Fallback...");
-            initApp(GUARANTEED_TOUNES_COURSES);
-        });
+        .then(r => { if (!r.ok) throw new Error("JSON Fetch failed"); return r.json(); })
+        .then(d => { initApp(d); })
+        .catch(err => { initApp(GUARANTEED_TOUNES_COURSES); });
 }
 
 function buildSide() {
@@ -508,7 +462,6 @@ function setListAndRender(list) {
     renderNextBatch();
 }
 
-// 🚀 ZERO LAG INFINITE SCROLL Observer
 let observer;
 function setupInfiniteScroll() {
     if (observer) observer.disconnect();
@@ -554,43 +507,6 @@ function apply() {
     if (currentFilter.sub) r = r.filter(v => v.topic === currentFilter.sub);
     if (currentFilter.search) r = r.filter(v => (v.title + v.channel + v.topic + v.category).toLowerCase().includes(currentFilter.search));
     setListAndRender(r);
-}
-
-// ================ VIDEO PAGE ================
-function loadVideoPage(v) {
-    if (typeof v === 'string') v = allVideos.find(x => x.id === v);
-    if (!v) return;
-    currentVid = v.id;
-    const s = S.g("settings") || { auto: 1 };
-    const q = s.quality && s.quality !== "auto" ? `&vq=${s.quality}` : "";
-    document.getElementById("playerLarge").innerHTML = `<iframe src="https://www.youtube.com/embed/${v.id}?autoplay=${s.auto ? 1 : 0}${q}" allowfullscreen allow="autoplay"></iframe>`;
-    document.getElementById("mTitleLarge").textContent = v.title;
-    document.getElementById("mChanLarge").textContent = v.channel;
-    document.getElementById("mCatLarge").textContent = `${v.category} • ${v.topic}`;
-    document.getElementById("mChanAvatar").textContent = (v.channel || "C")[0].toUpperCase();
-    document.getElementById("mDescLarge").innerHTML = `<span class="tag">#${v.category}</span><span class="tag">#${v.topic}</span><br><br>${v.title}`;
-    refreshActionsLarge(v.id); renderCmtsLarge(v.id); renderRelatedVideos(v.category, v.id);
-    if (S.g("settings")?.history) { let h = S.g("history") || []; if (!h.includes(v.id)) { h.unshift(v.id); S.s("history", h); } }
-}
-function refreshActionsLarge(id) {
-    const l = isLiked(id), lc = getLikes(id).length, ch = document.getElementById("mChanLarge").textContent, s = isSub(ch);
-    document.getElementById("mActionsLarge").innerHTML = `
-        <button class="action-btn ${l ? 'liked' : ''}" onclick="toggleLike('${id}')"><i class="fas fa-thumbs-up"></i> ${lc}</button>
-        <button class="action-btn" onclick="shareV('${id}')"><i class="fas fa-share"></i> Share</button>
-        <button class="action-btn download-btn" onclick="downloadV('${id}')"><i class="fas fa-download"></i> Download</button>
-    `;
-    const b = document.getElementById("subscribeBtn");
-    if (b) { b.className = "subscribe-btn" + (s ? " subscribed" : ""); b.innerHTML = s ? '<i class="fas fa-check"></i> Subscribed' : '<i class="fas fa-bell"></i> Subscribe'; }
-}
-function renderRelatedVideos(cat, cid) {
-    const list = document.getElementById("relatedList"); if (!list) return;
-    let rel = allVideos.filter(v => v.id !== cid);
-    const same = rel.filter(v => v.category === cat);
-    const other = rel.filter(v => v.category !== cat);
-    const final = [...same.slice(0, 12), ...other.slice(0, 8)];
-    if (!final.length) { list.innerHTML = `<p style="color:var(--text3);font-size:13px;padding:12px">Ma fammach videos similaires</p>`; return; }
-    list.innerHTML = final.map(v => `
-        <div class="related-item" onclick="navigate('video',{id:'${v.id}'})"><div class="related-thumb"><img src="${v.thumb}" loading="lazy" onerror="this.src='https://img.youtube.com/vi/${v.id}/0.jpg'"></div><div class="related-info"><div class="related-title">${v.title}</div><div class="related-ch"><i class="fas fa-user-circle"></i> ${v.channel}</div><div class="related-cat">${v.topic}</div></div></div>`).join("");
 }
 
 function loadCategoryPage(cat) {
