@@ -562,3 +562,78 @@ div#signupAvatar.avatar-upload{
 
 /* When image exists, hide camera icon */
 #signupAvatar:has(img) i{display:none!important}
+/* 🚨 NUCLEAR FIX - Sign Up Avatar Cannot Overflow */
+.ov-body{
+  position:relative!important;
+  overflow:hidden!important;
+}
+
+.ov-body #signupAvatar{
+  contain:strict!important;
+  width:84px!important;
+  height:84px!important;
+  min-width:84px!important;
+  min-height:84px!important;
+  max-width:84px!important;
+  max-height:84px!important;
+  border-radius:50%!important;
+  overflow:hidden!important;
+  position:relative!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  flex-shrink:0!important;
+  margin:6px auto 20px!important;
+  padding:0!important;
+  background:var(--surface2)!important;
+  border:2px dashed var(--border2)!important;
+  isolation:isolate!important;
+}
+
+.ov-body #signupAvatar *{
+  max-width:100%!important;
+  max-height:100%!important;
+  box-sizing:border-box!important;
+}
+
+.ov-body #signupAvatar img{
+  width:84px!important;
+  height:84px!important;
+  min-width:0!important;
+  min-height:0!important;
+  max-width:84px!important;
+  max-height:84px!important;
+  object-fit:cover!important;
+  object-position:center center!important;
+  border-radius:50%!important;
+  display:block!important;
+  position:absolute!important;
+  top:0!important;
+  left:0!important;
+  right:0!important;
+  bottom:0!important;
+  margin:0!important;
+  padding:0!important;
+  z-index:1!important;
+  transform:none!important;
+  inset:0!important;
+}
+
+.ov-body #signupAvatar input[type="file"]{
+  position:absolute!important;
+  top:0!important;left:0!important;
+  width:100%!important;height:100%!important;
+  max-width:84px!important;max-height:84px!important;
+  opacity:0!important;
+  cursor:pointer!important;
+  z-index:5!important;
+  margin:0!important;padding:0!important;
+}
+
+.ov-body #signupAvatar i{
+  font-size:22px!important;
+  color:var(--text3)!important;
+  z-index:2!important;
+}
+
+.ov-body #signupAvatar:has(img) i{display:none!important}
