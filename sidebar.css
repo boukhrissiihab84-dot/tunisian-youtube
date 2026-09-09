@@ -1,0 +1,18 @@
+/* ================================================
+   SIDEBAR + LAYOUT
+================================================ */
+.layout{display:flex;padding-top:var(--header-h);position:relative;z-index:1}
+.side{position:fixed;top:var(--header-h);left:0;bottom:0;width:var(--side-w);padding:18px 14px 30px;overflow-y:auto;z-index:800;transition:transform .35s var(--transition)}
+.side h4{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1.2px;color:var(--text3);padding:10px 12px 8px}
+.side-link{display:flex;align-items:center;gap:12px;width:100%;padding:9px 12px;border-radius:11px;background:transparent;border:none;color:var(--text);font-size:13.5px;font-weight:600;transition:.2s;text-align:left}
+.side-link i{width:17px;color:var(--text2);flex-shrink:0}
+.side-link:hover{background:var(--surface2)}
+.side-link:hover i{color:var(--accent)}
+.side-link.active{background:var(--accent-soft);color:var(--accent)}
+.side-link.active i{color:var(--accent)}
+.side-count{margin-left:auto;font-size:11px;font-weight:700;color:var(--text3);background:var(--surface2);padding:2px 8px;border-radius:99px}
+.side-foot{margin-top:18px;padding:14px 12px;font-size:11px;color:var(--text3);line-height:1.6;border-top:1px solid var(--border)}
+.side-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:790}
+.main{flex:1;min-width:0;margin-left:var(--side-w);padding:22px 26px 60px;transition:margin .35s var(--transition)}
+body.sidebar-collapsed .main{margin-left:0}
+body.sidebar-collapsed .side{transform:translateX(-100%)}
