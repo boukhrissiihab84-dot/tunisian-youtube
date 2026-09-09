@@ -325,4 +325,22 @@ try{var s=JSON.parse(localStorage.getItem("tt_settings")||"{}");if(s.theme)docum
     <script src="main.js"></script>
 </body>
 </html>
+    <!-- Firebase Compat SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
+    <!-- App scripts (الترتيب مهم) -->
+    <script src="data.js"></script>
+    <script src="globals.js"></script>
+    <script src="firebase-config.js"></script>
+    <script src="utils.js"></script>
+    <script src="auth.js"></script>
+    <script src="settings.js"></script>
+    <script src="social.js"></script>
+    <script src="video.js"></script>
+    <script src="ui.js"></script>
+    <script src="router.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>
