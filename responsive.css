@@ -1,0 +1,45 @@
+/* ================================================
+   RESPONSIVE - Media Queries (Mobile, Tablet)
+================================================ */
+@media(max-width:1150px){
+  .main{margin-left:0}
+  .side{transform:translateX(-105%);background:var(--surface);border-right:1px solid var(--border);box-shadow:var(--shadow-lg)}
+  body.sidebar-open .side{transform:translateX(0)}
+  body.sidebar-open .side-backdrop{display:block}
+}
+@media(max-width:1024px){.video-page-container{grid-template-columns:1fr}}
+@media(max-width:860px){
+  .search-wrap{position:absolute;left:0;right:0;top:var(--header-h);padding:10px 14px;background:var(--bg);border-bottom:1px solid var(--border);display:none}
+  body.search-open .search-wrap{display:flex;animation:fadeIn .25s}
+  body.search-open .layout{padding-top:calc(var(--header-h) + 62px)}
+  .vid-count{display:none}
+  .logo-t{font-size:17px}
+  .main{padding:16px 14px 50px}
+}
+@media(max-width:768px){
+  .hero{padding:30px 24px}
+  .hero-stats{gap:18px}
+  .video-info-large{padding:16px 18px 20px}
+  .video-title-large{font-size:17.5px}
+  .channel-row{flex-direction:column;align-items:flex-start}
+  .video-actions-row{width:100%;overflow-x:auto;flex-wrap:nowrap;padding-bottom:4px}
+  .action-btn{padding:9px 15px;font-size:12px;white-space:nowrap}
+  .settings-layout-pro{grid-template-columns:1fr}
+  .settings-sidebar-pro{flex-direction:row;overflow-x:auto;border-right:none;border-bottom:1px solid var(--border)}
+  .tab-btn-pro{white-space:nowrap;font-size:12.5px}
+  .settings-content-pro{padding:22px 18px}
+  .avatar-upload-box-pro{flex-direction:column;text-align:center;align-items:center}
+  .avatar-actions-pro{align-items:center}
+  .danger-box-pro{flex-direction:column;text-align:center}
+  .related-thumb{width:108px}
+  .grid{grid-template-columns:1fr 1fr;gap:16px 12px}
+  .card-title{font-size:13px}
+}
+@media(max-width:560px){
+  .grid{grid-template-columns:1fr}
+  .dropdown{right:8px;width:calc(100vw - 16px)}
+  .signin-btn span{display:none}
+  .signin-btn{padding:10px 12px}
+  .hdr{gap:10px;padding:0 12px}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
