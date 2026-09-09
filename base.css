@@ -1,0 +1,17 @@
+/* ================================================
+   BASE - Reset, Body, Scrollbar, Global
+================================================ */
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;transition:background .35s,color .35s;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.5;
+  background:radial-gradient(900px 500px at 85% -10%,rgba(231,0,19,.09),transparent 60%),radial-gradient(700px 420px at -10% 30%,rgba(255,122,61,.06),transparent 60%)}
+.ar{font-family:'Cairo','Inter',sans-serif}
+::selection{background:var(--accent);color:#fff}
+::-webkit-scrollbar{width:10px;height:8px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--surface3);border-radius:99px;border:2px solid var(--bg)}
+button{font-family:inherit;cursor:pointer}
+input,textarea,select{font-family:inherit;color:var(--text)}
+img{display:block;max-width:100%}
+a{color:inherit}
