@@ -1,0 +1,10 @@
+/* ================================================
+   MISC - Toasts, Footer
+================================================ */
+.toasts{position:fixed;bottom:24px;right:24px;z-index:2000;display:flex;flex-direction:column;gap:10px;max-width:340px}
+.toast{display:flex;align-items:center;gap:11px;background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:14px;padding:13px 17px;font-size:13.5px;font-weight:600;box-shadow:var(--shadow-lg);animation:toastIn .35s var(--transition)}
+.toast i{color:var(--accent)}
+.toast.out{animation:toastOut .3s forwards}
+
+.foot{margin-top:54px;padding-top:22px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;color:var(--text3);font-size:12px;font-weight:500}
+.foot b{color:var(--text2)}
