@@ -1,0 +1,41 @@
+/* ================================================
+   MODALS - Auth + Download + Forms
+================================================ */
+.ov{position:fixed;inset:0;background:rgba(5,5,10,.65);backdrop-filter:blur(8px);z-index:1000;display:none;align-items:center;justify-content:center;padding:20px}
+.ov.active{display:flex;animation:fadeIn .25s}
+.ov-box{width:100%;max-width:420px;background:var(--surface);border:1px solid var(--border);border-radius:22px;box-shadow:var(--shadow-lg);animation:scaleIn .3s var(--transition);max-height:92vh;overflow-y:auto}
+.ov-head{display:flex;align-items:center;justify-content:space-between;padding:22px 24px 0}
+.ov-head h2{font-size:20px;font-weight:800;font-family:'Space Grotesk',sans-serif}
+.ov-close{width:32px;height:32px;border-radius:50%;background:var(--surface2);border:none;color:var(--text2);transition:.25s}
+.ov-close:hover{background:var(--accent);color:#fff;transform:rotate(90deg)}
+.ov-body{padding:20px 24px 26px}
+
+/* Forms */
+.form-group{margin-bottom:14px}
+.form-label{display:block;font-size:12px;font-weight:700;color:var(--text2);margin-bottom:6px;text-transform:uppercase;letter-spacing:.4px}
+.form-input{width:100%;padding:12px 15px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);font-size:14px;outline:none;transition:.25s}
+.form-input:focus{border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-soft);background:var(--surface)}
+.form-textarea{width:100%;padding:12px 15px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);font-size:14px;outline:none;min-height:90px;resize:vertical}
+.form-textarea:focus{border-color:var(--accent)}
+.form-select{padding:9px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;font-size:13.5px;outline:none;cursor:pointer}
+.form-error{color:var(--accent);font-size:12.5px;font-weight:600;min-height:18px;margin-bottom:8px}
+.form-btn{width:100%;padding:13px;border-radius:var(--radius-sm);font-size:14.5px;font-weight:700;border:none;transition:.3s}
+.btn-primary{background:var(--gradient);color:#fff;box-shadow:0 8px 22px rgba(231,0,19,.3)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(231,0,19,.42)}
+.form-switch{text-align:center;font-size:13px;color:var(--text2);margin-top:16px;cursor:pointer}
+.form-switch b{color:var(--accent)}
+
+/* Download Modal */
+.dl-modal{display:none;position:fixed;inset:0;background:rgba(5,5,10,.7);backdrop-filter:blur(6px);z-index:1100;justify-content:center;align-items:center;padding:20px}
+.dl-modal.active{display:flex;animation:fadeIn .3s}
+.dl-box{background:var(--surface);border:1px solid var(--border);border-radius:22px;padding:30px;width:100%;max-width:430px;text-align:center;position:relative;box-shadow:var(--shadow-lg);animation:scaleIn .3s var(--transition)}
+.dl-close{position:absolute;right:16px;top:16px;width:30px;height:30px;border-radius:50%;background:var(--surface2);border:none;color:var(--text2);transition:.25s}
+.dl-close:hover{background:var(--accent);color:#fff;transform:rotate(90deg)}
+.dl-icon{width:70px;height:70px;border-radius:22px;background:var(--accent-soft);color:var(--accent);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:26px}
+.dl-title{font-size:19px;font-weight:800;margin-bottom:6px;font-family:'Space Grotesk',sans-serif}
+.dl-desc{font-size:13px;color:var(--text2);margin-bottom:22px}
+.dl-options{display:flex;flex-direction:column;gap:10px}
+.dl-btn{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-radius:var(--radius-sm);border:1px solid var(--border);text-decoration:none;font-size:13.5px;font-weight:600;background:var(--surface2);transition:.3s}
+.dl-btn span{display:flex;align-items:center;gap:10px}
+.dl-btn:hover{background:var(--surface3);transform:translateY(-2px)}
+.dl-btn.best{background:var(--gradient);color:#fff;border:none;box-shadow:0 6px 18px rgba(231,0,19,.35)}
