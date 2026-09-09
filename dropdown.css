@@ -1,0 +1,15 @@
+/* ================================================
+   DROPDOWN MENU
+================================================ */
+.dropdown{position:fixed;top:calc(var(--header-h) + 6px);right:16px;width:280px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow-lg);z-index:950;padding:8px;display:none;animation:scaleIn .22s var(--transition)}
+.dropdown.open,
+.dropdown.show{display:block}
+.dd-header{display:flex;align-items:center;gap:12px;padding:14px 12px;border-bottom:1px solid var(--border);margin-bottom:6px}
+.dd-name{font-weight:800;font-size:14.5px}
+.dd-email{font-size:12px;color:var(--text2);margin-top:2px;word-break:break-all}
+.dd-item{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:10px;cursor:pointer;font-size:13.5px;font-weight:600;transition:.2s}
+.dd-item i{color:var(--text2);width:17px;text-align:center}
+.dd-item:hover{background:var(--surface2)}
+.dd-item:hover i{color:var(--accent)}
+.dd-item.danger,.dd-item.danger i{color:var(--accent)}
+.dd-sep{height:1px;background:var(--border);margin:6px 4px}
