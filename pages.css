@@ -1,0 +1,11 @@
+/* ================================================
+   PAGES COMMON - Back button, Page header
+================================================ */
+.page{display:none}
+.page.active{display:block;animation:fadeIn .35s var(--transition)}
+.back-btn{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;margin-bottom:20px;font-size:13.5px;font-weight:600;border-radius:var(--radius-sm);background:var(--surface);border:1px solid var(--border);transition:.3s}
+.back-btn:hover{background:var(--surface2);transform:translateX(-4px)}
+.page-header{display:flex;align-items:center;gap:16px;margin-bottom:24px;padding-bottom:18px;border-bottom:1px solid var(--border)}
+.page-header h1{font-size:24px;font-weight:800;font-family:'Space Grotesk',sans-serif;letter-spacing:-.4px}
+.page-icon{width:54px;height:54px;border-radius:18px;background:var(--gradient);display:flex;align-items:center;justify-content:center;color:#fff;box-shadow:0 8px 22px rgba(231,0,19,.35);flex-shrink:0;font-size:22px}
+.page-sub{font-size:13px;color:var(--text2);margin-top:3px;font-weight:500}
