@@ -11,102 +11,108 @@ try{var s=JSON.parse(localStorage.getItem("tt_settings")||"{}");if(s.theme)docum
 </script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@600;700&family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-<link rel="stylesheet" href="css/01-variables.css">
-<link rel="stylesheet" href="css/02-base.css">
-<link rel="stylesheet" href="css/03-animations.css">
-<link rel="stylesheet" href="css/04-header.css">
-<link rel="stylesheet" href="css/05-avatars.css">
-<link rel="stylesheet" href="css/06-dropdown.css">
-<link rel="stylesheet" href="css/07-modals.css">
-<link rel="stylesheet" href="css/08-sidebar.css">
-<link rel="stylesheet" href="css/09-pages.css">
-<link rel="stylesheet" href="css/10-home.css">
-<link rel="stylesheet" href="css/11-video.css">
-<link rel="stylesheet" href="css/12-settings.css">
-<link rel="stylesheet" href="css/13-misc.css">
-<link rel="stylesheet" href="css/14-responsive.css">
+
+<!-- CSS Modules (مباشرة من الـ Root) -->
+<link rel="stylesheet" href="variables.css">
+<link rel="stylesheet" href="base.css">
+<link rel="stylesheet" href="animations.css">
+<link rel="stylesheet" href="header.css">
+<link rel="stylesheet" href="avatars.css">
+<link rel="stylesheet" href="dropdown.css">
+<link rel="stylesheet" href="modals.css">
+<link rel="stylesheet" href="sidebar.css">
+<link rel="stylesheet" href="pages.css">
+<link rel="stylesheet" href="home.css">
+<link rel="stylesheet" href="video.css">
+<link rel="stylesheet" href="settings.css">
+<link rel="stylesheet" href="misc.css">
+<link rel="stylesheet" href="responsive.css">
 </head>
 <body>
 
 <header class="hdr">
   <div class="hdr-left">
-    <button class="menu-i" onclick="toggleSidebar()"><i class="fa-solid fa-bars"></i></button>
-    <div class="logo-wrap" onclick="navigate('home')">
+    <button class="menu-i" onclick="toggleSidebar()" aria-label="Menu"><i class="fa-solid fa-bars"></i></button>
+    <div class="logo-wrap" onclick="navigate('home')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')navigate('home')" aria-label="TunisianTube Accueil">
       <img src="logo.png" alt="logo" class="logo-img" onerror="this.style.display='none'">
       <span class="logo-t">Tunisian<span class="logo-r">Tube</span></span>
     </div>
   </div>
   <div class="search-wrap">
-    <div class="search-inner">
-      <input type="text" id="searchInput" placeholder="Rechercher des cours..." oninput="onSearchInput()" onkeydown="if(event.key==='Enter')navigate('home')">
-      <button class="search-btn" onclick="navigate('home')"><i class="fa-solid fa-magnifying-glass"></i></button>
-    </div>
+    <!-- تحسين: ردّيناها Form باش الـ Enter تخدم بصفة طبيعية في التلفونات -->
+    <form class="search-inner" onsubmit="event.preventDefault(); navigate('home');">
+      <input type="text" id="searchInput" placeholder="Rechercher des cours..." oninput="onSearchInput()">
+      <button type="submit" class="search-btn" aria-label="Rechercher"><i class="fa-solid fa-magnifying-glass"></i></button>
+    </form>
   </div>
   <div class="hdr-right">
     <span class="vid-count" id="vCount">0 cours</span>
-    <button class="icon-btn" onclick="toggleMobileSearch()" id="mSearchBtn" style="display:none"><i class="fa-solid fa-magnifying-glass"></i></button>
-    <button class="icon-btn" onclick="toggleTheme()" id="themeBtn"><i class="fa-solid fa-sun"></i></button>
-    <button class="icon-btn" onclick="navigate('settings')"><i class="fa-solid fa-gear"></i></button>
+    <button class="icon-btn" onclick="toggleMobileSearch()" id="mSearchBtn" style="display:none" aria-label="Recherche Mobile"><i class="fa-solid fa-magnifying-glass"></i></button>
+    <button class="icon-btn" onclick="toggleTheme()" id="themeBtn" aria-label="Changer de thème"><i class="fa-solid fa-sun"></i></button>
+    <button class="icon-btn" onclick="navigate('settings')" aria-label="Paramètres"><i class="fa-solid fa-gear"></i></button>
     <div id="authArea"></div>
   </div>
 </header>
 
-<div class="dropdown" id="dropdown">
+<div class="dropdown" id="dropdown" role="menu">
   <div class="dd-header">
     <div class="dd-avatar" id="ddAvatar">U</div>
     <div><div class="dd-name" id="ddName">User</div><div class="dd-email" id="ddEmail"></div></div>
   </div>
-  <div class="dd-item" onclick="goSettings('channel')"><i class="fa-solid fa-tv"></i> <span data-i18n="mychannel">Ma Chaîne</span></div>
-  <div class="dd-item" onclick="goSettings('account')"><i class="fa-solid fa-user-gear"></i> <span data-i18n="accset">Paramètres du compte</span></div>
-  <div class="dd-item" onclick="navigate('settings')"><i class="fa-solid fa-gear"></i> <span data-i18n="appset">Paramètres de l'app</span></div>
+  <!-- تحسين: زيادة الـ roles والـ tabindex للـ dropdown items -->
+  <div class="dd-item" onclick="goSettings('channel')" role="menuitem" tabindex="0" onkeydown="if(event.key==='Enter')goSettings('channel')"><i class="fa-solid fa-tv"></i> <span data-i18n="mychannel">Ma Chaîne</span></div>
+  <div class="dd-item" onclick="goSettings('account')" role="menuitem" tabindex="0" onkeydown="if(event.key==='Enter')goSettings('account')"><i class="fa-solid fa-user-gear"></i> <span data-i18n="accset">Paramètres du compte</span></div>
+  <div class="dd-item" onclick="navigate('settings')" role="menuitem" tabindex="0" onkeydown="if(event.key==='Enter')navigate('settings')"><i class="fa-solid fa-gear"></i> <span data-i18n="appset">Paramètres de l'app</span></div>
   <div class="dd-sep"></div>
-  <div class="dd-item" onclick="navigate('liked')"><i class="fa-solid fa-heart"></i> <span data-i18n="liked">Vidéos aimées</span></div>
-  <div class="dd-item" onclick="navigate('subscriptions')"><i class="fa-solid fa-bell"></i> <span data-i18n="subs_p">Abonnements</span></div>
-  <div class="dd-item" onclick="navigate('history')"><i class="fa-solid fa-clock-rotate-left"></i> <span data-i18n="hist">Historique</span></div>
+  <div class="dd-item" onclick="navigate('liked')" role="menuitem" tabindex="0" onkeydown="if(event.key==='Enter')navigate('liked')"><i class="fa-solid fa-heart"></i> <span data-i18n="liked">Vidéos aimées</span></div>
+  <div class="dd-item" onclick="navigate('subscriptions')" role="menuitem" tabindex="0" onkeydown="if(event.key==='Enter')navigate('subscriptions')"><i class="fa-solid fa-bell"></i> <span data-i18n="subs_p">Abonnements</span></div>
+  <div class="dd-item" onclick="navigate('history')" role="menuitem" tabindex="0" onkeydown="if(event.key==='Enter')navigate('history')"><i class="fa-solid fa-clock-rotate-left"></i> <span data-i18n="hist">Historique</span></div>
   <div class="dd-sep"></div>
-  <div class="dd-item danger" onclick="logOut()"><i class="fa-solid fa-right-from-bracket"></i> <span data-i18n="out">Se déconnecter</span></div>
+  <div class="dd-item danger" onclick="logOut()" role="menuitem" tabindex="0" onkeydown="if(event.key==='Enter')logOut()"><i class="fa-solid fa-right-from-bracket"></i> <span data-i18n="out">Se déconnecter</span></div>
 </div>
 
-<div class="ov" id="authOv">
+<div class="ov" id="authOv" aria-modal="true" role="dialog" aria-labelledby="authTitle">
   <div class="ov-box">
     <div class="ov-head">
       <h2 id="authTitle">Create Account</h2>
-      <button class="ov-close" onclick="closeAuth()"><i class="fa-solid fa-xmark"></i></button>
+      <button class="ov-close" onclick="closeAuth()" aria-label="Fermer"><i class="fa-solid fa-xmark"></i></button>
     </div>
     <div class="ov-body">
       <div class="avatar-upload" id="signupAvatar">
         <i class="fa-solid fa-camera"></i>
-        <input type="file" accept="image/*" onchange="previewAvatar(event)">
+        <input type="file" accept="image/*" onchange="previewAvatar(event)" aria-label="Upload Avatar">
       </div>
+      <!-- تحسين: ربط الـ Labels بالـ Inputs -->
       <div class="form-group" id="nameGroup">
-        <label class="form-label">Nom</label>
+        <label class="form-label" for="authName">Nom</label>
         <input class="form-input" id="authName" placeholder="Yasmine Ben Ali">
       </div>
       <div class="form-group">
-        <label class="form-label">Email</label>
+        <label class="form-label" for="authEmail">Email</label>
         <input class="form-input" id="authEmail" type="email" placeholder="email@example.tn">
       </div>
       <div class="form-group">
-        <label class="form-label">Mot de passe</label>
+        <label class="form-label" for="authPass">Mot de passe</label>
         <input class="form-input" id="authPass" type="password" placeholder="Min 6 caractères">
       </div>
       <p class="form-error" id="authError"></p>
       <button class="form-btn btn-primary" id="authBtn" onclick="handleAuth()">Create Account</button>
-      <p class="form-switch" id="authSwitch" onclick="toggleAuthMode()">Déjà un compte ? <b>Sign In</b></p>
+      <p class="form-switch" id="authSwitch" onclick="toggleAuthMode()" role="button" tabindex="0">Déjà un compte ? <b>Sign In</b></p>
     </div>
   </div>
 </div>
 
-<div class="dl-modal" id="dlModal" onclick="if(event.target===this)closeDlModal()">
+<div class="dl-modal" id="dlModal" onclick="if(event.target===this)closeDlModal()" aria-modal="true" role="dialog" aria-labelledby="dlModalTitle">
   <div class="dl-box">
-    <button class="dl-close" onclick="closeDlModal()"><i class="fa-solid fa-xmark"></i></button>
+    <button class="dl-close" onclick="closeDlModal()" aria-label="Fermer"><i class="fa-solid fa-xmark"></i></button>
     <div class="dl-icon"><i class="fa-solid fa-download"></i></div>
-    <h2 class="dl-title" data-i18n="dl_title">Télécharger la vidéo</h2>
-    <p class="dl-desc">Cobalt : 0 pub, w surtoul.</p>
+    <h2 class="dl-title" id="dlModalTitle" data-i18n="dl_title">Télécharger la vidéo</h2>
+    <p class="dl-desc">Cobalt : 0 pub, w surtout.</p>
+    <!-- تحسين الـ Security باستعمال noreferrer -->
     <div class="dl-options">
-      <a class="dl-btn best" id="dlCobalt" href="https://cobalt.tools" target="_blank" rel="noopener"><span><i class="fa-solid fa-bolt"></i> Cobalt (el a7sen)</span><i class="fa-solid fa-arrow-right"></i></a>
-      <a class="dl-btn" id="dlSSYT" href="#" target="_blank" rel="noopener"><span><i class="fa-solid fa-download"></i> SSYouTube</span><i class="fa-solid fa-arrow-right"></i></a>
-      <a class="dl-btn" id="dlY2Mate" href="#" target="_blank" rel="noopener"><span><i class="fa-solid fa-video"></i> Y2Mate</span><i class="fa-solid fa-arrow-right"></i></a>
+      <a class="dl-btn best" id="dlCobalt" href="https://cobalt.tools" target="_blank" rel="noopener noreferrer"><span><i class="fa-solid fa-bolt"></i> Cobalt (el a7sen)</span><i class="fa-solid fa-arrow-right"></i></a>
+      <a class="dl-btn" id="dlSSYT" href="#" target="_blank" rel="noopener noreferrer"><span><i class="fa-solid fa-download"></i> SSYouTube</span><i class="fa-solid fa-arrow-right"></i></a>
+      <a class="dl-btn" id="dlY2Mate" href="#" target="_blank" rel="noopener noreferrer"><span><i class="fa-solid fa-video"></i> Y2Mate</span><i class="fa-solid fa-arrow-right"></i></a>
     </div>
   </div>
 </div>
@@ -214,14 +220,28 @@ try{var s=JSON.parse(localStorage.getItem("tt_settings")||"{}");if(s.theme)docum
                 <div class="avatar-upload-box-pro">
                   <div class="avatar-preview-wrapper-pro" id="accAvatarWrapPro"><i class="fa-solid fa-camera"></i></div>
                   <div class="avatar-actions-pro">
-                    <label class="btn-secondary-pro"><i class="fa-solid fa-upload"></i> <span data-i18n="upload_img">Charger une image</span><input type="file" accept="image/*" style="display:none" onchange="changeAccPicPro(event)"></label>
+                    <label class="btn-secondary-pro" for="accPicInputPro"><i class="fa-solid fa-upload"></i> <span data-i18n="upload_img">Charger une image</span></label>
+                    <input type="file" id="accPicInputPro" accept="image/*" style="display:none" onchange="changeAccPicPro(event)">
                     <button class="btn-text-pro" onclick="randomizeAvatarPro()"><i class="fa-solid fa-shuffle"></i> <span data-i18n="random_av">Aléatoire</span></button>
                   </div>
                 </div>
-                <div class="form-group"><label class="form-label" data-i18n="dname">Nom affiché</label><input class="form-input" id="accNamePro"></div>
-                <div class="form-group"><label class="form-label">Email</label><input class="form-input" id="accEmailPro" disabled></div>
-                <div class="form-group"><label class="form-label" data-i18n="cur_pass">Mot de passe actuel</label><input class="form-input" id="accOldPassPro" type="password"></div>
-                <div class="form-group"><label class="form-label" data-i18n="new_pass">Nouveau mot de passe</label><input class="form-input" id="accNewPassPro" type="password" placeholder="Min 6 caractères"></div>
+                <!-- تحسين: ربط الـ Labels بـ IDs المدخلات -->
+                <div class="form-group">
+                  <label class="form-label" for="accNamePro" data-i18n="dname">Nom affiché</label>
+                  <input class="form-input" id="accNamePro">
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="accEmailPro">Email</label>
+                  <input class="form-input" id="accEmailPro" disabled>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="accOldPassPro" data-i18n="cur_pass">Mot de passe actuel</label>
+                  <input class="form-input" id="accOldPassPro" type="password">
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="accNewPassPro" data-i18n="new_pass">Nouveau mot de passe</label>
+                  <input class="form-input" id="accNewPassPro" type="password" placeholder="Min 6 caractères">
+                </div>
                 <p class="form-error" id="accErrorPro"></p>
                 <button class="form-btn btn-primary" onclick="saveAccountPro()" data-i18n="save">Enregistrer</button>
               </div>
@@ -229,15 +249,34 @@ try{var s=JSON.parse(localStorage.getItem("tt_settings")||"{}");if(s.theme)docum
 
             <div id="set-pro-channel" class="settings-pane-pro">
               <h3><i class="fa-solid fa-circle-play"></i> <span data-i18n="ch_perso">Personnalisation de la chaîne</span></h3>
-              <div class="form-group"><label class="form-label" data-i18n="ch_name">Nom de la chaîne</label><input class="form-input" id="channelNamePro"></div>
-              <div class="form-group"><label class="form-label">Description</label><textarea class="form-textarea" id="channelBioPro"></textarea></div>
-              <div class="form-group"><label class="form-label" data-i18n="ch_cat">Catégorie</label>
+              <div class="form-group">
+                <label class="form-label" for="channelNamePro" data-i18n="ch_name">Nom de la chaîne</label>
+                <input class="form-input" id="channelNamePro">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="channelBioPro">Description</label>
+                <textarea class="form-textarea" id="channelBioPro"></textarea>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="channelCatPro" data-i18n="ch_cat">Catégorie</label>
                 <select class="form-select" id="channelCatPro" style="width:100%">
-                  <option value="">—</option><option>Education</option><option>Design</option><option>Programming</option><option>Languages</option><option>Marketing</option><option>Other</option>
+                  <option value="">—</option>
+                  <option value="Education">Education</option>
+                  <option value="Design">Design</option>
+                  <option value="Programming">Programming</option>
+                  <option value="Languages">Languages</option>
+                  <option value="Marketing">Marketing</option>
+                  <option value="Other">Other</option>
                 </select>
               </div>
-              <div class="form-group"><label class="form-label">Site web</label><input class="form-input" id="channelLinkPro" placeholder="https://"></div>
-              <div class="form-group"><label class="form-label">Réseaux</label><input class="form-input" id="channelSocialPro" placeholder="@handle"></div>
+              <div class="form-group">
+                <label class="form-label" for="channelLinkPro">Site web</label>
+                <input class="form-input" id="channelLinkPro" placeholder="https://">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="channelSocialPro">Réseaux</label>
+                <input class="form-input" id="channelSocialPro" placeholder="@handle">
+              </div>
               <button class="form-btn btn-primary" onclick="saveChannelPro()" data-i18n="save2">Sauvegarder</button>
             </div>
 
@@ -245,7 +284,7 @@ try{var s=JSON.parse(localStorage.getItem("tt_settings")||"{}");if(s.theme)docum
               <h3><i class="fa-solid fa-sliders"></i> <span data-i18n="tab_pref">Préférences</span></h3>
               <div class="setting-row-pro">
                 <div><div class="setting-title-pro"><i class="fa-solid fa-moon"></i> <span data-i18n="dark_m">Mode Sombre</span></div><div class="setting-desc-pro" data-i18n="dark_d">Interface de nuit</div></div>
-                <div class="toggle" id="t-pro-dark" onclick="toggleSetPro('dark')"></div>
+                <div class="toggle" id="t-pro-dark" onclick="toggleSetPro('dark')" role="checkbox" aria-checked="true" tabindex="0"></div>
               </div>
               <div class="setting-row-pro">
                 <div><div class="setting-title-pro"><i class="fa-solid fa-globe"></i> <span data-i18n="lang">Langue</span></div><div class="setting-desc-pro" data-i18n="lang_d">Langue de l'interface</div></div>
@@ -253,7 +292,7 @@ try{var s=JSON.parse(localStorage.getItem("tt_settings")||"{}");if(s.theme)docum
               </div>
               <div class="setting-row-pro">
                 <div><div class="setting-title-pro"><i class="fa-solid fa-play"></i> Autoplay</div><div class="setting-desc-pro" data-i18n="auto_d">Lecture automatique</div></div>
-                <div class="toggle" id="t-pro-auto" onclick="toggleSetPro('auto')"></div>
+                <div class="toggle" id="t-pro-auto" onclick="toggleSetPro('auto')" role="checkbox" aria-checked="false" tabindex="0"></div>
               </div>
               <div class="setting-row-pro">
                 <div><div class="setting-title-pro"><i class="fa-solid fa-display"></i> <span data-i18n="qual">Qualité</span></div><div class="setting-desc-pro" data-i18n="qual_d">Résolution par défaut</div></div>
@@ -310,37 +349,23 @@ try{var s=JSON.parse(localStorage.getItem("tt_settings")||"{}");if(s.theme)docum
 
 <div class="toasts" id="toasts"></div>
 
-<script src="data.js"></script>
-  </body>
-  </html>
-    <script src="data.js"></script>
-    <script src="globals.js"></script>
-    <script src="utils.js"></script>
-    <script src="auth.js"></script>
-    <script src="settings.js"></script>
-    <script src="social.js"></script>
-    <script src="video.js"></script>
-    <script src="ui.js"></script>
-    <script src="router.js"></script>
-    <script src="main.js"></script>
-</body>
-</html>
-    <!-- Firebase Compat SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+<!-- Firebase Compat SDKs -->
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
-    <!-- App scripts (الترتيب مهم) -->
-    <script src="data.js"></script>
-    <script src="globals.js"></script>
-    <script src="firebase-config.js"></script>
-    <script src="utils.js"></script>
-    <script src="auth.js"></script>
-    <script src="settings.js"></script>
-    <script src="social.js"></script>
-    <script src="video.js"></script>
-    <script src="ui.js"></script>
-    <script src="router.js"></script>
-    <script src="main.js"></script>
+<!-- JS Modules (الترتيب مهم جداً) -->
+<script src="data.js"></script>
+<script src="globals.js"></script>
+<script src="firebase-config.js"></script>
+<script src="utils.js"></script>
+<script src="auth.js"></script>
+<script src="settings.js"></script>
+<script src="social.js"></script>
+<script src="video.js"></script>
+<script src="ui.js"></script>
+<script src="router.js"></script>
+<script src="main.js"></script>
+
 </body>
 </html>
