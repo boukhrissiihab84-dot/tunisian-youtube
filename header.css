@@ -25,3 +25,29 @@
 .auth-cta{display:inline-flex;align-items:center;gap:8px;padding:9px 18px;border-radius:var(--radius-full);background:var(--gradient);color:#fff;font-weight:700;font-size:13.5px;border:none;box-shadow:0 6px 20px rgba(231,0,19,.35);transition:.3s;cursor:pointer}
 .signin-btn:hover,
 .auth-cta:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(231,0,19,.45)}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TunisianTube 🇹🇳</title>
+    <link rel="icon" type="image/png" href="logo.png">
+    
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@600;700&family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <!-- CSS Modules (مستدعاة مباشرة من الـ Root) -->
+    <link rel="stylesheet" href="variables.css">
+    <link rel="stylesheet" href="base.css">
+    <link rel="stylesheet" href="animations.css">
+    <link rel="stylesheet" href="header.css">
+    <link rel="stylesheet" href="avatars.css">
+    <link rel="stylesheet" href="dropdown.css">
+    <link rel="stylesheet" href="modals.css">
+    <link rel="stylesheet" href="sidebar.css">
+    <link rel="stylesheet" href="pages.css">
+    <link rel="stylesheet" href="home.css">
+    <link rel="stylesheet" href="video.css">
+    <link rel="stylesheet" href="settings.css">
+    <link rel="stylesheet" href="misc.css">
+    <link rel="stylesheet" href="responsive.css">
+</head>
