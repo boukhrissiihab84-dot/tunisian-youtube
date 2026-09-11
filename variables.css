@@ -1,28 +1,57 @@
-/* ================================================
-   VARIABLES - Colors, Themes, Sizes
-================================================ */
-:root{
-  --bg:#f4f5f7;--surface:#fff;--surface2:#eef0f3;--surface3:#e3e6eb;
-  --text:#0d0f14;--text2:#5b6270;--text3:#9aa1ad;
-  --border:rgba(13,15,20,.09);--border2:rgba(13,15,20,.16);
-  --accent:#e70013;--accent-soft:rgba(231,0,19,.08);--red:#e70013;
-  --gradient:linear-gradient(135deg,#e70013,#ff5e3a);
-  --gradient2:linear-gradient(135deg,#e70013,#b8000f);
-  --radius:18px;--radius-sm:12px;--radius-full:999px;
-  --shadow-sm:0 1px 2px rgba(13,15,20,.05),0 4px 14px rgba(13,15,20,.06);
-  --shadow-md:0 8px 30px rgba(13,15,20,.1);
-  --shadow-lg:0 24px 70px rgba(13,15,20,.18);
-  --transition:cubic-bezier(.22,.68,.32,1);
-  --header-h:64px;--side-w:248px;
+/* =======================================================
+   01-VARIABLES.CSS - YouTube Aesthetic + Tunisian Touch
+   ======================================================= */
+
+:root {
+    /* ألوان الخلفيات - نسخة يوتيوب الداكنة الرسمية 2024 */
+    --bg: #0f0f0f;                /* الخلفية الأساسية للموقع */
+    --surface: #0f0f0f;           /* الخلفية الموحدة للكروت والشبكة */
+    --surface2: #212121;          /* الأزرار النشطة والـ Hover في الـ Sidebar */
+    --surface3: #272727;          /* خلفية الـ Chips وأزرار البحث والـ Input */
+    
+    /* ألوان النصوص والرموز (YouTube Palette) */
+    --text: #f1f1f1;              /* النص الأبيض الأساسي المقروء جداً */
+    --text2: #aaaaaa;             /* النص الرمادي الفرعي للمشاهدات والقنوات */
+    --text3: #717171;             /* النص الرمادي الغامق للبيانات والتاريخ */
+    
+    /* الحدود والفاصل */
+    --border: rgba(255, 255, 255, 0.1);    /* خطوط يوتيوب الشفافة الفاصلة */
+    --border2: rgba(255, 255, 255, 0.2);   /* حدود الـ Hover والتركيز */
+    
+    /* اللمسة التونسية بالأحمر التونسي اللامع المميز */
+    --accent: #ff2d3f;                     /* الأحمر التونسي المتوهج */
+    --accent-soft: rgba(255, 45, 63, 0.12);/* خلفية حمراء شفافة للتفاعلات */
+    --red: #e70013;                        /* أحمر العلم التونسي الأساسي */
+    
+    /* تدرجات حمراء تونسية للمسات خاصة */
+    --gradient: linear-gradient(135deg, #ff2d3f, #ff7a3d);
+    --gradient2: linear-gradient(135deg, #ff2d3f, #c40818);
+    
+    /* الحواف الدائرية الرسمية ليوتيوب (تحديث 2024) */
+    --radius: 12px;                        /* حواف الـ Thumbnails والكروت الدائرية */
+    --radius-sm: 8px;                      /* حواف الـ Chips والأزرار */
+    --radius-full: 9999px;                 /* حواف دائرية كاملة لصور الأعضاء والبحث */
+    
+    /* المقاسات الهيكلية ليوتيوب */
+    --header-h: 56px;                      /* طول الـ Top bar الأصلي ليوتيوب */
+    --side-w: 240px;                       /* عرض القائمة الجانبية الموسعة */
+    --sidebar-mini-w: 72px;                /* عرض القائمة الجانبية المصغرة */
+    
+    /* التأثيرات والظلال */
+    --shadow-sm: 0 4px 14px rgba(0, 0, 0, 0.4);
+    --shadow-md: 0 8px 30px rgba(0, 0, 0, 0.5);
+    --shadow-lg: 0 24px 70px rgba(0, 0, 0, 0.7);
+    --transition: cubic-bezier(0.05, 0 0, 1); /* انسيابية فائقة السرعة للـ hover */
 }
-[data-theme="dark"]{
-  --bg:#0b0b10;--surface:#121218;--surface2:#1a1a22;--surface3:#232330;
-  --text:#f2f3f7;--text2:#a3a8b8;--text3:#6b7183;
-  --border:rgba(255,255,255,.08);--border2:rgba(255,255,255,.16);
-  --accent:#ff2d3f;--accent-soft:rgba(255,45,63,.12);
-  --gradient:linear-gradient(135deg,#ff2d3f,#ff7a3d);
-  --gradient2:linear-gradient(135deg,#ff2d3f,#c40818);
-  --shadow-sm:0 1px 2px rgba(0,0,0,.4),0 4px 14px rgba(0,0,0,.3);
-  --shadow-md:0 8px 30px rgba(0,0,0,.45);
-  --shadow-lg:0 24px 70px rgba(0,0,0,.6);
+
+/* في حال استخدام الـ theme-toggle مستقبلاً */
+[data-theme="dark"] {
+    /* يبقى المظهر داكنًا بشكل افتراضي متناسق مع ذوقك */
+    --bg: #0f0f0f;
+    --surface: #0f0f0f;
+    --surface2: #212121;
+    --surface3: #272727;
+    --text: #f1f1f1;
+    --text2: #aaaaaa;
+    --text3: #717171;
 }
