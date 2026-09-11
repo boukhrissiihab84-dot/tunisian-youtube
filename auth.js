@@ -1,6 +1,27 @@
 // ==========================================
-// 3. AUTH.JS - تسجيل الدخول والحسابات
+// 3. AUTH.JS - تسجيل الدخول بـ Firebase
 // ==========================================
+
+// مراقبة حالة الحساب (هل هو مسجل دخول أو لا)
+auth.onAuthStateChanged(async (firebaseUser) => {
+    if (firebaseUser) {
+        try {
+            const doc = await db.collection("users").doc(firebaseUser.uid).get();
+            if (doc.exists) {
+                user = { id: firebaseUser.uid, email: firebaseUser.email, ...doc.data() };
+            } else {
+                user = { id: firebaseUser.uid, email: firebaseUser.email, name: firebaseUser.displayName || "User", avatar: "" };
+            }
+        } catch (e) {
+            user = { id: firebaseUser.uid, email: firebaseUser.email, name: "User", avatar: "" };
+        }
+        S.s("user", user);
+    } else {
+        user = null;
+        S.r("user");
+    }
+    renderAuth();
+});
 
 function renderAuth() {
     const a = document.getElementById("authArea");
@@ -66,23 +87,64 @@ function previewAvatar(e) {
     } 
 }
 
-function handleAuth() {
-    const n = document.getElementById("authName").value.trim(), em = document.getElementById("authEmail").value.trim(), p = document.getElementById("authPass").value, err = document.getElementById("authError");
+async function handleAuth() {
+    const n = document.getElementById("authName").value.trim();
+    const em = document.getElementById("authEmail").value.trim();
+    const p = document.getElementById("authPass").value;
+    const err = document.getElementById("authError");
     err.textContent = "";
-    if (!em || !p) { err.textContent = "Fill all fields!"; return; }
-    if (p.length < 6) { err.textContent = "Password must be 6+ characters"; return; }
-    let users = S.g("users") || [];
-    if (isSignUp) {
-        if (!n) { err.textContent = "Enter your name!"; return; }
-        if (users.find(u => u.email === em)) { err.textContent = "Email already exists!"; return; }
-        user = { id: Date.now().toString(), name: n, email: em, pass: p, avatar: tempAvatar || "", bio: "" };
-        users.push(user); S.s("users", users); S.s("user", user);
-    } else {
-        const found = users.find(u => u.email === em && u.pass === p);
-        if (!found) { err.textContent = "Wrong email or password!"; return; }
-        user = found; S.s("user", user);
+
+    if (!em || !p) { err.textContent = "Remplissez tous les champs!"; return; }
+    if (p.length < 6) { err.textContent = "Mot de passe min 6 caractères"; return; }
+
+    const btn = document.getElementById("authBtn");
+    if (btn) btn.disabled = true;
+
+    try {
+        if (isSignUp) {
+            if (!n) { err.textContent = "Entrez votre nom!"; if(btn) btn.disabled = false; return; }
+            
+            // صنع حساب جديد في Firebase
+            const cred = await auth.createUserWithEmailAndPassword(em, p);
+            const uid = cred.user.uid;
+
+            // تسجيل الداتا في Firestore
+            const userData = { name: n, email: em, avatar: tempAvatar || "", createdAt: firebase.firestore.FieldValue.serverTimestamp() };
+            await db.collection("users").doc(uid).set(userData);
+            user = { id: uid, ...userData };
+            
+        } else {
+            // تسجيل الدخول
+            const cred = await auth.signInWithEmailAndPassword(em, p);
+            const uid = cred.user.uid;
+            
+            const doc = await db.collection("users").doc(uid).get();
+            if (doc.exists) {
+                user = { id: uid, ...doc.data() };
+            } else {
+                user = { id: uid, email: em, name: "User", avatar: "" };
+            }
+        }
+
+        S.s("user", user);
+        renderAuth();
+        closeAuth();
+        tempAvatar = "";
+    } catch (e) {
+        console.error("Auth error:", e);
+        if (e.code === 'auth/email-already-in-use') err.textContent = "Cet email existe déjà!";
+        else if (e.code === 'auth/wrong-password' || e.code === 'auth/user-not-found' || e.code === 'auth/invalid-credential') err.textContent = "Email ou mot de passe incorrect!";
+        else err.textContent = "Erreur de connexion!";
+    } finally {
+        if (btn) btn.disabled = false;
     }
-    renderAuth(); closeAuth(); tempAvatar = "";
 }
 
-function logOut() { user = null; S.r("user"); renderAuth(); document.getElementById("dropdown")?.classList.remove("show", "open"); navigate("home"); }
+async function logOut() {
+    try { await auth.signOut(); } catch (e) { console.error(e); }
+    user = null;
+    S.r("user");
+    renderAuth();
+    document.getElementById("dropdown")?.classList.remove("show", "open");
+    navigate("home");
+}
