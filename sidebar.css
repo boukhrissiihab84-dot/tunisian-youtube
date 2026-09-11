@@ -287,4 +287,88 @@
     .yt-main {
         margin-right: 0 !important;
     }
+   /* ===== LAYOUT FIX: المحتوى ما يضيقش و الـ grid يخدم ===== */
+
+.yt-layout {
+    display: flex !important;
+    width: 100% !important;
+    min-height: 100vh !important;
+    padding-top: 56px !important;
+    box-sizing: border-box !important;
+}
+
+.yt-sidebar,
+#sidebar,
+.sidebar {
+    position: fixed !important;
+    top: 56px !important;
+    bottom: 0 !important;
+    right: 0 !important; /* RTL */
+    left: auto !important;
+    width: 240px !important;
+    z-index: 800 !important;
+    background: #0f0f0f !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+}
+
+.yt-sidebar-mini {
+    width: 72px !important;
+}
+
+.yt-main,
+#mainContent,
+.main,
+.main-content {
+    flex: 1 !important;
+    width: auto !important;
+    min-width: 0 !important; /* مهم جداً للـ grid */
+    max-width: 100% !important;
+    margin-right: 240px !important; /* RTL: بجانب الـ sidebar */
+    margin-left: 0 !important;
+    padding: 0 24px 48px !important;
+    box-sizing: border-box !important;
+    background: #0f0f0f !important;
+    overflow-x: hidden !important;
+}
+
+/* mini sidebar */
+body:has(.yt-sidebar-mini) .yt-main,
+body:has(.yt-sidebar-mini) #mainContent,
+.yt-sidebar-mini ~ .yt-main,
+.yt-layout:has(.yt-sidebar-mini) .yt-main {
+    margin-right: 72px !important;
+}
+
+.page {
+    display: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+.page.active {
+    display: block !important;
+}
+
+/* بطّل أي height/width غريب على الصور العامة في الصفحة */
+.page img {
+    max-width: 100%;
+}
+
+/* الموبايل */
+@media (max-width: 791px) {
+    .yt-sidebar,
+    #sidebar {
+        transform: translateX(100%);
+        width: 240px !important;
+    }
+    .yt-sidebar.yt-sidebar-expanded {
+        transform: translateX(0);
+    }
+    .yt-main,
+    #mainContent {
+        margin-right: 0 !important;
+        padding: 0 12px 32px !important;
+    }
+}
 }
