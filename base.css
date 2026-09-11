@@ -1,17 +1,99 @@
-/* ================================================
-   BASE - Reset, Body, Scrollbar, Global
-================================================ */
-*{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;transition:background .35s,color .35s;overflow-x:hidden}
-body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.5;
-  background:radial-gradient(900px 500px at 85% -10%,rgba(231,0,19,.09),transparent 60%),radial-gradient(700px 420px at -10% 30%,rgba(255,122,61,.06),transparent 60%)}
-.ar{font-family:'Cairo','Inter',sans-serif}
-::selection{background:var(--accent);color:#fff}
-::-webkit-scrollbar{width:10px;height:8px}
-::-webkit-scrollbar-track{background:transparent}
-::-webkit-scrollbar-thumb{background:var(--surface3);border-radius:99px;border:2px solid var(--bg)}
-button{font-family:inherit;cursor:pointer}
-input,textarea,select{font-family:inherit;color:var(--text)}
-img{display:block;max-width:100%}
-a{color:inherit}
+/* =======================================================
+   02-BASE.CSS - YouTube UI Reset & Typography
+   ======================================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+html {
+    scroll-behavior: smooth;
+    background-color: var(--bg);
+}
+
+body {
+    font-family: 'Cairo', 'Inter', system-ui, -apple-system, sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    transition: background-color var(--transition);
+}
+
+/* اللمسة التونسية الخفيفة والأنيقة في الخلفية (لا تؤثر على سواد يوتيوب) */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.04;
+    background: radial-gradient(800px 400px at 50% -10%, var(--accent), transparent 70%);
+}
+
+/* تحسين اختيار النصوص بالماوس */
+::selection {
+    background-color: var(--accent);
+    color: #fff;
+}
+
+/* الـ Scrollbar الرسمي والأنيق ليوتيوب (يظهر فقط عند الحاجة وتصميمه رقيق) */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg);
+}
+
+::-webkit-scrollbar-thumb {
+    background: #3f3f3f;
+    border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555555;
+}
+
+/* العناصر الأساسية */
+button {
+    font-family: inherit;
+    cursor: pointer;
+    border: none;
+    background: none;
+    outline: none;
+    color: inherit;
+}
+
+input, textarea, select {
+    font-family: inherit;
+    color: var(--text);
+    background: none;
+    border: none;
+    outline: none;
+}
+
+img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* تنسيق عام لغلاف الصفحة */
+.app-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
