@@ -1,200 +1,242 @@
 /* =======================================================
-   04-HEADER.CSS - YouTube Style Top Header
+   HEADER.CSS - YouTube Top Bar (FIXED)
    ======================================================= */
 
-.yt-header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: var(--header-h);
-    background-color: var(--bg);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 16px;
-    z-index: 1000;
-    border-bottom: 1px solid var(--border);
-    user-select: none;
+.yt-header,
+.hdr {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    height: 56px !important;
+    max-height: 56px !important;
+    background: #0f0f0f !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 0 16px !important;
+    z-index: 1000 !important;
+    border-bottom: 1px solid rgba(255,255,255,0.1) !important;
+    overflow: visible !important;
+    box-sizing: border-box !important;
 }
 
-/* القسم الأيسر: القائمة واللوغو */
-.yt-header-left {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    flex-shrink: 0;
+/* منع أي عنصر يفيض من الهيدر */
+.yt-header *,
+.hdr * {
+    max-height: 40px;
 }
 
-/* زر الهامبرغر ☰ المائل للدوران */
-.yt-icon-btn {
-    width: 40px;
-    height: 40px;
-    border-radius: var(--radius-full);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--text);
-    transition: background-color var(--transition);
+.yt-header img,
+.hdr img {
+    max-width: 40px !important;
+    max-height: 40px !important;
+    width: auto !important;
+    height: auto !important;
+    object-fit: contain !important;
 }
 
-.yt-icon-btn:hover {
-    background-color: var(--surface2);
+/* ===== LEFT ===== */
+.yt-header-left,
+.hdr-left {
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    flex-shrink: 0 !important;
+    height: 56px !important;
+}
+
+.yt-icon-btn,
+.menu-i {
+    width: 40px !important;
+    height: 40px !important;
+    min-width: 40px !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    color: #f1f1f1 !important;
+    background: transparent !important;
+    border: none !important;
+    cursor: pointer !important;
+    flex-shrink: 0 !important;
+}
+
+.yt-icon-btn:hover,
+.menu-i:hover {
+    background: #272727 !important;
 }
 
 .yt-icon-btn svg {
-    fill: currentColor;
+    width: 24px !important;
+    height: 24px !important;
 }
 
-/* لوغو المنصة بالتصميم التونسي الراقي */
-.yt-logo {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    cursor: pointer;
-    font-family: 'Space Grotesk', sans-serif;
-    font-weight: 700;
-    font-size: 18px;
-    letter-spacing: -0.5px;
+/* ===== LOGO (صغير ومضبوط) ===== */
+.yt-logo,
+.logo-wrap {
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    cursor: pointer !important;
+    height: 40px !important;
+    max-height: 40px !important;
+    overflow: hidden !important;
+    flex-shrink: 0 !important;
+    text-decoration: none !important;
 }
 
 .yt-logo-red {
-    font-size: 20px;
-    filter: drop-shadow(0 2px 5px rgba(231, 0, 19, 0.3));
+    font-size: 18px !important;
+    line-height: 1 !important;
+    flex-shrink: 0 !important;
 }
 
-.yt-logo-text {
-    color: var(--text);
+.yt-logo-text,
+.logo-t {
+    font-family: 'Space Grotesk', 'Inter', sans-serif !important;
+    font-weight: 700 !important;
+    font-size: 18px !important;
+    letter-spacing: -0.5px !important;
+    color: #f1f1f1 !important;
+    white-space: nowrap !important;
+    line-height: 1 !important;
 }
 
-.yt-logo-text span {
-    color: var(--accent);
-    font-weight: 900;
+.yt-logo-text span,
+.logo-r {
+    color: #ff2d3f !important;
 }
 
-/* القسم الأوسط: شريط البحث الأسطوري ليوتيوب */
-.yt-header-center {
-    flex: 0 1 640px;
-    margin: 0 16px;
-    display: flex;
-    justify-content: center;
+/* إذا عندك صورة لوقو */
+.logo-img,
+.yt-logo img {
+    width: 32px !important;
+    height: 32px !important;
+    max-width: 32px !important;
+    max-height: 32px !important;
+    border-radius: 8px !important;
+    object-fit: cover !important;
 }
 
-.yt-search-pill {
-    display: flex;
-    width: 100%;
-    max-width: 600px;
-    height: 40px;
-    background-color: var(--surface3);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-full);
-    overflow: hidden;
-    position: relative;
-    transition: border-color var(--transition);
+/* ===== CENTER SEARCH ===== */
+.yt-header-center,
+.search-wrap {
+    flex: 1 1 auto !important;
+    max-width: 640px !important;
+    margin: 0 40px !important;
+    display: flex !important;
+    justify-content: center !important;
+    height: 40px !important;
 }
 
-/* عند الضغط على البحث يتوهج بالأحمر التونسي الهادئ */
-.yt-search-pill:focus-within {
-    border-color: var(--accent);
-    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3);
+.yt-search-pill,
+.search-inner {
+    display: flex !important;
+    width: 100% !important;
+    max-width: 540px !important;
+    height: 40px !important;
+    background: #121212 !important;
+    border: 1px solid #303030 !important;
+    border-radius: 40px !important;
+    overflow: hidden !important;
 }
 
-.yt-search-pill input {
-    flex: 1;
-    padding: 0 16px;
-    font-size: 15px;
-    background-color: #121212; /* خلفية الإدخال شديدة السواد */
-    border-radius: var(--radius-full) 0 0 var(--radius-full);
-    color: var(--text);
+.yt-search-pill:focus-within,
+.search-inner:focus-within {
+    border-color: #1c62b9 !important;
+}
+
+.yt-search-pill input,
+.search-inner input {
+    flex: 1 !important;
+    padding: 0 16px !important;
+    background: #121212 !important;
+    border: none !important;
+    outline: none !important;
+    color: #f1f1f1 !important;
+    font-size: 16px !important;
+    height: 40px !important;
+    max-height: 40px !important;
 }
 
 .yt-search-pill input::placeholder {
-    color: var(--text3);
-    font-size: 14px;
+    color: #888 !important;
 }
 
-/* زر مكبر الصوت (البحث) الرمادي على اليمين */
-.yt-search-btn {
-    width: 64px;
-    height: 100%;
-    background-color: var(--surface3);
-    border-right: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--text);
-    transition: background-color var(--transition);
+.yt-search-btn,
+.search-btn {
+    width: 64px !important;
+    height: 40px !important;
+    background: #222222 !important;
+    border: none !important;
+    border-right: 1px solid #303030 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    color: #f1f1f1 !important;
+    flex-shrink: 0 !important;
 }
 
 .yt-search-btn:hover {
-    background-color: var(--surface2);
+    background: #303030 !important;
 }
 
-.yt-search-btn svg {
-    color: var(--text2);
+/* ===== RIGHT ===== */
+.yt-header-right,
+.hdr-right {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    flex-shrink: 0 !important;
+    height: 56px !important;
 }
 
-/* القسم الأيمن: الدخول أو البروفايل */
-.yt-header-right {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    flex-shrink: 0;
-}
-
-/* زر الدخول الاحترافي شبه الشفاف بحدود حمراء هادئة */
-.yt-auth-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 6px 14px;
-    border: 1px solid var(--border);
-    border-color: rgba(255, 45, 63, 0.4);
-    border-radius: var(--radius-full);
-    color: var(--accent);
-    font-size: 14px;
-    font-weight: 600;
-    background-color: transparent;
-    transition: background-color var(--transition), border-color var(--transition);
+.yt-auth-btn,
+.signin-btn,
+.auth-cta {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    padding: 0 15px !important;
+    height: 36px !important;
+    max-height: 36px !important;
+    border: 1px solid #3ea6ff !important;
+    border-radius: 40px !important;
+    color: #3ea6ff !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    background: transparent !important;
+    cursor: pointer !important;
+    white-space: nowrap !important;
 }
 
 .yt-auth-btn:hover {
-    background-color: var(--accent-soft);
-    border-color: var(--accent);
-}
-
-.yt-auth-btn i {
-    font-size: 18px;
-}
-
-/* منطقة الأفتار والبروفايل للمسجلين */
-.yt-user-menu {
-    position: relative;
+    background: rgba(62, 166, 255, 0.1) !important;
 }
 
 .yt-avatar-header {
-    width: 34px;
-    height: 34px;
-    border-radius: var(--radius-full);
-    overflow: hidden;
-    cursor: pointer;
-    border: 1.5px solid transparent;
-    transition: border-color var(--transition);
-}
-
-.yt-avatar-header:hover {
-    border-color: var(--accent);
+    width: 32px !important;
+    height: 32px !important;
+    min-width: 32px !important;
+    border-radius: 50% !important;
+    overflow: hidden !important;
+    cursor: pointer !important;
 }
 
 .yt-avatar-header img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+    width: 32px !important;
+    height: 32px !important;
+    object-fit: cover !important;
 }
 
-/* responsive الموبايل للشريط العلوي */
-@media (max-width: 650px) {
-    .yt-header-center {
-        display: none; /* إخفاء البحث على الشاشات الصغيرة جداً لعدم الازدحام */
+@media (max-width: 700px) {
+    .yt-header-center,
+    .search-wrap {
+        display: none !important;
+    }
+    .yt-logo-text {
+        font-size: 16px !important;
     }
 }
