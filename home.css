@@ -1,305 +1,294 @@
 /* =======================================================
-   HOME.CSS - YouTube Chips, Grid & Cards 🇹🇳
+   HOME.CSS - YouTube Grid + Cards (FIXED)
    ======================================================= */
 
-/* ========== CHIPS BAR (Sticky) ========== */
-.yt-chips-container {
-    display: flex;
-    gap: 10px;
-    overflow-x: auto;
-    padding: 12px 0 18px;
-    margin-bottom: 8px;
-    position: sticky;
-    top: var(--header-h);
-    z-index: 500;
-    background: var(--bg);
-    scrollbar-width: none;
-    -ms-overflow-style: none;
+/* شريط الـ Chips */
+.yt-chips-container,
+.filter-bar,
+#filterBar {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    gap: 12px !important;
+    overflow-x: auto !important;
+    padding: 12px 0 16px !important;
+    margin: 0 0 8px !important;
+    position: sticky !important;
+    top: 56px !important;
+    z-index: 400 !important;
+    background: #0f0f0f !important;
+    scrollbar-width: none !important;
 }
 
-.yt-chips-container::-webkit-scrollbar {
-    display: none;
+.yt-chips-container::-webkit-scrollbar,
+.filter-bar::-webkit-scrollbar {
+    display: none !important;
 }
 
-.yt-chip {
-    flex-shrink: 0;
-    height: 32px;
-    padding: 0 14px;
-    border-radius: 8px;
-    background: var(--surface3);
-    border: none;
-    color: var(--text);
-    font-size: 13.5px;
-    font-weight: 500;
-    font-family: inherit;
-    cursor: pointer;
-    white-space: nowrap;
-    transition: background 0.15s ease, color 0.15s ease;
-    display: inline-flex;
-    align-items: center;
+.yt-chip,
+.chip,
+.f-chip {
+    flex-shrink: 0 !important;
+    height: 32px !important;
+    padding: 0 12px !important;
+    border-radius: 8px !important;
+    background: #272727 !important;
+    border: none !important;
+    color: #f1f1f1 !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    cursor: pointer !important;
+    white-space: nowrap !important;
 }
 
-.yt-chip:hover {
-    background: #3f3f3f;
+.yt-chip:hover,
+.chip:hover {
+    background: #3f3f3f !important;
 }
 
-.yt-chip.active {
-    background: var(--text);
-    color: #0f0f0f;
-    font-weight: 600;
+.yt-chip.active,
+.chip.active,
+.f-chip.active {
+    background: #f1f1f1 !important;
+    color: #0f0f0f !important;
+    font-weight: 600 !important;
 }
 
-/* ========== VIDEO GRID ========== */
-.yt-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 24px 16px;
-    width: 100%;
+/* =======================================================
+   GRID — هذا هو الإصلاح الأساسي
+   عدة فيديوهات في الصف كيما YouTube
+   ======================================================= */
+
+.yt-grid,
+.grid,
+#grid,
+#categoryGrid,
+#likedGrid,
+#subsGrid,
+#historyGrid {
+    display: grid !important;
+    /* مهم: minmax صغير باش يطلعوا 3-4 في الصف */
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)) !important;
+    gap: 40px 16px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    align-items: start !important;
 }
 
-/* ========== YOUTUBE CARD ========== */
-.yt-card {
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-    border-radius: 0;
-    background: transparent;
-    transition: transform 0.2s ease;
+/* الكارت — ما ياخذش عرض كامل */
+.yt-card,
+.card {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    cursor: pointer !important;
+    background: transparent !important;
+    border: none !important;
+    border-radius: 0 !important;
+    overflow: visible !important;
+    box-shadow: none !important;
+    transform: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    float: none !important;
+    position: relative !important;
 }
 
-.yt-card:hover {
-    transform: none; /* يوتيوب ما يحركش الكارت لفوق */
+.yt-card:hover,
+.card:hover {
+    transform: none !important;
 }
 
-/* --- Thumbnail --- */
-.yt-thumb-wrap {
-    position: relative;
-    width: 100%;
-    aspect-ratio: 16 / 9;
-    border-radius: 12px;
-    overflow: hidden;
-    background: var(--surface2);
+/* Thumbnail 16:9 */
+.yt-thumb-wrap,
+.card-thumb,
+.thumb {
+    position: relative !important;
+    width: 100% !important;
+    aspect-ratio: 16 / 9 !important;
+    height: auto !important;
+    max-height: none !important;
+    border-radius: 12px !important;
+    overflow: hidden !important;
+    background: #272727 !important;
 }
 
-.yt-thumb {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    transition: transform 0.3s ease;
+.yt-thumb,
+.yt-thumb-wrap img,
+.card-thumb img,
+.thumb img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    display: block !important;
+    border-radius: 12px !important;
+    max-width: 100% !important;
+    position: relative !important;
 }
 
 .yt-card:hover .yt-thumb {
-    transform: scale(1.03);
+    transform: scale(1.02);
+    transition: transform 0.25s ease;
 }
 
-/* مدة الفيديو */
-.yt-duration {
-    position: absolute;
-    bottom: 8px;
-    left: 8px; /* RTL: المدة على اليسار */
-    background: rgba(0, 0, 0, 0.85);
-    color: #fff;
-    font-size: 12px;
-    font-weight: 600;
-    padding: 2px 6px;
-    border-radius: 4px;
-    line-height: 1.4;
-    letter-spacing: 0.3px;
-    z-index: 2;
-    font-variant-numeric: tabular-nums;
+/* Duration */
+.yt-duration,
+.dur {
+    position: absolute !important;
+    bottom: 8px !important;
+    left: 8px !important;
+    background: rgba(0,0,0,0.8) !important;
+    color: #fff !important;
+    font-size: 12px !important;
+    font-weight: 500 !important;
+    padding: 1px 4px !important;
+    border-radius: 4px !important;
+    z-index: 2 !important;
 }
 
-/* شارة تونس 🇹🇳 */
-.yt-badge-tounes {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    background: rgba(15, 15, 15, 0.85);
-    backdrop-filter: blur(6px);
-    color: #fff;
-    font-size: 13px;
-    padding: 2px 7px;
-    border-radius: 6px;
-    z-index: 2;
-    line-height: 1.3;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+/* شارة 🇹🇳 */
+.yt-badge-tounes,
+.card-badge {
+    position: absolute !important;
+    top: 8px !important;
+    right: 8px !important;
+    background: rgba(0,0,0,0.8) !important;
+    color: #fff !important;
+    font-size: 11px !important;
+    padding: 2px 6px !important;
+    border-radius: 4px !important;
+    z-index: 2 !important;
 }
 
-/* --- Card Info Row --- */
-.yt-card-info {
-    display: flex;
-    gap: 12px;
-    padding: 12px 0 0;
-    align-items: flex-start;
+/* معلومات تحت الصورة */
+.yt-card-info,
+.card-body {
+    display: flex !important;
+    gap: 12px !important;
+    padding: 12px 0 0 !important;
+    align-items: flex-start !important;
+    width: 100% !important;
 }
 
-/* Avatar القناة (حرف أول) */
 .yt-ch-avatar {
-    width: 36px;
-    height: 36px;
-    min-width: 36px;
-    border-radius: 50%;
-    background: var(--gradient);
-    color: #fff;
-    font-size: 15px;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    text-transform: uppercase;
-    font-family: 'Space Grotesk', sans-serif;
+    width: 36px !important;
+    height: 36px !important;
+    min-width: 36px !important;
+    max-width: 36px !important;
+    border-radius: 50% !important;
+    background: linear-gradient(135deg, #ff2d3f, #ff7a3d) !important;
+    color: #fff !important;
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-shrink: 0 !important;
+    overflow: hidden !important;
 }
 
-.yt-card-text {
-    flex: 1;
-    min-width: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
+.yt-card-text,
+.card-info {
+    flex: 1 !important;
+    min-width: 0 !important;
 }
 
-.yt-card-title {
-    font-size: 14px;
-    font-weight: 600;
-    line-height: 1.4;
-    color: var(--text);
-    margin: 0;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    letter-spacing: -0.1px;
+.yt-card-title,
+.card-title {
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    line-height: 1.4 !important;
+    color: #f1f1f1 !important;
+    margin: 0 0 4px !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+    max-height: 2.8em !important;
 }
 
-.yt-card-channel {
-    font-size: 13px;
-    color: var(--text2);
-    margin: 2px 0 0;
-    font-weight: 400;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+.yt-card-channel,
+.card-ch,
+.yt-card-meta,
+.card-cat,
+.card-meta {
+    font-size: 12px !important;
+    color: #aaaaaa !important;
+    margin: 0 !important;
+    line-height: 1.4 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
 }
 
-.yt-card-channel:hover {
-    color: var(--text);
-}
-
-.yt-card-meta {
-    font-size: 13px;
-    color: var(--text2);
-    margin: 0;
-    font-weight: 400;
-}
-
-/* زر ⋮ */
 .yt-card-menu {
-    width: 36px;
-    height: 36px;
-    min-width: 36px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--text2);
-    font-size: 18px;
-    background: transparent;
-    border: none;
-    cursor: pointer;
+    width: 40px !important;
+    height: 40px !important;
+    min-width: 40px !important;
+    border: none !important;
+    background: transparent !important;
+    color: #f1f1f1 !important;
+    font-size: 16px !important;
+    cursor: pointer !important;
     opacity: 0;
-    transition: opacity 0.15s, background 0.15s;
-    flex-shrink: 0;
+    border-radius: 50% !important;
+    flex-shrink: 0 !important;
 }
 
 .yt-card:hover .yt-card-menu {
     opacity: 1;
 }
 
-.yt-card-menu:hover {
-    background: var(--surface2);
-    color: var(--text);
+/* Empty */
+.yt-empty,
+.empty-state {
+    grid-column: 1 / -1 !important;
+    text-align: center !important;
+    padding: 80px 20px !important;
+    color: #aaa !important;
 }
 
-/* ========== EMPTY STATE ========== */
-.yt-empty {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 80px 20px;
-    color: var(--text2);
-    grid-column: 1 / -1;
-    width: 100%;
-    gap: 8px;
+.yt-empty h2,
+.empty-state h2 {
+    color: #f1f1f1 !important;
+    font-size: 18px !important;
 }
 
-.yt-empty svg {
-    margin-bottom: 12px;
-    opacity: 0.5;
-}
-
-.yt-empty h2 {
-    font-size: 20px;
-    font-weight: 700;
-    color: var(--text);
-    margin: 0;
-}
-
-.yt-empty p {
-    font-size: 14px;
-    color: var(--text3);
-    margin: 0;
-}
-
-/* ========== SENTINEL (Infinite Scroll) ========== */
 #sentinel {
-    height: 20px;
-    width: 100%;
-    margin-top: 16px;
+    height: 20px !important;
+    grid-column: 1 / -1 !important;
 }
 
-/* ========== RESPONSIVE GRID ========== */
-@media (min-width: 1400px) {
-    .yt-grid {
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-        gap: 28px 18px;
+/* ========== Breakpoints كيما YouTube ========== */
+@media (min-width: 1200px) {
+    .yt-grid, .grid, #grid, #categoryGrid, #likedGrid, #subsGrid, #historyGrid {
+        grid-template-columns: repeat(4, 1fr) !important;
     }
 }
 
-@media (max-width: 900px) {
-    .yt-grid {
-        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-        gap: 20px 12px;
+@media (min-width: 900px) and (max-width: 1199px) {
+    .yt-grid, .grid, #grid, #categoryGrid, #likedGrid, #subsGrid, #historyGrid {
+        grid-template-columns: repeat(3, 1fr) !important;
     }
 }
 
-@media (max-width: 600px) {
-    .yt-grid {
-        grid-template-columns: 1fr;
-        gap: 16px;
+@media (min-width: 600px) and (max-width: 899px) {
+    .yt-grid, .grid, #grid, #categoryGrid, #likedGrid, #subsGrid, #historyGrid {
+        grid-template-columns: repeat(2, 1fr) !important;
     }
+}
 
+@media (max-width: 599px) {
+    .yt-grid, .grid, #grid, #categoryGrid, #likedGrid, #subsGrid, #historyGrid {
+        grid-template-columns: 1fr !important;
+        gap: 24px 0 !important;
+    }
     .yt-thumb-wrap {
-        border-radius: 0;
+        border-radius: 0 !important;
     }
-
-    .page {
-        padding: 0 0 32px;
-    }
-
-    .yt-chips-container {
-        padding: 10px 12px 14px;
-    }
-
-    .yt-card-info {
-        padding: 10px 12px 0;
-    }
-
     .yt-card-menu {
-        opacity: 1; /* على الموبايل يظهر دايما */
+        opacity: 1 !important;
     }
 }
