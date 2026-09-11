@@ -1,242 +1,279 @@
 /* =======================================================
-   HEADER.CSS - YouTube Top Bar (FIXED)
+   HEADER.CSS - YouTube Style + TunisianTube 🇹🇳
    ======================================================= */
 
-.yt-header,
 .hdr {
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
-    height: 56px !important;
-    max-height: 56px !important;
-    background: #0f0f0f !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: space-between !important;
-    padding: 0 16px !important;
-    z-index: 1000 !important;
-    border-bottom: 1px solid rgba(255,255,255,0.1) !important;
-    overflow: visible !important;
-    box-sizing: border-box !important;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 56px;
+    background: var(--bg);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+    z-index: 1000;
+    border-bottom: 1px solid var(--border);
+    gap: 12px;
+    box-sizing: border-box;
 }
 
-/* منع أي عنصر يفيض من الهيدر */
-.yt-header *,
-.hdr * {
-    max-height: 40px;
-}
-
-.yt-header img,
-.hdr img {
-    max-width: 40px !important;
-    max-height: 40px !important;
-    width: auto !important;
-    height: auto !important;
-    object-fit: contain !important;
-}
-
-/* ===== LEFT ===== */
-.yt-header-left,
+/* ===== LEFT: Menu + Logo ===== */
 .hdr-left {
-    display: flex !important;
-    align-items: center !important;
-    gap: 12px !important;
-    flex-shrink: 0 !important;
-    height: 56px !important;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+    height: 100%;
 }
 
-.yt-icon-btn,
 .menu-i {
-    width: 40px !important;
-    height: 40px !important;
-    min-width: 40px !important;
-    border-radius: 50% !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    color: #f1f1f1 !important;
-    background: transparent !important;
-    border: none !important;
-    cursor: pointer !important;
-    flex-shrink: 0 !important;
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    transition: background 0.15s ease;
 }
 
-.yt-icon-btn:hover,
 .menu-i:hover {
-    background: #272727 !important;
+    background: var(--surface2);
 }
 
-.yt-icon-btn svg {
-    width: 24px !important;
-    height: 24px !important;
-}
-
-/* ===== LOGO (صغير ومضبوط) ===== */
-.yt-logo,
+/* ===== LOGO ===== */
 .logo-wrap {
-    display: flex !important;
-    align-items: center !important;
-    gap: 6px !important;
-    cursor: pointer !important;
-    height: 40px !important;
-    max-height: 40px !important;
-    overflow: hidden !important;
-    flex-shrink: 0 !important;
-    text-decoration: none !important;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    height: 40px;
+    text-decoration: none;
+    user-select: none;
+    flex-shrink: 0;
 }
 
-.yt-logo-red {
-    font-size: 18px !important;
-    line-height: 1 !important;
-    flex-shrink: 0 !important;
+.logo-img {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    object-fit: cover;
+    flex-shrink: 0;
 }
 
-.yt-logo-text,
 .logo-t {
-    font-family: 'Space Grotesk', 'Inter', sans-serif !important;
-    font-weight: 700 !important;
-    font-size: 18px !important;
-    letter-spacing: -0.5px !important;
-    color: #f1f1f1 !important;
-    white-space: nowrap !important;
-    line-height: 1 !important;
+    font-family: 'Space Grotesk', 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 19px;
+    letter-spacing: -0.5px;
+    color: var(--text);
+    white-space: nowrap;
+    line-height: 1;
 }
 
-.yt-logo-text span,
 .logo-r {
-    color: #ff2d3f !important;
+    color: var(--accent);
+    font-weight: 900;
 }
 
-/* إذا عندك صورة لوقو */
-.logo-img,
-.yt-logo img {
-    width: 32px !important;
-    height: 32px !important;
-    max-width: 32px !important;
-    max-height: 32px !important;
-    border-radius: 8px !important;
-    object-fit: cover !important;
-}
-
-/* ===== CENTER SEARCH ===== */
-.yt-header-center,
+/* ===== CENTER: Search Pill ===== */
 .search-wrap {
-    flex: 1 1 auto !important;
-    max-width: 640px !important;
-    margin: 0 40px !important;
-    display: flex !important;
-    justify-content: center !important;
-    height: 40px !important;
+    flex: 1 1 auto;
+    max-width: 640px;
+    margin: 0 40px;
+    display: flex;
+    justify-content: center;
+    height: 40px;
 }
 
-.yt-search-pill,
 .search-inner {
-    display: flex !important;
-    width: 100% !important;
-    max-width: 540px !important;
-    height: 40px !important;
-    background: #121212 !important;
-    border: 1px solid #303030 !important;
-    border-radius: 40px !important;
-    overflow: hidden !important;
+    display: flex;
+    width: 100%;
+    max-width: 540px;
+    height: 40px;
+    background: var(--surface3);
+    border: 1px solid var(--border);
+    border-radius: 40px;
+    overflow: hidden;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.yt-search-pill:focus-within,
 .search-inner:focus-within {
-    border-color: #1c62b9 !important;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px var(--accent-soft);
 }
 
-.yt-search-pill input,
 .search-inner input {
-    flex: 1 !important;
-    padding: 0 16px !important;
-    background: #121212 !important;
-    border: none !important;
-    outline: none !important;
-    color: #f1f1f1 !important;
-    font-size: 16px !important;
-    height: 40px !important;
-    max-height: 40px !important;
+    flex: 1;
+    padding: 0 16px;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text);
+    font-size: 14px;
+    height: 100%;
+    font-family: inherit;
 }
 
-.yt-search-pill input::placeholder {
-    color: #888 !important;
+.search-inner input::placeholder {
+    color: var(--text3);
 }
 
-.yt-search-btn,
 .search-btn {
-    width: 64px !important;
-    height: 40px !important;
-    background: #222222 !important;
-    border: none !important;
-    border-right: 1px solid #303030 !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    cursor: pointer !important;
-    color: #f1f1f1 !important;
-    flex-shrink: 0 !important;
+    width: 64px;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.05);
+    border: none;
+    border-right: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--text2);
+    flex-shrink: 0;
+    transition: background 0.15s ease;
 }
 
-.yt-search-btn:hover {
-    background: #303030 !important;
+.search-btn:hover {
+    background: var(--surface2);
+    color: var(--text);
 }
 
-/* ===== RIGHT ===== */
-.yt-header-right,
+/* ===== RIGHT: Video Count + Icons + Auth ===== */
 .hdr-right {
-    display: flex !important;
-    align-items: center !important;
-    gap: 8px !important;
-    flex-shrink: 0 !important;
-    height: 56px !important;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+    height: 100%;
 }
 
-.yt-auth-btn,
+.vid-count {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text2);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 7px 13px;
+    border-radius: 40px;
+    white-space: nowrap;
+    line-height: 1;
+}
+
+.icon-btn {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    color: var(--text);
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.15s ease;
+}
+
+.icon-btn:hover {
+    background: var(--surface2);
+}
+
+/* ===== Auth Area (Sign In / User Avatar) ===== */
+#authArea {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
 .signin-btn,
 .auth-cta {
-    display: inline-flex !important;
-    align-items: center !important;
-    gap: 8px !important;
-    padding: 0 15px !important;
-    height: 36px !important;
-    max-height: 36px !important;
-    border: 1px solid #3ea6ff !important;
-    border-radius: 40px !important;
-    color: #3ea6ff !important;
-    font-size: 14px !important;
-    font-weight: 500 !important;
-    background: transparent !important;
-    cursor: pointer !important;
-    white-space: nowrap !important;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 15px;
+    height: 36px;
+    border: 1px solid var(--accent);
+    border-radius: 40px;
+    color: var(--accent);
+    font-size: 14px;
+    font-weight: 600;
+    background: transparent;
+    cursor: pointer;
+    white-space: nowrap;
+    font-family: inherit;
+    transition: background 0.15s ease;
 }
 
-.yt-auth-btn:hover {
-    background: rgba(62, 166, 255, 0.1) !important;
+.signin-btn:hover,
+.auth-cta:hover {
+    background: var(--accent-soft);
 }
 
-.yt-avatar-header {
-    width: 32px !important;
-    height: 32px !important;
-    min-width: 32px !important;
-    border-radius: 50% !important;
-    overflow: hidden !important;
-    cursor: pointer !important;
+.signin-btn i,
+.auth-cta i {
+    font-size: 16px;
 }
 
-.yt-avatar-header img {
-    width: 32px !important;
-    height: 32px !important;
-    object-fit: cover !important;
+/* User Avatar في الهيدر بعد التسجيل */
+.hdr-avatar {
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    border-radius: 50%;
+    overflow: hidden;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: border-color 0.15s ease;
+}
+
+.hdr-avatar:hover {
+    border-color: var(--accent);
+}
+
+.hdr-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 900px) {
+    .vid-count {
+        display: none;
+    }
+    .search-wrap {
+        margin: 0 20px;
+    }
 }
 
 @media (max-width: 700px) {
-    .yt-header-center,
     .search-wrap {
-        display: none !important;
+        display: none;
     }
-    .yt-logo-text {
-        font-size: 16px !important;
+    .logo-t {
+        font-size: 17px;
+    }
+    #mSearchBtn {
+        display: flex !important;
+    }
+}
+
+@media (max-width: 500px) {
+    .hdr {
+        padding: 0 8px;
+        gap: 6px;
+    }
+    .hdr-left {
+        gap: 8px;
     }
 }
