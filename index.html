@@ -369,3 +369,272 @@ try{var s=JSON.parse(localStorage.getItem("tt_settings")||"{}");if(s.theme)docum
 
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TunisianTube 🇹🇳 - منصة الدورات التونسية</title>
+    <link rel="icon" type="image/png" href="https://img.icons8.com/color/48/tunisia-flag.png">
+    
+    <!-- Font Awesome الأيقونات -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- استدعاء الـ 14 ملف CSS الموزعة -->
+    <link rel="stylesheet" href="01-variables.css">
+    <link rel="stylesheet" href="02-base.css">
+    <link rel="stylesheet" href="03-animations.css">
+    <link rel="stylesheet" href="04-header.css">
+    <link rel="stylesheet" href="05-avatars.css">
+    <link rel="stylesheet" href="06-dropdown.css">
+    <link rel="stylesheet" href="07-modals.css">
+    <link rel="stylesheet" href="08-sidebar.css">
+    <link rel="stylesheet" href="09-pages.css">
+    <link rel="stylesheet" href="10-home.css">
+    <link rel="stylesheet" href="11-video.css">
+    <link rel="stylesheet" href="12-settings.css">
+    <link rel="stylesheet" href="13-misc.css">
+    <link rel="stylesheet" href="14-responsive.css">
+</head>
+<body class="yt-dark-theme">
+
+    <!-- الغلاف الخارجي للموقع بالكامل -->
+    <div class="app-container">
+        
+        <!-- ========================================== -->
+        <!-- 1. TOP HEADER (YouTube Aesthetic)          -->
+        <!-- ========================================== -->
+        <header class="yt-header">
+            <div class="yt-header-left">
+                <button class="yt-icon-btn" id="menuToggleBtn" onclick="toggleSidebar()" aria-label="القائمة">
+                    <svg viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M21 6H3V5h18v1zM21 12H3v-1h18v1zm0 6H3v-1h18v1z"/></svg>
+                </button>
+                <div class="yt-logo" onclick="showAll()">
+                    <span class="yt-logo-red">🇹🇳</span>
+                    <span class="yt-logo-text">Tunisian<span>Tube</span></span>
+                </div>
+            </div>
+
+            <div class="yt-header-center">
+                <div class="yt-search-pill">
+                    <input type="text" id="searchInput" placeholder="لوّج على دورة، بروموشن، لغة..." oninput="onSearchInput()">
+                    <button class="yt-search-btn" aria-label="بحث">
+                        <svg viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" d="M20.87 20.17l-5.59-5.59C16.35 13.35 17 11.75 17 10c0-3.87-3.13-7-7-7s-7 3.13-7 7 3.13 7 7 7c1.75 0 3.35-.65 4.58-1.71l5.59 5.59.7-.71zM10 16c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6z"/></svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="yt-header-right">
+                <!-- زر إنشاء حساب / تسجيل الدخول (يظهر إذا كان الزائر غير مسجل) -->
+                <button class="yt-auth-btn" id="headerAuthBtn" onclick="openAuth()">
+                    <i class="far fa-user-circle"></i> دخول
+                </button>
+                
+                <!-- بروفايل المستخدم (مخفي افتراضيًا ويظهر بعد تسجيل الدخول) -->
+                <div class="yt-user-menu" id="userMenuArea" style="display: none;">
+                    <div class="yt-avatar-header" onclick="toggleDropdown()">
+                        <img id="headerAvatar" src="" alt="avatar" onerror="this.src='https://img.icons8.com/color/96/user.png'">
+                    </div>
+                    
+                    <!-- Dropdown Menu الحساب -->
+                    <div class="yt-dropdown" id="userDropdown">
+                        <div class="yt-dropdown-header">
+                            <img id="dropdownAvatar" class="avatar-preview-sm" src="" alt="avatar">
+                            <div class="yt-dropdown-info">
+                                <span id="dropdownName">اسم المستخدم</span>
+                                <span id="dropdownEmail">الايميل</span>
+                            </div>
+                        </div>
+                        <div class="yt-dropdown-divider"></div>
+                        <button class="yt-dropdown-item" onclick="navigate('settings')">
+                            <i class="fas fa-cog"></i> الإعدادات الاحترافية
+                        </button>
+                        <button class="yt-dropdown-item" onclick="navigate('liked')">
+                            <i class="fas fa-heart"></i> فيديوهاتي المفضلة
+                        </button>
+                        <button class="yt-dropdown-item logout" onclick="handleLogout()">
+                            <i class="fas fa-sign-out-alt"></i> تسجيل الخروج
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- ========================================== -->
+        <!-- 2. MAIN LAYOUT (Sidebar + Content)         -->
+        <!-- ========================================== -->
+        <div class="yt-layout">
+            
+            <!-- SIDEBAR -->
+            <aside class="yt-sidebar yt-sidebar-expanded" id="sidebar">
+                <div class="yt-sidebar-scroll" id="catList">
+                    <!-- يتم بناؤه ديناميكيًا من ui.js -->
+                </div>
+                <div id="subList">
+                    <!-- يتم بناؤه ديناميكيًا من ui.js -->
+                </div>
+            </aside>
+
+            <!-- MAIN CONTENT CONTAINER -->
+            <main class="yt-main" id="mainContent">
+                
+                <!-- ========================================== -->
+                <!-- PAGE 1: HOME VIEW                          -->
+                <!-- ========================================== -->
+                <div id="homePage" class="page active">
+                    <!-- شريط فلاتر الـ Chips التابع لـ YouTube -->
+                    <div class="yt-chips-container" id="filterBar">
+                        <!-- يتم توليده ديناميكيًا من ui.js -->
+                    </div>
+                    
+                    <!-- Grid الفيديوهات الرئيسي -->
+                    <div class="yt-grid" id="grid"></div>
+                    
+                    <!-- مؤشر الانتهاء لتحميل لا نهائي (Infinite Scroll) -->
+                    <div id="sentinel" style="height: 20px; margin-top: 20px;"></div>
+                    
+                    <!-- رسالة فارغة عند غياب الفيديوهات -->
+                    <div id="empty" style="display: none;"></div>
+                </div>
+
+                <!-- ========================================== -->
+                <!-- PAGE 2: WATCH VIDEO PAGE                   -->
+                <!-- ========================================== -->
+                <div id="videoPage" class="page">
+                    <!-- سيتم التحكم به وتصميمه داخل 11-video.css -->
+                    <div id="videoPlayerContainer"></div>
+                </div>
+
+                <!-- ========================================== -->
+                <!-- PAGE 3: CATEGORY PAGE                      -->
+                <!-- ========================================== -->
+                <div id="categoryPage" class="page">
+                    <div class="yt-page-header">
+                        <span id="catIcon" class="yt-page-icon"></span>
+                        <h2 id="catTitle" class="yt-page-title">التصنيف</h2>
+                    </div>
+                    <div class="yt-grid" id="categoryGrid"></div>
+                </div>
+
+                <!-- ========================================== -->
+                <!-- PAGE 4: LIKED VIDEOS PAGE                  -->
+                <!-- ========================================== -->
+                <div id="likedPage" class="page">
+                    <div class="yt-page-header">
+                        <span class="yt-page-icon">❤️</span>
+                        <h2 class="yt-page-title">الفيديوهات التي أعجبتني</h2>
+                    </div>
+                    <div class="yt-grid" id="likedGrid"></div>
+                </div>
+
+                <!-- ========================================== -->
+                <!-- PAGE 5: SUBSCRIPTIONS PAGE                 -->
+                <!-- ========================================== -->
+                <div id="subscriptionsPage" class="page">
+                    <div class="yt-page-header">
+                        <span class="yt-page-icon">🔔</span>
+                        <h2 class="yt-page-title">القنوات المشترك فيها</h2>
+                    </div>
+                    <div class="yt-grid" id="subsGrid"></div>
+                </div>
+
+                <!-- ========================================== -->
+                <!-- PAGE 6: WATCH HISTORY PAGE                 -->
+                <!-- ========================================== -->
+                <div id="historyPage" class="page">
+                    <div class="yt-page-header">
+                        <span class="yt-page-icon">📜</span>
+                        <h2 class="yt-page-title">سجل المشاهدة</h2>
+                    </div>
+                    <div class="yt-grid" id="historyGrid"></div>
+                </div>
+
+                <!-- ========================================== -->
+                <!-- PAGE 7: SETTINGS PRO PAGE                  -->
+                <!-- ========================================== -->
+                <div id="settingsPage" class="page">
+                    <!-- الإعدادات ذات 4 تبويبات -->
+                    <div id="settingsContainer"></div>
+                </div>
+
+            </main>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- 3. POPUP MODALS (Auth / Sign-In / Sign-Up) -->
+        <!-- ========================================== -->
+        <div class="modal-overlay" id="authModal" onclick="closeAuth()">
+            <div class="auth-modal-card" onclick="event.stopPropagation()">
+                <button class="modal-close-btn" onclick="closeAuth()">×</button>
+                <div class="modal-tabs">
+                    <button class="m-tab active" onclick="switchAuthTab('login')">تسجيل الدخول</button>
+                    <button class="m-tab" onclick="switchAuthTab('signup')">إنشاء حساب تلميذ</button>
+                </div>
+                
+                <!-- واجهة الدخول -->
+                <form id="loginForm" onsubmit="handleAuth(event, 'login')">
+                    <div class="form-group">
+                        <label>البريد الإلكتروني</label>
+                        <input type="email" id="loginEmail" required placeholder="name@domain.com">
+                    </div>
+                    <div class="form-group">
+                        <label>كلمة المرور</label>
+                        <input type="password" id="loginPassword" required placeholder="••••••••">
+                    </div>
+                    <button type="submit" class="yt-auth-submit-btn">دخول</button>
+                </form>
+
+                <!-- واجهة التسجيل الجديد -->
+                <form id="signupForm" onsubmit="handleAuth(event, 'signup')" style="display: none;">
+                    <div class="form-group">
+                        <label>الاسم الكامل</label>
+                        <input type="text" id="signupName" required placeholder="اسمي الثلاثي">
+                    </div>
+                    <div class="form-group">
+                        <label>البريد الإلكتروني</label>
+                        <input type="email" id="signupEmail" required placeholder="name@example.com">
+                    </div>
+                    <div class="form-group">
+                        <label>كلمة المرور</label>
+                        <input type="password" id="signupPassword" required placeholder="لا تقل عن 6 أحرف">
+                    </div>
+                    <div class="form-group">
+                        <label>صورة الحساب (Avatar)</label>
+                        <div class="avatar-signup-selector">
+                            <input type="file" id="signupAvatarInput" accept="image/*" onchange="previewAvatar(event)">
+                            <div class="signup-avatar-preview-container">
+                                <img id="signupAvatar" src="https://img.icons8.com/color/96/user.png" alt="preview">
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="yt-auth-submit-btn">إنشاء حساب جديد</button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ========================================== -->
+    <!-- 4. DATABASE & FIREBASE SCRIPT LOADER       -->
+    <!-- ========================================== -->
+    <!-- Firebase Compat SDK v10 (متوافق مع بيئة المتصفح العادية) -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+    <!-- قاعدة بيانات الفيديوهات الخام -->
+    <script src="data.js"></script>
+
+    <!-- الـ 9 ملفات JavaScript الموزعة بالترتيب الصحيح -->
+    <script src="globals.js"></script>
+    <script src="utils.js"></script>
+    <script src="firebase-config.js"></script>
+    <script src="auth.js"></script>
+    <script src="settings.js"></script>
+    <script src="social.js"></script>
+    <script src="video.js"></script>
+    <script src="ui.js"></script>
+    <script src="router.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>
