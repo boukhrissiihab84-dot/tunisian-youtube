@@ -1,18 +1,290 @@
-/* ================================================
-   SIDEBAR + LAYOUT
-================================================ */
-.layout{display:flex;padding-top:var(--header-h);position:relative;z-index:1}
-.side{position:fixed;top:var(--header-h);left:0;bottom:0;width:var(--side-w);padding:18px 14px 30px;overflow-y:auto;z-index:800;transition:transform .35s var(--transition)}
-.side h4{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1.2px;color:var(--text3);padding:10px 12px 8px}
-.side-link{display:flex;align-items:center;gap:12px;width:100%;padding:9px 12px;border-radius:11px;background:transparent;border:none;color:var(--text);font-size:13.5px;font-weight:600;transition:.2s;text-align:left}
-.side-link i{width:17px;color:var(--text2);flex-shrink:0}
-.side-link:hover{background:var(--surface2)}
-.side-link:hover i{color:var(--accent)}
-.side-link.active{background:var(--accent-soft);color:var(--accent)}
-.side-link.active i{color:var(--accent)}
-.side-count{margin-left:auto;font-size:11px;font-weight:700;color:var(--text3);background:var(--surface2);padding:2px 8px;border-radius:99px}
-.side-foot{margin-top:18px;padding:14px 12px;font-size:11px;color:var(--text3);line-height:1.6;border-top:1px solid var(--border)}
-.side-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:790}
-.main{flex:1;min-width:0;margin-left:var(--side-w);padding:22px 26px 60px;transition:margin .35s var(--transition)}
-body.sidebar-collapsed .main{margin-left:0}
-body.sidebar-collapsed .side{transform:translateX(-100%)}
+/* =======================================================
+   SIDEBAR.CSS - YouTube Mini/Expanded Sidebar 🇹🇳
+   ======================================================= */
+
+.yt-layout {
+    display: flex;
+    width: 100%;
+    min-height: 100vh;
+    padding-top: var(--header-h);
+}
+
+/* ========== SIDEBAR BASE ========== */
+.yt-sidebar {
+    position: fixed;
+    top: var(--header-h);
+    right: 0; /* RTL: القائمة على اليمين */
+    bottom: 0;
+    width: var(--side-w);
+    background: var(--bg);
+    overflow-x: hidden;
+    overflow-y: auto;
+    z-index: 800;
+    padding: 12px 0 24px;
+    border-left: 1px solid var(--border);
+    transition: width 0.2s ease;
+    scrollbar-width: thin;
+    scrollbar-color: transparent transparent;
+}
+
+.yt-sidebar:hover {
+    scrollbar-color: #3f3f3f transparent;
+}
+
+.yt-sidebar::-webkit-scrollbar {
+    width: 8px;
+}
+
+.yt-sidebar::-webkit-scrollbar-thumb {
+    background: transparent;
+    border-radius: 4px;
+}
+
+.yt-sidebar:hover::-webkit-scrollbar-thumb {
+    background: #3f3f3f;
+}
+
+/* ========== EXPANDED (240px) ========== */
+.yt-sidebar-expanded {
+    width: var(--side-w);
+}
+
+.yt-sidebar-expanded .yt-side-btn span,
+.yt-sidebar-expanded .yt-side-heading,
+.yt-sidebar-expanded .yt-side-count,
+.yt-sidebar-expanded .yt-side-dot {
+    display: inline;
+    opacity: 1;
+}
+
+/* ========== MINI (72px) ========== */
+.yt-sidebar-mini {
+    width: 72px;
+    padding: 12px 4px;
+}
+
+.yt-sidebar-mini .yt-side-btn {
+    flex-direction: column;
+    justify-content: center;
+    gap: 6px;
+    padding: 14px 0;
+    height: auto;
+    border-radius: 10px;
+    margin: 0 4px 2px;
+    font-size: 10px;
+}
+
+.yt-sidebar-mini .yt-side-btn svg {
+    width: 24px;
+    height: 24px;
+}
+
+.yt-sidebar-mini .yt-side-btn span:not(.yt-side-count) {
+    font-size: 10px;
+    font-weight: 400;
+    max-width: 64px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.yt-sidebar-mini .yt-side-heading,
+.yt-sidebar-mini .yt-side-count,
+.yt-sidebar-mini .yt-side-divider,
+.yt-sidebar-mini .yt-side-dot,
+.yt-sidebar-mini .yt-side-sub {
+    display: none !important;
+}
+
+.yt-sidebar-mini #subList {
+    display: none;
+}
+
+/* ========== SECTIONS ========== */
+.yt-side-section {
+    padding: 0 12px;
+    margin-bottom: 4px;
+}
+
+.yt-side-heading {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text);
+    padding: 8px 12px 6px;
+    margin: 0;
+    letter-spacing: -0.2px;
+}
+
+.yt-side-divider {
+    height: 1px;
+    background: var(--border);
+    margin: 12px 12px;
+}
+
+/* ========== BUTTONS ========== */
+.yt-side-btn {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    width: 100%;
+    padding: 0 12px;
+    height: 40px;
+    border-radius: 10px;
+    color: var(--text);
+    font-size: 14px;
+    font-weight: 400;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+    text-align: right;
+    white-space: nowrap;
+    overflow: hidden;
+    position: relative;
+}
+
+.yt-side-btn svg {
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    fill: currentColor;
+}
+
+.yt-side-btn span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.yt-side-btn:hover {
+    background: var(--surface2);
+}
+
+.yt-side-btn.active {
+    background: var(--surface2);
+    font-weight: 700;
+}
+
+.yt-side-btn.active svg {
+    fill: var(--accent);
+}
+
+/* عدد الفيديوهات */
+.yt-side-count {
+    margin-right: auto;
+    margin-left: 0;
+    font-size: 12px;
+    color: var(--text3);
+    font-weight: 500;
+    background: var(--surface3);
+    padding: 1px 7px;
+    border-radius: 10px;
+}
+
+.yt-side-btn.active .yt-side-count {
+    background: var(--accent-soft);
+    color: var(--accent);
+}
+
+/* مواضيع فرعية */
+.yt-side-sub {
+    gap: 16px;
+    padding-right: 16px;
+    height: 36px;
+    font-size: 13px;
+    color: var(--text2);
+}
+
+.yt-side-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--text3);
+    flex-shrink: 0;
+}
+
+.yt-side-sub:hover .yt-side-dot,
+.yt-side-sub.active .yt-side-dot {
+    background: var(--accent);
+}
+
+/* ========== MAIN CONTENT OFFSET ========== */
+.yt-main {
+    flex: 1;
+    margin-right: var(--side-w); /* RTL */
+    margin-left: 0;
+    min-width: 0;
+    background: var(--bg);
+    transition: margin-right 0.2s ease;
+    padding: 0;
+}
+
+/* كي الـ sidebar يصير mini */
+.yt-sidebar-mini ~ .yt-main,
+.yt-layout:has(.yt-sidebar-mini) .yt-main {
+    margin-right: 72px;
+}
+
+/* ========== PAGES VISIBILITY ========== */
+.page {
+    display: none;
+    padding: 0 24px 48px;
+    animation: ytFadeIn 0.25s ease;
+}
+
+.page.active {
+    display: block;
+}
+
+@keyframes ytFadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* رؤوس الصفحات الداخلية (liked, history...) */
+.yt-page-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 20px 0 16px;
+}
+
+.yt-page-icon {
+    font-size: 28px;
+    display: flex;
+    align-items: center;
+}
+
+.yt-page-icon svg {
+    width: 28px;
+    height: 28px;
+    fill: var(--accent);
+}
+
+.yt-page-title {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--text);
+    letter-spacing: -0.3px;
+}
+
+/* ========== MOBILE ========== */
+@media (max-width: 791px) {
+    .yt-sidebar {
+        transform: translateX(100%);
+        width: 240px !important;
+        box-shadow: -4px 0 20px rgba(0,0,0,0.5);
+        border-left: none;
+    }
+
+    .yt-sidebar.yt-sidebar-expanded {
+        transform: translateX(0);
+    }
+
+    .yt-sidebar-mini {
+        transform: translateX(100%);
+    }
+
+    .yt-main {
+        margin-right: 0 !important;
+    }
+}
