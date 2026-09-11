@@ -277,7 +277,9 @@ function toggleSidebar() {
     if (!s || !m) return;
     const isMini = s.classList.toggle("yt-sidebar-mini");
     s.classList.toggle("yt-sidebar-expanded", !isMini);
-    m.style.marginLeft = isMini ? "72px" : "240px";
+    // RTL: القائمة على اليمين
+    m.style.marginRight = isMini ? "72px" : "240px";
+    m.style.marginLeft = "0";
 }
 
 // =====================
