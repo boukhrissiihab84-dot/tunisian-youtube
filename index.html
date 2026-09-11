@@ -1,634 +1,410 @@
 <!DOCTYPE html>
 <html lang="fr" data-theme="dark">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TunisianTube</title>
-<link rel="icon" type="image/png" href="logo.png">
-<script>
-// theme mel fou2, bech maywallich flash abyedh
-try{var s=JSON.parse(localStorage.getItem("tt_settings")||"{}");if(s.theme)document.documentElement.setAttribute("data-theme",s.theme);}catch(e){}
-</script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@600;700&family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
-<!-- CSS Modules (مباشرة من الـ Root) -->
-<link rel="stylesheet" href="variables.css">
-<link rel="stylesheet" href="base.css">
-<link rel="stylesheet" href="animations.css">
-<link rel="stylesheet" href="header.css">
-<link rel="stylesheet" href="avatars.css">
-<link rel="stylesheet" href="dropdown.css">
-<link rel="stylesheet" href="modals.css">
-<link rel="stylesheet" href="sidebar.css">
-<link rel="stylesheet" href="pages.css">
-<link rel="stylesheet" href="home.css">
-<link rel="stylesheet" href="video.css">
-<link rel="stylesheet" href="settings.css">
-<link rel="stylesheet" href="misc.css">
-<link rel="stylesheet" href="responsive.css">
-</head>
-<body>
-
-<header class="hdr">
-  <div class="hdr-left">
-    <button class="menu-i" onclick="toggleSidebar()" aria-label="Menu"><i class="fa-solid fa-bars"></i></button>
-    <div class="logo-wrap" onclick="navigate('home')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')navigate('home')" aria-label="TunisianTube Accueil">
-      <img src="logo.png" alt="logo" class="logo-img" onerror="this.style.display='none'">
-      <span class="logo-t">Tunisian<span class="logo-r">Tube</span></span>
-    </div>
-  </div>
-  <div class="search-wrap">
-    <!-- تحسين: ردّيناها Form باش الـ Enter تخدم بصفة طبيعية في التلفونات -->
-    <form class="search-inner" onsubmit="event.preventDefault(); navigate('home');">
-      <input type="text" id="searchInput" placeholder="Rechercher des cours..." oninput="onSearchInput()">
-      <button type="submit" class="search-btn" aria-label="Rechercher"><i class="fa-solid fa-magnifying-glass"></i></button>
-    </form>
-  </div>
-  <div class="hdr-right">
-    <span class="vid-count" id="vCount">0 cours</span>
-    <button class="icon-btn" onclick="toggleMobileSearch()" id="mSearchBtn" style="display:none" aria-label="Recherche Mobile"><i class="fa-solid fa-magnifying-glass"></i></button>
-    <button class="icon-btn" onclick="toggleTheme()" id="themeBtn" aria-label="Changer de thème"><i class="fa-solid fa-sun"></i></button>
-    <button class="icon-btn" onclick="navigate('settings')" aria-label="Paramètres"><i class="fa-solid fa-gear"></i></button>
-    <div id="authArea"></div>
-  </div>
-</header>
-
-<div class="dropdown" id="dropdown" role="menu">
-  <div class="dd-header">
-    <div class="dd-avatar" id="ddAvatar">U</div>
-    <div><div class="dd-name" id="ddName">User</div><div class="dd-email" id="ddEmail"></div></div>
-  </div>
-  <!-- تحسين: زيادة الـ roles والـ tabindex للـ dropdown items -->
-  <div class="dd-item" onclick="goSettings('channel')" role="menuitem" tabindex="0" onkeydown="if(event.key==='Enter')goSettings('channel')"><i class="fa-solid fa-tv"></i> <span data-i18n="mychannel">Ma Chaîne</span></div>
-  <div class="dd-item" onclick="goSettings('account')" role="menuitem" tabindex="0" onkeydown="if(event.key==='Enter')goSettings('account')"><i class="fa-solid fa-user-gear"></i> <span data-i18n="accset">Paramètres du compte</span></div>
-  <div class="dd-item" onclick="navigate('settings')" role="menuitem" tabindex="0" onkeydown="if(event.key==='Enter')navigate('settings')"><i class="fa-solid fa-gear"></i> <span data-i18n="appset">Paramètres de l'app</span></div>
-  <div class="dd-sep"></div>
-  <div class="dd-item" onclick="navigate('liked')" role="menuitem" tabindex="0" onkeydown="if(event.key==='Enter')navigate('liked')"><i class="fa-solid fa-heart"></i> <span data-i18n="liked">Vidéos aimées</span></div>
-  <div class="dd-item" onclick="navigate('subscriptions')" role="menuitem" tabindex="0" onkeydown="if(event.key==='Enter')navigate('subscriptions')"><i class="fa-solid fa-bell"></i> <span data-i18n="subs_p">Abonnements</span></div>
-  <div class="dd-item" onclick="navigate('history')" role="menuitem" tabindex="0" onkeydown="if(event.key==='Enter')navigate('history')"><i class="fa-solid fa-clock-rotate-left"></i> <span data-i18n="hist">Historique</span></div>
-  <div class="dd-sep"></div>
-  <div class="dd-item danger" onclick="logOut()" role="menuitem" tabindex="0" onkeydown="if(event.key==='Enter')logOut()"><i class="fa-solid fa-right-from-bracket"></i> <span data-i18n="out">Se déconnecter</span></div>
-</div>
-
-<div class="ov" id="authOv" aria-modal="true" role="dialog" aria-labelledby="authTitle">
-  <div class="ov-box">
-    <div class="ov-head">
-      <h2 id="authTitle">Create Account</h2>
-      <button class="ov-close" onclick="closeAuth()" aria-label="Fermer"><i class="fa-solid fa-xmark"></i></button>
-    </div>
-    <div class="ov-body">
-      <div class="avatar-upload" id="signupAvatar">
-        <i class="fa-solid fa-camera"></i>
-        <input type="file" accept="image/*" onchange="previewAvatar(event)" aria-label="Upload Avatar">
-      </div>
-      <!-- تحسين: ربط الـ Labels بالـ Inputs -->
-      <div class="form-group" id="nameGroup">
-        <label class="form-label" for="authName">Nom</label>
-        <input class="form-input" id="authName" placeholder="Yasmine Ben Ali">
-      </div>
-      <div class="form-group">
-        <label class="form-label" for="authEmail">Email</label>
-        <input class="form-input" id="authEmail" type="email" placeholder="email@example.tn">
-      </div>
-      <div class="form-group">
-        <label class="form-label" for="authPass">Mot de passe</label>
-        <input class="form-input" id="authPass" type="password" placeholder="Min 6 caractères">
-      </div>
-      <p class="form-error" id="authError"></p>
-      <button class="form-btn btn-primary" id="authBtn" onclick="handleAuth()">Create Account</button>
-      <p class="form-switch" id="authSwitch" onclick="toggleAuthMode()" role="button" tabindex="0">Déjà un compte ? <b>Sign In</b></p>
-    </div>
-  </div>
-</div>
-
-<div class="dl-modal" id="dlModal" onclick="if(event.target===this)closeDlModal()" aria-modal="true" role="dialog" aria-labelledby="dlModalTitle">
-  <div class="dl-box">
-    <button class="dl-close" onclick="closeDlModal()" aria-label="Fermer"><i class="fa-solid fa-xmark"></i></button>
-    <div class="dl-icon"><i class="fa-solid fa-download"></i></div>
-    <h2 class="dl-title" id="dlModalTitle" data-i18n="dl_title">Télécharger la vidéo</h2>
-    <p class="dl-desc">Cobalt : 0 pub, w surtout.</p>
-    <!-- تحسين الـ Security باستعمال noreferrer -->
-    <div class="dl-options">
-      <a class="dl-btn best" id="dlCobalt" href="https://cobalt.tools" target="_blank" rel="noopener noreferrer"><span><i class="fa-solid fa-bolt"></i> Cobalt (el a7sen)</span><i class="fa-solid fa-arrow-right"></i></a>
-      <a class="dl-btn" id="dlSSYT" href="#" target="_blank" rel="noopener noreferrer"><span><i class="fa-solid fa-download"></i> SSYouTube</span><i class="fa-solid fa-arrow-right"></i></a>
-      <a class="dl-btn" id="dlY2Mate" href="#" target="_blank" rel="noopener noreferrer"><span><i class="fa-solid fa-video"></i> Y2Mate</span><i class="fa-solid fa-arrow-right"></i></a>
-    </div>
-  </div>
-</div>
-
-<div class="layout">
-  <div class="side-backdrop" onclick="closeMobileSidebar()"></div>
-  <aside class="side" id="sidebar">
-    <h4 data-i18n="cats">Catégories</h4>
-    <div id="catList"></div>
-    <h4 data-i18n="topics">Sujets</h4>
-    <div id="subList"></div>
-    <div class="side-foot">TunisianTube © 2025<br><span class="ar">صنع بحب في تونس</span></div>
-  </aside>
-
-  <main class="main" id="mainContent">
-
-    <div class="page active" id="page-home">
-      <section class="hero" id="hero">
-        <div class="hero-blob1"></div><div class="hero-blob2"></div>
-        <span class="hero-kicker"><i class="fa-solid fa-wand-magic-sparkles"></i> <span data-i18n="hero_kicker">La plateforme d'apprentissage tunisienne</span></span>
-        <h1><span data-i18n="hero_t1">Apprends quelque chose de</span> <span class="grad" data-i18n="hero_t2">nouveau chaque jour</span><br><span class="ar" data-i18n="hero_t3">بالدارجة التونسية</span></h1>
-        <p data-i18n="hero_p">Des cours gratuits en programmation, design, langues et marketing — sélectionnés pour la communauté tunisienne.</p>
-        <div class="hero-cta">
-          <button class="hero-btn primary" onclick="scrollToGrid()"><i class="fa-solid fa-play"></i> <span data-i18n="hero_cta">Commencer</span></button>
-          <button class="hero-btn ghost" onclick="navigate('settings')"><i class="fa-solid fa-sliders"></i> <span data-i18n="hero_pref">Préférences</span></button>
-        </div>
-        <div class="hero-stats">
-          <div class="hstat"><b id="statV">0</b><span data-i18n="courses">cours</span></div>
-          <div class="hstat"><b id="statC">5</b><span data-i18n="cats">Catégories</span></div>
-          <div class="hstat"><b><i>100%</i></b><span data-i18n="free">gratuit</span></div>
-          <div class="hstat"><b id="statH">0h</b><span data-i18n="content">heures de contenu</span></div>
-        </div>
-      </section>
-
-      <div class="marquee-wrap" id="marqueeWrap"><div class="marquee" id="marquee"></div></div>
-      <div class="filter-bar" id="filterBar"></div>
-      <div class="grid" id="grid"></div>
-      <div id="sentinel"></div>
-      <div class="empty-state" id="empty" style="display:none">
-        <div class="e-i"><i class="fa-solid fa-magnifying-glass"></i></div>
-        <h2 data-i18n="empty">Aucune vidéo trouvée</h2>
-        <p data-i18n="empty_p">Essaie d'autres mots-clés ou parcours les catégories.</p>
-      </div>
-      <footer class="foot">
-        <span><b>TunisianTube</b> — <span data-i18n="foot1">Apprends en darija, évolue sans limites.</span></span>
-        <span class="ar">يلا نتعلموا جميع بعضنا</span>
-      </footer>
-    </div>
-
-    <div class="page" id="page-video">
-      <div class="video-page-container">
-        <div class="video-main">
-          <button class="back-btn" onclick="navigate('home')"><i class="fa-solid fa-arrow-left"></i> <span data-i18n="back">Retour</span></button>
-          <div class="video-player-large" id="playerLarge"></div>
-          <div class="video-info-large">
-            <h1 class="video-title-large" id="mTitleLarge"></h1>
-            <div class="channel-row">
-              <div class="channel-info">
-                <div class="channel-avatar" id="mChanAvatar">C</div>
-                <div><h3 id="mChanLarge">Channel</h3><p id="mCatLarge"></p></div>
-                <button class="subscribe-btn" id="subscribeBtn" onclick="toggleSubFromPage()"><i class="fa-solid fa-bell"></i> <span>S'abonner</span></button>
-              </div>
-              <div class="video-actions-row" id="mActionsLarge"></div>
-            </div>
-            <div class="video-description" id="mDescLarge"></div>
-            <div class="comments-large" id="cmtSectionLarge"></div>
-          </div>
-        </div>
-        <div class="related-videos">
-          <h3><i class="fa-solid fa-tv"></i> <span data-i18n="related">Vidéos similaires</span></h3>
-          <div id="relatedList"></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="page" id="page-category">
-      <button class="back-btn" onclick="navigate('home')"><i class="fa-solid fa-arrow-left"></i> <span data-i18n="home">Accueil</span></button>
-      <div class="page-header">
-        <div class="page-icon" id="catIcon"><i class="fa-solid fa-folder"></i></div>
-        <div><h1 id="catTitle">Catégorie</h1><p class="page-sub" id="catSub"></p></div>
-      </div>
-      <div class="grid" id="categoryGrid"></div>
-    </div>
-
-    <div class="page" id="page-settings">
-      <button class="back-btn" onclick="navigate('home')"><i class="fa-solid fa-arrow-left"></i> <span data-i18n="back">Retour</span></button>
-      <div class="settings-container-pro">
-        <div class="settings-header-pro">
-          <h2><i class="fa-solid fa-gear"></i> <span data-i18n="set_title">Paramètres</span></h2>
-          <p data-i18n="set_sub">Gérez votre compte, chaîne et préférences.</p>
-        </div>
-        <div class="settings-layout-pro">
-          <aside class="settings-sidebar-pro">
-            <button class="tab-btn-pro active" data-tab="account" onclick="openSettingsTab('account', this)"><i class="fa-solid fa-circle-user"></i> <span data-i18n="tab_acc">Mon Compte</span></button>
-            <button class="tab-btn-pro" data-tab="channel" onclick="openSettingsTab('channel', this)"><i class="fa-solid fa-tv"></i> <span data-i18n="tab_ch">Ma Chaîne</span></button>
-            <button class="tab-btn-pro" data-tab="preferences" onclick="openSettingsTab('preferences', this)"><i class="fa-solid fa-sliders"></i> <span data-i18n="tab_pref">Préférences</span></button>
-            <button class="tab-btn-pro danger" data-tab="privacy" onclick="openSettingsTab('privacy', this)"><i class="fa-solid fa-shield-halved"></i> <span data-i18n="tab_sec">Sécurité</span></button>
-          </aside>
-          <main class="settings-content-pro">
-
-            <div id="set-pro-account" class="settings-pane-pro active">
-              <h3><i class="fa-solid fa-user-gear"></i> <span data-i18n="acc_info">Informations Personnelles</span></h3>
-              <div id="accLocked"></div>
-              <div id="accBody">
-                <div class="avatar-upload-box-pro">
-                  <div class="avatar-preview-wrapper-pro" id="accAvatarWrapPro"><i class="fa-solid fa-camera"></i></div>
-                  <div class="avatar-actions-pro">
-                    <label class="btn-secondary-pro" for="accPicInputPro"><i class="fa-solid fa-upload"></i> <span data-i18n="upload_img">Charger une image</span></label>
-                    <input type="file" id="accPicInputPro" accept="image/*" style="display:none" onchange="changeAccPicPro(event)">
-                    <button class="btn-text-pro" onclick="randomizeAvatarPro()"><i class="fa-solid fa-shuffle"></i> <span data-i18n="random_av">Aléatoire</span></button>
-                  </div>
-                </div>
-                <!-- تحسين: ربط الـ Labels بـ IDs المدخلات -->
-                <div class="form-group">
-                  <label class="form-label" for="accNamePro" data-i18n="dname">Nom affiché</label>
-                  <input class="form-input" id="accNamePro">
-                </div>
-                <div class="form-group">
-                  <label class="form-label" for="accEmailPro">Email</label>
-                  <input class="form-input" id="accEmailPro" disabled>
-                </div>
-                <div class="form-group">
-                  <label class="form-label" for="accOldPassPro" data-i18n="cur_pass">Mot de passe actuel</label>
-                  <input class="form-input" id="accOldPassPro" type="password">
-                </div>
-                <div class="form-group">
-                  <label class="form-label" for="accNewPassPro" data-i18n="new_pass">Nouveau mot de passe</label>
-                  <input class="form-input" id="accNewPassPro" type="password" placeholder="Min 6 caractères">
-                </div>
-                <p class="form-error" id="accErrorPro"></p>
-                <button class="form-btn btn-primary" onclick="saveAccountPro()" data-i18n="save">Enregistrer</button>
-              </div>
-            </div>
-
-            <div id="set-pro-channel" class="settings-pane-pro">
-              <h3><i class="fa-solid fa-circle-play"></i> <span data-i18n="ch_perso">Personnalisation de la chaîne</span></h3>
-              <div class="form-group">
-                <label class="form-label" for="channelNamePro" data-i18n="ch_name">Nom de la chaîne</label>
-                <input class="form-input" id="channelNamePro">
-              </div>
-              <div class="form-group">
-                <label class="form-label" for="channelBioPro">Description</label>
-                <textarea class="form-textarea" id="channelBioPro"></textarea>
-              </div>
-              <div class="form-group">
-                <label class="form-label" for="channelCatPro" data-i18n="ch_cat">Catégorie</label>
-                <select class="form-select" id="channelCatPro" style="width:100%">
-                  <option value="">—</option>
-                  <option value="Education">Education</option>
-                  <option value="Design">Design</option>
-                  <option value="Programming">Programming</option>
-                  <option value="Languages">Languages</option>
-                  <option value="Marketing">Marketing</option>
-                  <option value="Other">Other</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label class="form-label" for="channelLinkPro">Site web</label>
-                <input class="form-input" id="channelLinkPro" placeholder="https://">
-              </div>
-              <div class="form-group">
-                <label class="form-label" for="channelSocialPro">Réseaux</label>
-                <input class="form-input" id="channelSocialPro" placeholder="@handle">
-              </div>
-              <button class="form-btn btn-primary" onclick="saveChannelPro()" data-i18n="save2">Sauvegarder</button>
-            </div>
-
-            <div id="set-pro-preferences" class="settings-pane-pro">
-              <h3><i class="fa-solid fa-sliders"></i> <span data-i18n="tab_pref">Préférences</span></h3>
-              <div class="setting-row-pro">
-                <div><div class="setting-title-pro"><i class="fa-solid fa-moon"></i> <span data-i18n="dark_m">Mode Sombre</span></div><div class="setting-desc-pro" data-i18n="dark_d">Interface de nuit</div></div>
-                <div class="toggle" id="t-pro-dark" onclick="toggleSetPro('dark')" role="checkbox" aria-checked="true" tabindex="0"></div>
-              </div>
-              <div class="setting-row-pro">
-                <div><div class="setting-title-pro"><i class="fa-solid fa-globe"></i> <span data-i18n="lang">Langue</span></div><div class="setting-desc-pro" data-i18n="lang_d">Langue de l'interface</div></div>
-                <select class="form-select" id="langSelectPro" onchange="setLangPro(this.value)"><option value="dz">Derja</option><option value="fr">Français</option><option value="en">English</option></select>
-              </div>
-              <div class="setting-row-pro">
-                <div><div class="setting-title-pro"><i class="fa-solid fa-play"></i> Autoplay</div><div class="setting-desc-pro" data-i18n="auto_d">Lecture automatique</div></div>
-                <div class="toggle" id="t-pro-auto" onclick="toggleSetPro('auto')" role="checkbox" aria-checked="false" tabindex="0"></div>
-              </div>
-              <div class="setting-row-pro">
-                <div><div class="setting-title-pro"><i class="fa-solid fa-display"></i> <span data-i18n="qual">Qualité</span></div><div class="setting-desc-pro" data-i18n="qual_d">Résolution par défaut</div></div>
-                <select class="form-select" id="qualitySelectPro" onchange="setQualityPro(this.value)"><option value="auto">Auto</option><option value="hd1080">1080p</option><option value="hd720">720p</option></select>
-              </div>
-              <div class="setting-row-pro">
-                <div><div class="setting-title-pro"><i class="fa-solid fa-text-height"></i> <span data-i18n="fsize">Taille du texte</span></div><div class="setting-desc-pro">Font size</div></div>
-                <select class="form-select" id="fontSelectPro" onchange="setFontSizePro(this.value)"><option value="small">Petit</option><option value="normal">Normal</option><option value="large">Grand</option></select>
-              </div>
-            </div>
-
-            <div id="set-pro-privacy" class="settings-pane-pro">
-              <h3><i class="fa-solid fa-trash-can"></i> <span data-i18n="data_sec">Données & Sécurité</span></h3>
-              <div class="danger-box-pro"><div><h4 data-i18n="clr_hist">Effacer l'historique</h4><p data-i18n="clr_hist_p">Supprime toutes les vidéos vues</p></div><button class="btn-danger-pro" onclick="clearHistoryPro()"><span data-i18n="clear">Effacer</span></button></div>
-              <div class="danger-box-pro"><div><h4 data-i18n="clr_like">Effacer les likes</h4><p data-i18n="clr_like_p">Réinitialise tes vidéos aimées</p></div><button class="btn-danger-pro" onclick="clearLikesPro()"><span data-i18n="clear">Effacer</span></button></div>
-              <div class="danger-box-pro"><div><h4 data-i18n="reset_all">Tout réinitialiser</h4><p data-i18n="reset_all_p">Supprime toutes tes données locales</p></div><button class="btn-danger-extreme-pro" onclick="resetAllAppDataPro()"><span data-i18n="reset">Tout Reset</span></button></div>
-            </div>
-
-          </main>
-        </div>
-      </div>
-    </div>
-
-    <div class="page" id="page-liked">
-      <button class="back-btn" onclick="navigate('home')"><i class="fa-solid fa-arrow-left"></i> <span data-i18n="back">Retour</span></button>
-      <div class="page-header">
-        <div class="page-icon" style="background:linear-gradient(135deg,#e70013,#ff7a3d)"><i class="fa-solid fa-heart"></i></div>
-        <div><h1 data-i18n="liked">Vidéos aimées</h1><p class="page-sub" id="likedSub"></p></div>
-      </div>
-      <div class="grid" id="likedGrid"></div>
-    </div>
-
-    <div class="page" id="page-subscriptions">
-      <button class="back-btn" onclick="navigate('home')"><i class="fa-solid fa-arrow-left"></i> <span data-i18n="back">Retour</span></button>
-      <div class="page-header">
-        <div class="page-icon" style="background:linear-gradient(135deg,#e70013,#ff7a3d)"><i class="fa-solid fa-bell"></i></div>
-        <div><h1 data-i18n="subs_p">Abonnements</h1><p class="page-sub" id="subsSub"></p></div>
-      </div>
-      <div class="grid" id="subsGrid"></div>
-    </div>
-
-    <div class="page" id="page-history">
-      <button class="back-btn" onclick="navigate('home')"><i class="fa-solid fa-arrow-left"></i> <span data-i18n="back">Retour</span></button>
-      <div class="page-header">
-        <div class="page-icon"><i class="fa-solid fa-clock-rotate-left"></i></div>
-        <div><h1 data-i18n="hist">Historique</h1><p class="page-sub" id="histSub"></p></div>
-        <button class="back-btn" style="margin:0 0 0 auto" onclick="clearHistoryPro()"><i class="fa-solid fa-trash"></i> <span data-i18n="clear">Effacer</span></button>
-      </div>
-      <div class="grid" id="historyGrid"></div>
-    </div>
-
-  </main>
-</div>
-
-<div class="toasts" id="toasts"></div>
-
-<!-- Firebase Compat SDKs -->
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-
-<!-- JS Modules (الترتيب مهم جداً) -->
-<script src="data.js"></script>
-<script src="globals.js"></script>
-<script src="firebase-config.js"></script>
-<script src="utils.js"></script>
-<script src="auth.js"></script>
-<script src="settings.js"></script>
-<script src="social.js"></script>
-<script src="video.js"></script>
-<script src="ui.js"></script>
-<script src="router.js"></script>
-<script src="main.js"></script>
-
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TunisianTube 🇹🇳 - منصة الدورات التونسية</title>
-    <link rel="icon" type="image/png" href="https://img.icons8.com/color/48/tunisia-flag.png">
+    <title>TunisianTube 🇹🇳</title>
+    <link rel="icon" type="image/png" href="logo.png">
     
-    <!-- Font Awesome الأيقونات -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- منع الفلاش الأبيض عند التحميل -->
+    <script>
+        try {
+            var s = JSON.parse(localStorage.getItem("tt_settings") || "{}");
+            if (s.theme) document.documentElement.setAttribute("data-theme", s.theme);
+        } catch(e) {}
+    </script>
     
+    <!-- الخطوط والأيقونات -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@600;700&family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
     <!-- استدعاء الـ 14 ملف CSS الموزعة -->
-    <link rel="stylesheet" href="01-variables.css">
-    <link rel="stylesheet" href="02-base.css">
-    <link rel="stylesheet" href="03-animations.css">
-    <link rel="stylesheet" href="04-header.css">
-    <link rel="stylesheet" href="05-avatars.css">
-    <link rel="stylesheet" href="06-dropdown.css">
-    <link rel="stylesheet" href="07-modals.css">
-    <link rel="stylesheet" href="08-sidebar.css">
-    <link rel="stylesheet" href="09-pages.css">
-    <link rel="stylesheet" href="10-home.css">
-    <link rel="stylesheet" href="11-video.css">
-    <link rel="stylesheet" href="12-settings.css">
-    <link rel="stylesheet" href="13-misc.css">
-    <link rel="stylesheet" href="14-responsive.css">
+    <link rel="stylesheet" href="variables.css">
+    <link rel="stylesheet" href="base.css">
+    <link rel="stylesheet" href="animations.css">
+    <link rel="stylesheet" href="header.css">
+    <link rel="stylesheet" href="avatars.css">
+    <link rel="stylesheet" href="dropdown.css">
+    <link rel="stylesheet" href="modals.css">
+    <link rel="stylesheet" href="sidebar.css">
+    <link rel="stylesheet" href="pages.css">
+    <link rel="stylesheet" href="home.css">
+    <link rel="stylesheet" href="video.css">
+    <link rel="stylesheet" href="settings.css">
+    <link rel="stylesheet" href="misc.css">
+    <link rel="stylesheet" href="responsive.css">
 </head>
 <body class="yt-dark-theme">
 
-    <!-- الغلاف الخارجي للموقع بالكامل -->
     <div class="app-container">
         
         <!-- ========================================== -->
-        <!-- 1. TOP HEADER (YouTube Aesthetic)          -->
+        <!-- 1. HEADER العلوي (YouTube Aesthetic)        -->
         <!-- ========================================== -->
-        <header class="yt-header">
-            <div class="yt-header-left">
-                <button class="yt-icon-btn" id="menuToggleBtn" onclick="toggleSidebar()" aria-label="القائمة">
+        <header class="hdr">
+            <div class="hdr-left">
+                <button class="menu-i" onclick="toggleSidebar()" aria-label="Menu">
                     <svg viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M21 6H3V5h18v1zM21 12H3v-1h18v1zm0 6H3v-1h18v1z"/></svg>
                 </button>
-                <div class="yt-logo" onclick="showAll()">
-                    <span class="yt-logo-red">🇹🇳</span>
-                    <span class="yt-logo-text">Tunisian<span>Tube</span></span>
+                <div class="logo-wrap" onclick="showAll()" role="button" tabindex="0" aria-label="TunisianTube Accueil">
+                    <img src="logo.png" alt="logo" class="logo-img" onerror="this.style.display='none'">
+                    <span class="logo-t">Tunisian<span class="logo-r">Tube</span></span>
                 </div>
             </div>
 
-            <div class="yt-header-center">
-                <div class="yt-search-pill">
-                    <input type="text" id="searchInput" placeholder="لوّج على دورة، بروموشن، لغة..." oninput="onSearchInput()">
-                    <button class="yt-search-btn" aria-label="بحث">
+            <div class="search-wrap">
+                <form class="search-inner" onsubmit="event.preventDefault(); navigate('home');">
+                    <input type="text" id="searchInput" placeholder="Rechercher des cours..." oninput="onSearchInput()">
+                    <button type="submit" class="search-btn" aria-label="Rechercher">
                         <svg viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" d="M20.87 20.17l-5.59-5.59C16.35 13.35 17 11.75 17 10c0-3.87-3.13-7-7-7s-7 3.13-7 7 3.13 7 7 7c1.75 0 3.35-.65 4.58-1.71l5.59 5.59.7-.71zM10 16c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6z"/></svg>
                     </button>
-                </div>
+                </form>
             </div>
 
-            <div class="yt-header-right">
-                <!-- زر إنشاء حساب / تسجيل الدخول (يظهر إذا كان الزائر غير مسجل) -->
-                <button class="yt-auth-btn" id="headerAuthBtn" onclick="openAuth()">
-                    <i class="far fa-user-circle"></i> دخول
-                </button>
-                
-                <!-- بروفايل المستخدم (مخفي افتراضيًا ويظهر بعد تسجيل الدخول) -->
-                <div class="yt-user-menu" id="userMenuArea" style="display: none;">
-                    <div class="yt-avatar-header" onclick="toggleDropdown()">
-                        <img id="headerAvatar" src="" alt="avatar" onerror="this.src='https://img.icons8.com/color/96/user.png'">
-                    </div>
-                    
-                    <!-- Dropdown Menu الحساب -->
-                    <div class="yt-dropdown" id="userDropdown">
-                        <div class="yt-dropdown-header">
-                            <img id="dropdownAvatar" class="avatar-preview-sm" src="" alt="avatar">
-                            <div class="yt-dropdown-info">
-                                <span id="dropdownName">اسم المستخدم</span>
-                                <span id="dropdownEmail">الايميل</span>
-                            </div>
-                        </div>
-                        <div class="yt-dropdown-divider"></div>
-                        <button class="yt-dropdown-item" onclick="navigate('settings')">
-                            <i class="fas fa-cog"></i> الإعدادات الاحترافية
-                        </button>
-                        <button class="yt-dropdown-item" onclick="navigate('liked')">
-                            <i class="fas fa-heart"></i> فيديوهاتي المفضلة
-                        </button>
-                        <button class="yt-dropdown-item logout" onclick="handleLogout()">
-                            <i class="fas fa-sign-out-alt"></i> تسجيل الخروج
-                        </button>
-                    </div>
-                </div>
+            <div class="hdr-right">
+                <span class="vid-count" id="vCount">0 cours</span>
+                <button class="icon-btn" onclick="toggleTheme()" id="themeBtn" aria-label="Changer de thème"><i class="fa-solid fa-sun"></i></button>
+                <button class="icon-btn" onclick="navigate('settings')" aria-label="Paramètres"><i class="fa-solid fa-gear"></i></button>
+                <div id="authArea"></div>
             </div>
         </header>
 
         <!-- ========================================== -->
-        <!-- 2. MAIN LAYOUT (Sidebar + Content)         -->
+        <!-- 2. DROPDOWN القائمة المنسدلة للبروفايل        -->
         <!-- ========================================== -->
-        <div class="yt-layout">
+        <div class="dropdown" id="dropdown" role="menu">
+            <div class="dd-header">
+                <div class="dd-avatar" id="ddAvatar">U</div>
+                <div>
+                    <div class="dd-name" id="ddName">User</div>
+                    <div class="dd-email" id="ddEmail"></div>
+                </div>
+            </div>
+            <div class="dd-sep"></div>
+            <div class="dd-item" onclick="goSettings('channel')" role="menuitem" tabindex="0"><i class="fa-solid fa-tv"></i> <span data-i18n="mychannel">Ma Chaîne</span></div>
+            <div class="dd-item" onclick="goSettings('account')" role="menuitem" tabindex="0"><i class="fa-solid fa-user-gear"></i> <span data-i18n="accset">Paramètres du compte</span></div>
+            <div class="dd-item" onclick="navigate('settings')" role="menuitem" tabindex="0"><i class="fa-solid fa-gear"></i> <span data-i18n="appset">Paramètres de l'app</span></div>
+            <div class="dd-sep"></div>
+            <div class="dd-item" onclick="navigate('liked')" role="menuitem" tabindex="0"><i class="fa-solid fa-heart"></i> <span data-i18n="liked">Vidéos aimées</span></div>
+            <div class="dd-item" onclick="navigate('subscriptions')" role="menuitem" tabindex="0"><i class="fa-solid fa-bell"></i> <span data-i18n="subs_p">Abonnements</span></div>
+            <div class="dd-item" onclick="navigate('history')" role="menuitem" tabindex="0"><i class="fa-solid fa-clock-rotate-left"></i> <span data-i18n="hist">Historique</span></div>
+            <div class="dd-sep"></div>
+            <div class="dd-item danger" onclick="logOut()" role="menuitem" tabindex="0"><i class="fa-solid fa-right-from-bracket"></i> <span data-i18n="out">Se déconnecter</span></div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- 3. LAYOUT الرئيسي (Sidebar + Pages)         -->
+        <!-- ========================================== -->
+        <div class="layout">
+            <div class="side-backdrop" onclick="closeMobileSidebar()"></div>
             
-            <!-- SIDEBAR -->
-            <aside class="yt-sidebar yt-sidebar-expanded" id="sidebar">
-                <div class="yt-sidebar-scroll" id="catList">
-                    <!-- يتم بناؤه ديناميكيًا من ui.js -->
+            <!-- القائمة الجانبية -->
+            <aside class="side" id="sidebar">
+                <div id="catList">
+                    <!-- يتم بناؤه من ui.js -->
                 </div>
                 <div id="subList">
-                    <!-- يتم بناؤه ديناميكيًا من ui.js -->
+                    <!-- يتم بناؤه من ui.js -->
                 </div>
+                <div class="side-foot">TunisianTube © 2025<br><span class="ar">صنع بحب في تونس 🇹🇳</span></div>
             </aside>
 
-            <!-- MAIN CONTENT CONTAINER -->
-            <main class="yt-main" id="mainContent">
-                
-                <!-- ========================================== -->
-                <!-- PAGE 1: HOME VIEW                          -->
-                <!-- ========================================== -->
-                <div id="homePage" class="page active">
-                    <!-- شريط فلاتر الـ Chips التابع لـ YouTube -->
-                    <div class="yt-chips-container" id="filterBar">
-                        <!-- يتم توليده ديناميكيًا من ui.js -->
-                    </div>
+            <!-- محتوى الصفحات الرئيسي -->
+            <main class="main" id="mainContent">
+
+                <!-- الصفحة الرئيسية -->
+                <div class="page active" id="page-home">
+                    <!-- القسم الترويجي (Banner) -->
+                    <section class="hero" id="hero">
+                        <div class="hero-blob1"></div><div class="hero-blob2"></div>
+                        <span class="hero-kicker"><i class="fa-solid fa-wand-magic-sparkles"></i> <span data-i18n="hero_kicker">La plateforme d'apprentissage tunisienne</span></span>
+                        <h1><span data-i18n="hero_t1">Apprends quelque chose de</span> <span class="grad" data-i18n="hero_t2">nouveau chaque jour</span><br><span class="ar" data-i18n="hero_t3">بالدارجة التونسية</span></h1>
+                        <p data-i18n="hero_p">Des cours gratuits en programmation, design, langues et marketing — sélectionnés pour la communauté tunisienne.</p>
+                        <div class="hero-cta">
+                            <button class="hero-btn primary" onclick="scrollToGrid()"><i class="fa-solid fa-play"></i> <span data-i18n="hero_cta">Commencer</span></button>
+                            <button class="hero-btn ghost" onclick="navigate('settings')"><i class="fa-solid fa-sliders"></i> <span data-i18n="hero_pref">Préférences</span></button>
+                        </div>
+                        <div class="hero-stats">
+                            <div class="hstat"><b id="statV">0</b><span data-i18n="courses">cours</span></div>
+                            <div class="hstat"><b id="statC">5</b><span data-i18n="cats">Catégories</span></div>
+                            <div class="hstat"><b><i>100%</i></b><span data-i18n="free">gratuit</span></div>
+                            <div class="hstat"><b id="statH">0h</b><span data-i18n="content">heures de contenu</span></div>
+                        </div>
+                    </section>
+
+                    <div class="marquee-wrap" id="marqueeWrap"><div class="marquee" id="marquee"></div></div>
                     
-                    <!-- Grid الفيديوهات الرئيسي -->
-                    <div class="yt-grid" id="grid"></div>
+                    <!-- فلاتر يوتيوب -->
+                    <div class="filter-bar" id="filterBar"></div>
                     
-                    <!-- مؤشر الانتهاء لتحميل لا نهائي (Infinite Scroll) -->
-                    <div id="sentinel" style="height: 20px; margin-top: 20px;"></div>
+                    <!-- شبكة فيديوهات يوتيوب الأسطورية -->
+                    <div class="grid" id="grid"></div>
                     
-                    <!-- رسالة فارغة عند غياب الفيديوهات -->
-                    <div id="empty" style="display: none;"></div>
-                </div>
-
-                <!-- ========================================== -->
-                <!-- PAGE 2: WATCH VIDEO PAGE                   -->
-                <!-- ========================================== -->
-                <div id="videoPage" class="page">
-                    <!-- سيتم التحكم به وتصميمه داخل 11-video.css -->
-                    <div id="videoPlayerContainer"></div>
-                </div>
-
-                <!-- ========================================== -->
-                <!-- PAGE 3: CATEGORY PAGE                      -->
-                <!-- ========================================== -->
-                <div id="categoryPage" class="page">
-                    <div class="yt-page-header">
-                        <span id="catIcon" class="yt-page-icon"></span>
-                        <h2 id="catTitle" class="yt-page-title">التصنيف</h2>
+                    <div id="sentinel"></div>
+                    
+                    <div class="empty-state" id="empty" style="display:none">
+                        <div class="e-i"><i class="fa-solid fa-magnifying-glass"></i></div>
+                        <h2 data-i18n="empty">Aucune vidéo trouvée</h2>
+                        <p data-i18n="empty_p">Essaie d'autres mots-clés ou parcours les catégories.</p>
                     </div>
-                    <div class="yt-grid" id="categoryGrid"></div>
                 </div>
 
-                <!-- ========================================== -->
-                <!-- PAGE 4: LIKED VIDEOS PAGE                  -->
-                <!-- ========================================== -->
-                <div id="likedPage" class="page">
-                    <div class="yt-page-header">
-                        <span class="yt-page-icon">❤️</span>
-                        <h2 class="yt-page-title">الفيديوهات التي أعجبتني</h2>
+                <!-- صفحة الفيديو -->
+                <div class="page" id="page-video">
+                    <div class="video-page-container">
+                        <div class="video-main">
+                            <button class="back-btn" onclick="navigate('home')"><i class="fa-solid fa-arrow-left"></i> <span data-i18n="back">Retour</span></button>
+                            <div class="video-player-large" id="playerLarge"></div>
+                            <div class="video-info-large">
+                                <h1 class="video-title-large" id="mTitleLarge"></h1>
+                                <div class="channel-row">
+                                    <div class="channel-info">
+                                        <div class="channel-avatar" id="mChanAvatar">C</div>
+                                        <div><h3 id="mChanLarge">Channel</h3><p id="mCatLarge"></p></div>
+                                        <button class="subscribe-btn" id="subscribeBtn" onclick="toggleSubFromPage()"><i class="fa-solid fa-bell"></i> <span>S'abonner</span></button>
+                                    </div>
+                                    <div class="video-actions-row" id="mActionsLarge"></div>
+                                </div>
+                                <div class="video-description" id="mDescLarge"></div>
+                                <div class="comments-large" id="cmtSectionLarge"></div>
+                            </div>
+                        </div>
+                        <div class="related-videos">
+                            <h3><i class="fa-solid fa-tv"></i> <span data-i18n="related">Vidéos similaires</span></h3>
+                            <div id="relatedList"></div>
+                        </div>
                     </div>
-                    <div class="yt-grid" id="likedGrid"></div>
                 </div>
 
-                <!-- ========================================== -->
-                <!-- PAGE 5: SUBSCRIPTIONS PAGE                 -->
-                <!-- ========================================== -->
-                <div id="subscriptionsPage" class="page">
-                    <div class="yt-page-header">
-                        <span class="yt-page-icon">🔔</span>
-                        <h2 class="yt-page-title">القنوات المشترك فيها</h2>
+                <!-- صفحة التصنيفات -->
+                <div class="page" id="page-category">
+                    <button class="back-btn" onclick="navigate('home')"><i class="fa-solid fa-arrow-left"></i> <span data-i18n="home">Accueil</span></button>
+                    <div class="page-header">
+                        <div class="page-icon" id="catIcon"><i class="fa-solid fa-folder"></i></div>
+                        <div><h1 id="catTitle">Catégorie</h1><p class="page-sub" id="catSub"></p></div>
                     </div>
-                    <div class="yt-grid" id="subsGrid"></div>
+                    <div class="grid" id="categoryGrid"></div>
                 </div>
 
-                <!-- ========================================== -->
-                <!-- PAGE 6: WATCH HISTORY PAGE                 -->
-                <!-- ========================================== -->
-                <div id="historyPage" class="page">
-                    <div class="yt-page-header">
-                        <span class="yt-page-icon">📜</span>
-                        <h2 class="yt-page-title">سجل المشاهدة</h2>
+                <!-- صفحة الإعدادات الاحترافية -->
+                <div class="page" id="page-settings">
+                    <button class="back-btn" onclick="navigate('home')"><i class="fa-solid fa-arrow-left"></i> <span data-i18n="back">Retour</span></button>
+                    <div class="settings-container-pro">
+                        <div class="settings-header-pro">
+                            <h2><i class="fa-solid fa-gear"></i> <span data-i18n="set_title">Paramètres</span></h2>
+                            <p data-i18n="set_sub">Gérez votre compte, chaîne et préférences.</p>
+                        </div>
+                        <div class="settings-layout-pro">
+                            <aside class="settings-sidebar-pro">
+                                <button class="tab-btn-pro active" data-tab="account" onclick="openSettingsTab('account', this)"><i class="fa-solid fa-circle-user"></i> <span data-i18n="tab_acc">Mon Compte</span></button>
+                                <button class="tab-btn-pro" data-tab="channel" onclick="openSettingsTab('channel', this)"><i class="fa-solid fa-tv"></i> <span data-i18n="tab_ch">Ma Chaîne</span></button>
+                                <button class="tab-btn-pro" data-tab="preferences" onclick="openSettingsTab('preferences', this)"><i class="fa-solid fa-sliders"></i> <span data-i18n="tab_pref">Préférences</span></button>
+                                <button class="tab-btn-pro danger" data-tab="privacy" onclick="openSettingsTab('privacy', this)"><i class="fa-solid fa-shield-halved"></i> <span data-i18n="tab_sec">Sécurité</span></button>
+                            </aside>
+                            <main class="settings-content-pro">
+                                <!-- Account Pane -->
+                                <div id="set-pro-account" class="settings-pane-pro active">
+                                    <h3><i class="fa-solid fa-user-gear"></i> <span data-i18n="acc_info">Informations Personnelles</span></h3>
+                                    <div id="accLocked"></div>
+                                    <div id="accBody">
+                                        <div class="avatar-upload-box-pro">
+                                            <div class="avatar-preview-wrapper-pro" id="accAvatarWrapPro"><i class="fa-solid fa-camera"></i></div>
+                                            <div class="avatar-actions-pro">
+                                                <label class="btn-secondary-pro" for="accPicInputPro"><i class="fa-solid fa-upload"></i> <span data-i18n="upload_img">Charger une image</span></label>
+                                                <input type="file" id="accPicInputPro" accept="image/*" style="display:none" onchange="changeAccPicPro(event)">
+                                                <button class="btn-text-pro" onclick="randomizeAvatarPro()"><i class="fa-solid fa-shuffle"></i> <span data-i18n="random_av">Aléatoire</span></button>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label" for="accNamePro" data-i18n="dname">Nom affiché</label>
+                                            <input class="form-input" id="accNamePro">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label" for="accEmailPro">Email</label>
+                                            <input class="form-input" id="accEmailPro" disabled>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label" for="accOldPassPro" data-i18n="cur_pass">Mot de passe actuel</label>
+                                            <input class="form-input" id="accOldPassPro" type="password">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label" for="accNewPassPro" data-i18n="new_pass">Nouveau mot de passe</label>
+                                            <input class="form-input" id="accNewPassPro" type="password" placeholder="Min 6 caractères">
+                                        </div>
+                                        <p class="form-error" id="accErrorPro"></p>
+                                        <button class="form-btn btn-primary" onclick="saveAccountPro()" data-i18n="save">Enregistrer</button>
+                                    </div>
+                                </div>
+
+                                <!-- Channel Pane -->
+                                <div id="set-pro-channel" class="settings-pane-pro">
+                                    <h3><i class="fa-solid fa-circle-play"></i> <span data-i18n="ch_perso">Personnalisation de la chaîne</span></h3>
+                                    <div class="form-group">
+                                        <label class="form-label" for="channelNamePro" data-i18n="ch_name">Nom de la chaîne</label>
+                                        <input class="form-input" id="channelNamePro">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label" for="channelBioPro">Description</label>
+                                        <textarea class="form-textarea" id="channelBioPro"></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label" for="channelCatPro" data-i18n="ch_cat">Catégorie</label>
+                                        <select class="form-select" id="channelCatPro" style="width:100%">
+                                            <option value="">—</option>
+                                            <option value="Education">Education</option>
+                                            <option value="Design">Design</option>
+                                            <option value="Programming">Programming</option>
+                                            <option value="Languages">Languages</option>
+                                            <option value="Marketing">Marketing</option>
+                                            <option value="Other">Other</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label" for="channelLinkPro">Site web</label>
+                                        <input class="form-input" id="channelLinkPro" placeholder="https://">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label" for="channelSocialPro">Réseaux</label>
+                                        <input class="form-input" id="channelSocialPro" placeholder="@handle">
+                                    </div>
+                                    <button class="form-btn btn-primary" onclick="saveChannelPro()" data-i18n="save2">Sauvegarder</button>
+                                </div>
+
+                                <!-- Preferences Pane -->
+                                <div id="set-pro-preferences" class="settings-pane-pro">
+                                    <h3><i class="fa-solid fa-sliders"></i> <span data-i18n="tab_pref">Préférences</span></h3>
+                                    <div class="setting-row-pro">
+                                        <div><div class="setting-title-pro"><i class="fa-solid fa-moon"></i> <span data-i18n="dark_m">Mode Sombre</span></div><div class="setting-desc-pro" data-i18n="dark_d">Interface de nuit</div></div>
+                                        <div class="toggle" id="t-pro-dark" onclick="toggleSetPro('dark')" role="checkbox" aria-checked="true" tabindex="0"></div>
+                                    </div>
+                                    <div class="setting-row-pro">
+                                        <div><div class="setting-title-pro"><i class="fa-solid fa-globe"></i> <span data-i18n="lang">Langue</span></div><div class="setting-desc-pro" data-i18n="lang_d">Langue de l'interface</div></div>
+                                        <select class="form-select" id="langSelectPro" onchange="setLangPro(this.value)"><option value="dz">Derja</option><option value="fr">Français</option><option value="en">English</option></select>
+                                    </div>
+                                    <div class="setting-row-pro">
+                                        <div><div class="setting-title-pro"><i class="fa-solid fa-play"></i> Autoplay</div><div class="setting-desc-pro" data-i18n="auto_d">Lecture automatique</div></div>
+                                        <div class="toggle" id="t-pro-auto" onclick="toggleSetPro('auto')" role="checkbox" aria-checked="false" tabindex="0"></div>
+                                    </div>
+                                    <div class="setting-row-pro">
+                                        <div><div class="setting-title-pro"><i class="fa-solid fa-display"></i> <span data-i18n="qual">Qualité</span></div><div class="setting-desc-pro" data-i18n="qual_d">Résolution par défaut</div></div>
+                                        <select class="form-select" id="qualitySelectPro" onchange="setQualityPro(this.value)"><option value="auto">Auto</option><option value="hd1080">1080p</option><option value="hd720">720p</option></select>
+                                    </div>
+                                    <div class="setting-row-pro">
+                                        <div><div class="setting-title-pro"><i class="fa-solid fa-text-height"></i> <span data-i18n="fsize">Taille du texte</span></div><div class="setting-desc-pro">Font size</div></div>
+                                        <select class="form-select" id="fontSelectPro" onchange="setFontSizePro(this.value)"><option value="small">Petit</option><option value="normal">Normal</option><option value="large">Grand</option></select>
+                                    </div>
+                                </div>
+
+                                <!-- Security Pane -->
+                                <div id="set-pro-privacy" class="settings-pane-pro">
+                                    <h3><i class="fa-solid fa-trash-can"></i> <span data-i18n="data_sec">Données & Sécurité</span></h3>
+                                    <div class="danger-box-pro"><div><h4 data-i18n="clr_hist">Effacer l'historique</h4><p data-i18n="clr_hist_p">Supprime toutes les vidéos vues</p></div><button class="btn-danger-pro" onclick="clearHistoryPro()"><span data-i18n="clear">Effacer</span></button></div>
+                                    <div class="danger-box-pro"><div><h4 data-i18n="clr_like">Effacer les likes</h4><p data-i18n="clr_like_p">Réinitialise tes vidéos aimées</p></div><button class="btn-danger-pro" onclick="clearLikesPro()"><span data-i18n="clear">Effacer</span></button></div>
+                                    <div class="danger-box-pro"><div><h4 data-i18n="reset_all">Tout réinitialiser</h4><p data-i18n="reset_all_p">Supprime toutes tes données locales</p></div><button class="btn-danger-extreme-pro" onclick="resetAllAppDataPro()"><span data-i18n="reset">Tout Reset</span></button></div>
+                                </div>
+                            </main>
+                        </div>
                     </div>
-                    <div class="yt-grid" id="historyGrid"></div>
                 </div>
 
-                <!-- ========================================== -->
-                <!-- PAGE 7: SETTINGS PRO PAGE                  -->
-                <!-- ========================================== -->
-                <div id="settingsPage" class="page">
-                    <!-- الإعدادات ذات 4 تبويبات -->
-                    <div id="settingsContainer"></div>
+                <!-- صفحة الفيديوهات المفضلة -->
+                <div class="page" id="page-liked">
+                    <button class="back-btn" onclick="navigate('home')"><i class="fa-solid fa-arrow-left"></i> <span data-i18n="back">Retour</span></button>
+                    <div class="page-header">
+                        <div class="page-icon" style="background:linear-gradient(135deg,#e70013,#ff7a3d)"><i class="fa-solid fa-heart"></i></div>
+                        <div><h1 data-i18n="liked">Vidéos aimées</h1><p class="page-sub" id="likedSub"></p></div>
+                    </div>
+                    <div class="grid" id="likedGrid"></div>
+                </div>
+
+                <!-- صفحة الاشتراكات -->
+                <div class="page" id="page-subscriptions">
+                    <button class="back-btn" onclick="navigate('home')"><i class="fa-solid fa-arrow-left"></i> <span data-i18n="back">Retour</span></button>
+                    <div class="page-header">
+                        <div class="page-icon" style="background:linear-gradient(135deg,#e70013,#ff7a3d)"><i class="fa-solid fa-bell"></i></div>
+                        <div><h1 data-i18n="subs_p">Abonnements</h1><p class="page-sub" id="subsSub"></p></div>
+                    </div>
+                    <div class="grid" id="subsGrid"></div>
+                </div>
+
+                <!-- صفحة السجل -->
+                <div class="page" id="page-history">
+                    <button class="back-btn" onclick="navigate('home')"><i class="fa-solid fa-arrow-left"></i> <span data-i18n="back">Retour</span></button>
+                    <div class="page-header">
+                        <div class="page-icon"><i class="fa-solid fa-clock-rotate-left"></i></div>
+                        <div><h1 data-i18n="hist">Historique</h1><p class="page-sub" id="histSub"></p></div>
+                        <button class="back-btn" style="margin:0 0 0 auto" onclick="clearHistoryPro()"><i class="fa-solid fa-trash"></i> <span data-i18n="clear">Effacer</span></button>
+                    </div>
+                    <div class="grid" id="historyGrid"></div>
                 </div>
 
             </main>
         </div>
 
         <!-- ========================================== -->
-        <!-- 3. POPUP MODALS (Auth / Sign-In / Sign-Up) -->
+        <!-- 4. MODALS (تسجيل الدخول / الرفع / التحميل)   -->
         <!-- ========================================== -->
-        <div class="modal-overlay" id="authModal" onclick="closeAuth()">
-            <div class="auth-modal-card" onclick="event.stopPropagation()">
-                <button class="modal-close-btn" onclick="closeAuth()">×</button>
-                <div class="modal-tabs">
-                    <button class="m-tab active" onclick="switchAuthTab('login')">تسجيل الدخول</button>
-                    <button class="m-tab" onclick="switchAuthTab('signup')">إنشاء حساب تلميذ</button>
+        
+        <!-- Modal التسجيل -->
+        <div class="ov" id="authOv" aria-modal="true" role="dialog" aria-labelledby="authTitle">
+            <div class="ov-box">
+                <div class="ov-head">
+                    <h2 id="authTitle">Create Account</h2>
+                    <button class="ov-close" onclick="closeAuth()" aria-label="Fermer"><i class="fa-solid fa-xmark"></i></button>
                 </div>
-                
-                <!-- واجهة الدخول -->
-                <form id="loginForm" onsubmit="handleAuth(event, 'login')">
-                    <div class="form-group">
-                        <label>البريد الإلكتروني</label>
-                        <input type="email" id="loginEmail" required placeholder="name@domain.com">
+                <div class="ov-body">
+                    <div class="avatar-upload" id="signupAvatar">
+                        <i class="fa-solid fa-camera"></i>
+                        <input type="file" accept="image/*" onchange="previewAvatar(event)" aria-label="Upload Avatar">
+                    </div>
+                    <div class="form-group" id="nameGroup">
+                        <label class="form-label" for="authName">Nom</label>
+                        <input class="form-input" id="authName" placeholder="Yasmine Ben Ali">
                     </div>
                     <div class="form-group">
-                        <label>كلمة المرور</label>
-                        <input type="password" id="loginPassword" required placeholder="••••••••">
+                        <label class="form-label" for="authEmail">Email</label>
+                        <input class="form-input" id="authEmail" type="email" placeholder="email@example.tn">
                     </div>
-                    <button type="submit" class="yt-auth-submit-btn">دخول</button>
-                </form>
+                    <div class="form-group">
+                        <label class="form-label" for="authPass">Mot de passe</label>
+                        <input class="form-input" id="authPass" type="password" placeholder="Min 6 caractères">
+                    </div>
+                    <p class="form-error" id="authError"></p>
+                    <button class="form-btn btn-primary" id="authBtn" onclick="handleAuth()">Create Account</button>
+                    <p class="form-switch" id="authSwitch" onclick="toggleAuthMode()" role="button" tabindex="0">Déjà un compte ? <b>Sign In</b></p>
+                </div>
+            </div>
+        </div>
 
-                <!-- واجهة التسجيل الجديد -->
-                <form id="signupForm" onsubmit="handleAuth(event, 'signup')" style="display: none;">
-                    <div class="form-group">
-                        <label>الاسم الكامل</label>
-                        <input type="text" id="signupName" required placeholder="اسمي الثلاثي">
-                    </div>
-                    <div class="form-group">
-                        <label>البريد الإلكتروني</label>
-                        <input type="email" id="signupEmail" required placeholder="name@example.com">
-                    </div>
-                    <div class="form-group">
-                        <label>كلمة المرور</label>
-                        <input type="password" id="signupPassword" required placeholder="لا تقل عن 6 أحرف">
-                    </div>
-                    <div class="form-group">
-                        <label>صورة الحساب (Avatar)</label>
-                        <div class="avatar-signup-selector">
-                            <input type="file" id="signupAvatarInput" accept="image/*" onchange="previewAvatar(event)">
-                            <div class="signup-avatar-preview-container">
-                                <img id="signupAvatar" src="https://img.icons8.com/color/96/user.png" alt="preview">
-                            </div>
-                        </div>
-                    </div>
-                    <button type="submit" class="yt-auth-submit-btn">إنشاء حساب جديد</button>
-                </form>
+        <!-- Modal التحميل -->
+        <div class="dl-modal" id="dlModal" onclick="if(event.target===this)closeDlModal()" aria-modal="true" role="dialog" aria-labelledby="dlModalTitle">
+            <div class="dl-box">
+                <button class="dl-close" onclick="closeDlModal()" aria-label="Fermer"><i class="fa-solid fa-xmark"></i></button>
+                <div class="dl-icon"><i class="fa-solid fa-download"></i></div>
+                <h2 class="dl-title" id="dlModalTitle" data-i18n="dl_title">Télécharger la vidéo</h2>
+                <p class="dl-desc">Cobalt : 0 pub, w surtout.</p>
+                <div class="dl-options">
+                    <a class="dl-btn best" id="dlCobalt" href="https://cobalt.tools" target="_blank" rel="noopener noreferrer"><span><i class="fa-solid fa-bolt"></i> Cobalt (el a7sen)</span><i class="fa-solid fa-arrow-right"></i></a>
+                    <a class="dl-btn" id="dlSSYT" href="#" target="_blank" rel="noopener noreferrer"><span><i class="fa-solid fa-download"></i> SSYouTube</span><i class="fa-solid fa-arrow-right"></i></a>
+                    <a class="dl-btn" id="dlY2Mate" href="#" target="_blank" rel="noopener noreferrer"><span><i class="fa-solid fa-video"></i> Y2Mate</span><i class="fa-solid fa-arrow-right"></i></a>
+                </div>
             </div>
         </div>
 
     </div>
 
-    <!-- ========================================== -->
-    <!-- 4. DATABASE & FIREBASE SCRIPT LOADER       -->
-    <!-- ========================================== -->
-    <!-- Firebase Compat SDK v10 (متوافق مع بيئة المتصفح العادية) -->
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <div class="toasts" id="toasts"></div>
 
-    <!-- قاعدة بيانات الفيديوهات الخام -->
+    <!-- Firebase Compat SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+    <!-- الملفات البرمجية الـ 9 الموزعة بالترتيب الصحيح -->
     <script src="data.js"></script>
-
-    <!-- الـ 9 ملفات JavaScript الموزعة بالترتيب الصحيح -->
     <script src="globals.js"></script>
-    <script src="utils.js"></script>
     <script src="firebase-config.js"></script>
+    <script src="utils.js"></script>
     <script src="auth.js"></script>
     <script src="settings.js"></script>
     <script src="social.js"></script>
@@ -636,5 +412,6 @@ try{var s=JSON.parse(localStorage.getItem("tt_settings")||"{}");if(s.theme)docum
     <script src="ui.js"></script>
     <script src="router.js"></script>
     <script src="main.js"></script>
+
 </body>
 </html>
