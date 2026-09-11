@@ -1,53 +1,200 @@
-/* ================================================
-   HEADER - Top bar, Logo, Search, Icons
-================================================ */
-.hdr{position:fixed;top:0;left:0;right:0;height:var(--header-h);z-index:900;display:flex;align-items:center;gap:16px;padding:0 18px;
-  background:color-mix(in srgb,var(--bg) 78%,transparent);backdrop-filter:blur(18px) saturate(1.4);border-bottom:1px solid var(--border)}
-.hdr-left{display:flex;align-items:center;gap:12px;flex-shrink:0}
-.menu-i{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;color:var(--text2);background:none;border:none;transition:.25s;font-size:17px}
-.menu-i:hover{background:var(--surface2);color:var(--text)}
-.logo-wrap{display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none}
-.logo-img{width:34px;height:34px;border-radius:10px;object-fit:cover;background:var(--gradient)}
-.logo-t{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:19px;letter-spacing:-.4px;white-space:nowrap}
-.logo-r{color:var(--accent)}
-.search-wrap{flex:1;display:flex;justify-content:center}
-.search-inner{width:min(600px,100%);display:flex;align-items:center;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-full);overflow:hidden;transition:.3s}
-.search-inner:focus-within{border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-soft);background:var(--surface)}
-.search-inner input{flex:1;padding:11px 20px;background:transparent;border:none;outline:none;font-size:14px}
-.search-inner input::placeholder{color:var(--text3)}
-.search-btn{width:52px;height:42px;background:transparent;border:none;border-left:1px solid var(--border);color:var(--text2);transition:.25s}
-.search-btn:hover{background:var(--gradient);color:#fff}
-.hdr-right{display:flex;align-items:center;gap:9px;flex-shrink:0}
-.vid-count{font-size:12px;font-weight:700;color:var(--text2);background:var(--surface2);border:1px solid var(--border);padding:7px 13px;border-radius:var(--radius-full);white-space:nowrap}
-.icon-btn{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:transparent;border:1px solid transparent;color:var(--text2);transition:.25s;font-size:16px}
-.icon-btn:hover{background:var(--surface2);color:var(--text);border-color:var(--border)}
-.signin-btn,
-.auth-cta{display:inline-flex;align-items:center;gap:8px;padding:9px 18px;border-radius:var(--radius-full);background:var(--gradient);color:#fff;font-weight:700;font-size:13.5px;border:none;box-shadow:0 6px 20px rgba(231,0,19,.35);transition:.3s;cursor:pointer}
-.signin-btn:hover,
-.auth-cta:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(231,0,19,.45)}
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TunisianTube 🇹🇳</title>
-    <link rel="icon" type="image/png" href="logo.png">
-    
-    <!-- Fonts & Icons -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@600;700&family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+/* =======================================================
+   04-HEADER.CSS - YouTube Style Top Header
+   ======================================================= */
 
-    <!-- CSS Modules (مستدعاة مباشرة من الـ Root) -->
-    <link rel="stylesheet" href="variables.css">
-    <link rel="stylesheet" href="base.css">
-    <link rel="stylesheet" href="animations.css">
-    <link rel="stylesheet" href="header.css">
-    <link rel="stylesheet" href="avatars.css">
-    <link rel="stylesheet" href="dropdown.css">
-    <link rel="stylesheet" href="modals.css">
-    <link rel="stylesheet" href="sidebar.css">
-    <link rel="stylesheet" href="pages.css">
-    <link rel="stylesheet" href="home.css">
-    <link rel="stylesheet" href="video.css">
-    <link rel="stylesheet" href="settings.css">
-    <link rel="stylesheet" href="misc.css">
-    <link rel="stylesheet" href="responsive.css">
-</head>
+.yt-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: var(--header-h);
+    background-color: var(--bg);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+    z-index: 1000;
+    border-bottom: 1px solid var(--border);
+    user-select: none;
+}
+
+/* القسم الأيسر: القائمة واللوغو */
+.yt-header-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-shrink: 0;
+}
+
+/* زر الهامبرغر ☰ المائل للدوران */
+.yt-icon-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text);
+    transition: background-color var(--transition);
+}
+
+.yt-icon-btn:hover {
+    background-color: var(--surface2);
+}
+
+.yt-icon-btn svg {
+    fill: currentColor;
+}
+
+/* لوغو المنصة بالتصميم التونسي الراقي */
+.yt-logo {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    letter-spacing: -0.5px;
+}
+
+.yt-logo-red {
+    font-size: 20px;
+    filter: drop-shadow(0 2px 5px rgba(231, 0, 19, 0.3));
+}
+
+.yt-logo-text {
+    color: var(--text);
+}
+
+.yt-logo-text span {
+    color: var(--accent);
+    font-weight: 900;
+}
+
+/* القسم الأوسط: شريط البحث الأسطوري ليوتيوب */
+.yt-header-center {
+    flex: 0 1 640px;
+    margin: 0 16px;
+    display: flex;
+    justify-content: center;
+}
+
+.yt-search-pill {
+    display: flex;
+    width: 100%;
+    max-width: 600px;
+    height: 40px;
+    background-color: var(--surface3);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+    position: relative;
+    transition: border-color var(--transition);
+}
+
+/* عند الضغط على البحث يتوهج بالأحمر التونسي الهادئ */
+.yt-search-pill:focus-within {
+    border-color: var(--accent);
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.yt-search-pill input {
+    flex: 1;
+    padding: 0 16px;
+    font-size: 15px;
+    background-color: #121212; /* خلفية الإدخال شديدة السواد */
+    border-radius: var(--radius-full) 0 0 var(--radius-full);
+    color: var(--text);
+}
+
+.yt-search-pill input::placeholder {
+    color: var(--text3);
+    font-size: 14px;
+}
+
+/* زر مكبر الصوت (البحث) الرمادي على اليمين */
+.yt-search-btn {
+    width: 64px;
+    height: 100%;
+    background-color: var(--surface3);
+    border-right: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text);
+    transition: background-color var(--transition);
+}
+
+.yt-search-btn:hover {
+    background-color: var(--surface2);
+}
+
+.yt-search-btn svg {
+    color: var(--text2);
+}
+
+/* القسم الأيمن: الدخول أو البروفايل */
+.yt-header-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+/* زر الدخول الاحترافي شبه الشفاف بحدود حمراء هادئة */
+.yt-auth-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 14px;
+    border: 1px solid var(--border);
+    border-color: rgba(255, 45, 63, 0.4);
+    border-radius: var(--radius-full);
+    color: var(--accent);
+    font-size: 14px;
+    font-weight: 600;
+    background-color: transparent;
+    transition: background-color var(--transition), border-color var(--transition);
+}
+
+.yt-auth-btn:hover {
+    background-color: var(--accent-soft);
+    border-color: var(--accent);
+}
+
+.yt-auth-btn i {
+    font-size: 18px;
+}
+
+/* منطقة الأفتار والبروفايل للمسجلين */
+.yt-user-menu {
+    position: relative;
+}
+
+.yt-avatar-header {
+    width: 34px;
+    height: 34px;
+    border-radius: var(--radius-full);
+    overflow: hidden;
+    cursor: pointer;
+    border: 1.5px solid transparent;
+    transition: border-color var(--transition);
+}
+
+.yt-avatar-header:hover {
+    border-color: var(--accent);
+}
+
+.yt-avatar-header img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* responsive الموبايل للشريط العلوي */
+@media (max-width: 650px) {
+    .yt-header-center {
+        display: none; /* إخفاء البحث على الشاشات الصغيرة جداً لعدم الازدحام */
+    }
+}
