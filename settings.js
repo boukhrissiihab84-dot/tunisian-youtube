@@ -12,6 +12,61 @@ function toggleTheme() {
     const s = S.g("settings") || { dark: 0, auto: 1, notif: 0, history: 1, public: 1, search: 1 };
     s.dark = s.dark ? 0 : 1;
     S.s("settings", s); applyTheme(); loadUserSettingsPro();
+    // ==========================================
+// THEME TOGGLE (Dark ↔ Light)
+// ==========================================
+
+function toggleTheme() {
+    const html = document.documentElement;
+    const current = html.getAttribute("data-theme") || "dark";
+    const newTheme = current === "dark" ? "light" : "dark";
+    
+    html.setAttribute("data-theme", newTheme);
+    
+    // حفظ في localStorage
+    try {
+        const s = JSON.parse(localStorage.getItem("tt_settings") || "{}");
+        s.theme = newTheme;
+        localStorage.setItem("tt_settings", JSON.stringify(s));
+    } catch(e) {}
+    
+    // تحديث الأيقونة (شمس ↔ قمر)
+    const btn = document.getElementById("themeBtn");
+    if (btn) {
+        const icon = btn.querySelector("i");
+        if (icon) {
+            icon.className = newTheme === "dark" ? "fa-solid fa-sun" : "fa-solid fa-moon";
+        }
+    }
+    
+    // تحديث toggle في الإعدادات لو موجود
+    const t = document.getElementById("t-pro-dark");
+    if (t) {
+        t.classList.toggle("active", newTheme === "dark");
+        t.setAttribute("aria-checked", newTheme === "dark" ? "true" : "false");
+    }
+}
+
+// تطبيق الثيم عند فتح الصفحة
+function applyThemeOnLoad() {
+    try {
+        const s = JSON.parse(localStorage.getItem("tt_settings") || "{}");
+        const theme = s.theme || "dark";
+        document.documentElement.setAttribute("data-theme", theme);
+        
+        const btn = document.getElementById("themeBtn");
+        if (btn) {
+            const icon = btn.querySelector("i");
+            if (icon) icon.className = theme === "dark" ? "fa-solid fa-sun" : "fa-solid fa-moon";
+        }
+    } catch(e) {}
+}
+
+// تشغيلها تلقائي عند تحميل الصفحة
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", applyThemeOnLoad);
+} else {
+    applyThemeOnLoad();
 }
 function applyFontSize() {
     const s = S.g("settings") || { fontSize: "normal" };
