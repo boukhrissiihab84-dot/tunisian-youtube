@@ -1,131 +1,96 @@
 /* =======================================================
-   SIDEBAR.CSS - YouTube Mini/Expanded Sidebar 🇹🇳
+   SIDEBAR.CSS - Professional Layout (LEFT Sidebar)
    ======================================================= */
 
-.yt-layout {
+/* ========== LAYOUT الرئيسي ========== */
+.layout {
     display: flex;
     width: 100%;
     min-height: 100vh;
-    padding-top: var(--header-h);
+    padding-top: 56px;
+    box-sizing: border-box;
+    position: relative;
 }
 
-/* ========== SIDEBAR BASE ========== */
-.yt-sidebar {
+/* ========== SIDEBAR (على اليسار كيما YouTube) ========== */
+.side {
     position: fixed;
-    top: var(--header-h);
-    right: 0; /* RTL: القائمة على اليمين */
+    top: 56px;
+    left: 0;
     bottom: 0;
-    width: var(--side-w);
+    width: 240px;
     background: var(--bg);
-    overflow-x: hidden;
     overflow-y: auto;
+    overflow-x: hidden;
     z-index: 800;
-    padding: 12px 0 24px;
-    border-left: 1px solid var(--border);
-    transition: width 0.2s ease;
+    padding: 12px 8px 24px;
+    border-right: 1px solid var(--border);
+    transition: transform 0.2s ease, width 0.2s ease;
     scrollbar-width: thin;
     scrollbar-color: transparent transparent;
 }
 
-.yt-sidebar:hover {
-    scrollbar-color: #3f3f3f transparent;
+.side:hover {
+    scrollbar-color: var(--surface3) transparent;
 }
 
-.yt-sidebar::-webkit-scrollbar {
+.side::-webkit-scrollbar {
     width: 8px;
 }
 
-.yt-sidebar::-webkit-scrollbar-thumb {
+.side::-webkit-scrollbar-thumb {
     background: transparent;
     border-radius: 4px;
 }
 
-.yt-sidebar:hover::-webkit-scrollbar-thumb {
-    background: #3f3f3f;
+.side:hover::-webkit-scrollbar-thumb {
+    background: var(--surface3);
 }
 
-/* ========== EXPANDED (240px) ========== */
-.yt-sidebar-expanded {
-    width: var(--side-w);
-}
-
-.yt-sidebar-expanded .yt-side-btn span,
-.yt-sidebar-expanded .yt-side-heading,
-.yt-sidebar-expanded .yt-side-count,
-.yt-sidebar-expanded .yt-side-dot {
-    display: inline;
-    opacity: 1;
-}
-
-/* ========== MINI (72px) ========== */
-.yt-sidebar-mini {
+/* Sidebar Mini (72px) */
+.side.mini {
     width: 72px;
     padding: 12px 4px;
 }
 
-.yt-sidebar-mini .yt-side-btn {
-    flex-direction: column;
-    justify-content: center;
-    gap: 6px;
-    padding: 14px 0;
-    height: auto;
-    border-radius: 10px;
-    margin: 0 4px 2px;
-    font-size: 10px;
-}
-
-.yt-sidebar-mini .yt-side-btn svg {
-    width: 24px;
-    height: 24px;
-}
-
-.yt-sidebar-mini .yt-side-btn span:not(.yt-side-count) {
-    font-size: 10px;
-    font-weight: 400;
-    max-width: 64px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.yt-sidebar-mini .yt-side-heading,
-.yt-sidebar-mini .yt-side-count,
-.yt-sidebar-mini .yt-side-divider,
-.yt-sidebar-mini .yt-side-dot,
-.yt-sidebar-mini .yt-side-sub {
+.side.mini h4,
+.side.mini .side-cnt,
+.side.mini .side-foot {
     display: none !important;
 }
 
-.yt-sidebar-mini #subList {
-    display: none;
+.side.mini .side-btn {
+    flex-direction: column;
+    gap: 4px;
+    padding: 14px 4px;
+    height: auto;
+    justify-content: center;
+    font-size: 10px;
+    text-align: center;
 }
 
-/* ========== SECTIONS ========== */
-.yt-side-section {
-    padding: 0 12px;
-    margin-bottom: 4px;
+.side.mini .side-btn i,
+.side.mini .side-btn svg {
+    font-size: 20px;
+    margin: 0;
 }
 
-.yt-side-heading {
-    font-size: 16px;
+/* ========== HEADINGS ========== */
+.side h4 {
+    font-size: 14px;
     font-weight: 700;
     color: var(--text);
-    padding: 8px 12px 6px;
-    margin: 0;
+    padding: 12px 16px 8px;
+    margin: 4px 0 4px;
     letter-spacing: -0.2px;
+    text-transform: none;
 }
 
-.yt-side-divider {
-    height: 1px;
-    background: var(--border);
-    margin: 12px 12px;
-}
-
-/* ========== BUTTONS ========== */
-.yt-side-btn {
+/* ========== SIDE BUTTONS ========== */
+.side-btn {
     display: flex;
     align-items: center;
-    gap: 24px;
+    gap: 16px;
     width: 100%;
     padding: 0 12px;
     height: 40px;
@@ -137,238 +102,148 @@
     border: none;
     cursor: pointer;
     transition: background-color 0.15s ease;
-    text-align: right;
+    text-align: left;
+    font-family: inherit;
+    margin: 0 0 2px;
     white-space: nowrap;
-    overflow: hidden;
-    position: relative;
-}
-
-.yt-side-btn svg {
-    flex-shrink: 0;
-    width: 24px;
-    height: 24px;
-    fill: currentColor;
-}
-
-.yt-side-btn span {
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
-.yt-side-btn:hover {
+.side-btn:hover {
     background: var(--surface2);
 }
 
-.yt-side-btn.active {
+.side-btn.active {
     background: var(--surface2);
     font-weight: 700;
 }
 
-.yt-side-btn.active svg {
-    fill: var(--accent);
+.side-btn i,
+.side-btn svg {
+    flex-shrink: 0;
+    width: 24px;
+    font-size: 18px;
+    color: inherit;
+    text-align: center;
 }
 
-/* عدد الفيديوهات */
-.yt-side-count {
-    margin-right: auto;
-    margin-left: 0;
+.side-btn.active i,
+.side-btn.active svg {
+    color: var(--accent);
+}
+
+/* عدّاد */
+.side-cnt {
+    margin-left: auto;
     font-size: 12px;
     color: var(--text3);
     font-weight: 500;
     background: var(--surface3);
-    padding: 1px 7px;
+    padding: 2px 8px;
     border-radius: 10px;
+    min-width: 24px;
+    text-align: center;
 }
 
-.yt-side-btn.active .yt-side-count {
+.side-btn.active .side-cnt {
     background: var(--accent-soft);
     color: var(--accent);
 }
 
-/* مواضيع فرعية */
-.yt-side-sub {
-    gap: 16px;
-    padding-right: 16px;
-    height: 36px;
-    font-size: 13px;
-    color: var(--text2);
+/* ========== FOOTER ========== */
+.side-foot {
+    padding: 20px 16px;
+    margin-top: 20px;
+    border-top: 1px solid var(--border);
+    font-size: 11px;
+    color: var(--text3);
+    line-height: 1.6;
+    text-align: center;
 }
 
-.yt-side-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: var(--text3);
-    flex-shrink: 0;
+.side-foot .ar {
+    color: var(--accent);
+    font-weight: 600;
 }
 
-.yt-side-sub:hover .yt-side-dot,
-.yt-side-sub.active .yt-side-dot {
-    background: var(--accent);
-}
-
-/* ========== MAIN CONTENT OFFSET ========== */
-.yt-main {
+/* ========== MAIN CONTENT (على اليمين) ========== */
+.main {
     flex: 1;
-    margin-right: var(--side-w); /* RTL */
-    margin-left: 0;
+    margin-left: 240px;
+    margin-right: 0;
     min-width: 0;
+    max-width: 100%;
+    padding: 24px 40px 60px;
     background: var(--bg);
-    transition: margin-right 0.2s ease;
-    padding: 0;
+    transition: margin-left 0.2s ease;
+    box-sizing: border-box;
+    min-height: calc(100vh - 56px);
 }
 
-/* كي الـ sidebar يصير mini */
-.yt-sidebar-mini ~ .yt-main,
-.yt-layout:has(.yt-sidebar-mini) .yt-main {
-    margin-right: 72px;
+/* لما الـ sidebar يصير mini */
+body.sidebar-mini .main {
+    margin-left: 72px;
 }
 
-/* ========== PAGES VISIBILITY ========== */
+/* ========== BACKDROP للـ MOBILE ========== */
+.side-backdrop {
+    display: none;
+    position: fixed;
+    inset: 56px 0 0 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 700;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.side-backdrop.show {
+    display: block;
+    opacity: 1;
+}
+
+/* ========== PAGES ========== */
 .page {
     display: none;
-    padding: 0 24px 48px;
-    animation: ytFadeIn 0.25s ease;
+    width: 100%;
+    max-width: 100%;
+    animation: pageFade 0.25s ease;
 }
 
 .page.active {
     display: block;
 }
 
-@keyframes ytFadeIn {
+@keyframes pageFade {
     from { opacity: 0; transform: translateY(6px); }
     to   { opacity: 1; transform: translateY(0); }
 }
 
-/* رؤوس الصفحات الداخلية (liked, history...) */
-.yt-page-header {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    padding: 20px 0 16px;
-}
-
-.yt-page-icon {
-    font-size: 28px;
-    display: flex;
-    align-items: center;
-}
-
-.yt-page-icon svg {
-    width: 28px;
-    height: 28px;
-    fill: var(--accent);
-}
-
-.yt-page-title {
-    font-size: 22px;
-    font-weight: 800;
-    color: var(--text);
-    letter-spacing: -0.3px;
-}
-
 /* ========== MOBILE ========== */
-@media (max-width: 791px) {
-    .yt-sidebar {
-        transform: translateX(100%);
+@media (max-width: 900px) {
+    .side {
+        transform: translateX(-100%);
         width: 240px !important;
-        box-shadow: -4px 0 20px rgba(0,0,0,0.5);
-        border-left: none;
+        border-right: none;
+        box-shadow: 4px 0 20px rgba(0, 0, 0, 0.5);
     }
 
-    .yt-sidebar.yt-sidebar-expanded {
+    .side.show {
         transform: translateX(0);
     }
 
-    .yt-sidebar-mini {
-        transform: translateX(100%);
+    .main {
+        margin-left: 0 !important;
+        padding: 16px;
     }
 
-    .yt-main {
-        margin-right: 0 !important;
-    }
-   /* ===== LAYOUT FIX: المحتوى ما يضيقش و الـ grid يخدم ===== */
-
-.yt-layout {
-    display: flex !important;
-    width: 100% !important;
-    min-height: 100vh !important;
-    padding-top: 56px !important;
-    box-sizing: border-box !important;
-}
-
-.yt-sidebar,
-#sidebar,
-.sidebar {
-    position: fixed !important;
-    top: 56px !important;
-    bottom: 0 !important;
-    right: 0 !important; /* RTL */
-    left: auto !important;
-    width: 240px !important;
-    z-index: 800 !important;
-    background: #0f0f0f !important;
-    overflow-y: auto !important;
-    overflow-x: hidden !important;
-}
-
-.yt-sidebar-mini {
-    width: 72px !important;
-}
-
-.yt-main,
-#mainContent,
-.main,
-.main-content {
-    flex: 1 !important;
-    width: auto !important;
-    min-width: 0 !important; /* مهم جداً للـ grid */
-    max-width: 100% !important;
-    margin-right: 240px !important; /* RTL: بجانب الـ sidebar */
-    margin-left: 0 !important;
-    padding: 0 24px 48px !important;
-    box-sizing: border-box !important;
-    background: #0f0f0f !important;
-    overflow-x: hidden !important;
-}
-
-/* mini sidebar */
-body:has(.yt-sidebar-mini) .yt-main,
-body:has(.yt-sidebar-mini) #mainContent,
-.yt-sidebar-mini ~ .yt-main,
-.yt-layout:has(.yt-sidebar-mini) .yt-main {
-    margin-right: 72px !important;
-}
-
-.page {
-    display: none !important;
-    width: 100% !important;
-    max-width: 100% !important;
-}
-
-.page.active {
-    display: block !important;
-}
-
-/* بطّل أي height/width غريب على الصور العامة في الصفحة */
-.page img {
-    max-width: 100%;
-}
-
-/* الموبايل */
-@media (max-width: 791px) {
-    .yt-sidebar,
-    #sidebar {
-        transform: translateX(100%);
-        width: 240px !important;
-    }
-    .yt-sidebar.yt-sidebar-expanded {
-        transform: translateX(0);
-    }
-    .yt-main,
-    #mainContent {
-        margin-right: 0 !important;
-        padding: 0 12px 32px !important;
+    body.sidebar-mini .main {
+        margin-left: 0;
     }
 }
+
+@media (max-width: 500px) {
+    .main {
+        padding: 12px;
+    }
 }
