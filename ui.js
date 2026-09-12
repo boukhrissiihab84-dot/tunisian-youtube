@@ -268,18 +268,28 @@ function renderGridPage(gid, list, msg) {
     applyGridSize();
 }
 
-// =====================
-// SIDEBAR TOGGLE (Mini 72px / Expanded 240px)
-// =====================
 function toggleSidebar() {
     const s = document.getElementById("sidebar");
-    const m = document.getElementById("mainContent");
-    if (!s || !m) return;
-    const isMini = s.classList.toggle("yt-sidebar-mini");
-    s.classList.toggle("yt-sidebar-expanded", !isMini);
-    // RTL: القائمة على اليمين
-    m.style.marginRight = isMini ? "72px" : "240px";
-    m.style.marginLeft = "0";
+    if (!s) return;
+    
+    // على الشاشات الكبيرة: بدّل بين expanded و mini
+    if (window.innerWidth > 900) {
+        s.classList.toggle("mini");
+        document.body.classList.toggle("sidebar-mini", s.classList.contains("mini"));
+    } 
+    // على الموبايل: افتح/سكّر الـ drawer
+    else {
+        s.classList.toggle("show");
+        const bd = document.querySelector(".side-backdrop");
+        if (bd) bd.classList.toggle("show", s.classList.contains("show"));
+    }
+}
+
+function closeMobileSidebar() {
+    const s = document.getElementById("sidebar");
+    const bd = document.querySelector(".side-backdrop");
+    if (s) s.classList.remove("show");
+    if (bd) bd.classList.remove("show");
 }
 
 // =====================
